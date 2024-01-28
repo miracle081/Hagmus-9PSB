@@ -1,0 +1,24 @@
+{
+  "cli": {
+    "version": ">= 5.3.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {
+      "ios":{
+        "appleId":"israel@hagmus.com",
+        "ascAppId":"6473706399",
+        "appleTeamId":"ALGM993ZAN"
+      }
+    }
+  }
+}
