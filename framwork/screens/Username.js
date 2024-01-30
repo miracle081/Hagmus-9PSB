@@ -52,23 +52,23 @@ export function Username({ navigation }) {
             <FontAwesomeIcon
               icon={faChevronLeft}
               size={25}
-              color='grey'
+              color='grey' 
             />
           </TouchableOpacity>
           <View style={styles.header}>
             <View style={styles.stepIndicator}>
-              <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
-              <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
-              <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
+              <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]}></View>
+              <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]}></View>
+              <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
               <View style={styles.indicator}></View>
             </View>
             <Text style={styles.text1}>Step 3/4</Text>
           </View>
+          <ScrollView>
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={{ flex: 1 }}
+            // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            // style={{ flex: 3 }}
           >
-            <ScrollView>
               <View style={styles.formContainer}>
                 <Text style={styles.signupText}>First name</Text>
                 <TextInput
@@ -144,8 +144,8 @@ export function Username({ navigation }) {
                   </TouchableOpacity>
                 </View>
               </View>
-            </ScrollView>
           </KeyboardAvoidingView>
+            </ScrollView>
         </View>
 
       </View>

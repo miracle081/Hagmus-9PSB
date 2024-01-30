@@ -18,8 +18,8 @@ export function Referral({ navigation }) {
     const { setPreloader, userInfo, carouselLinks, accountInfo, getAccountInfo, token } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false)
     const [amount, setAmount] = useState(0)
+    const [account, setAccount] = useState(0)
     const screenWidth = Dimensions.get('screen').width;
-    const earnBalance = Number(userInfo.hagmusTask) + Number(userInfo.referralBonus)
 
     const closeModal = () => {
         setModalVisibility(!modalVisibility);
@@ -66,6 +66,43 @@ export function Referral({ navigation }) {
             });
     }
 
+    // function redeemReferral() {
+    //     setPreloader(true)
+    //     const data = {
+    //         amount: String(amount),
+    //     };
+    //     const requestOptions = {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             authorization: `bearer ${token}`
+    //         },
+    //         body: JSON.stringify(data),
+    //         redirect: 'follow'
+    //     };
+    //     fetch(baseURL + "/api/account/withdraw-referral-bonus", requestOptions)
+    //         .then(response => response.json())
+    //         .then(response => {
+    //             const { data, status, message } = response;
+    //             // console.log(response);
+    //             setPreloader(false)
+    //             if (status == "success") {
+    //                 navigation.navigate("Successful", {
+    //                     name: "",
+    //                     amount: `${symbol("ngn")}${amount}`,
+    //                     message: `${amount} has been redeemed to your main balance`,
+    //                     screen: "Referral"
+    //                 })
+    //             }
+    //             handleError(status, message);
+    //             getAccountInfo();
+    //         })
+    //         .catch(error => {
+    //             setPreloader(false)
+    //             console.log('error', error)
+    //         });
+    // }
+
     return (
         <View style={styles.container}>
             <View style={styles.body}>
@@ -89,7 +126,7 @@ export function Referral({ navigation }) {
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', marginRight: 10 }}>₦{formatMoney(Number(accountInfo.cashback_balance))}</Text>
+                            <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', marginRight: 10 }}>₦{formatMoney(Number(accountInfo.cashback_balance + accountInfo.referral_bonus))}</Text>
                             <TouchableOpacity onPress={closeModal}
                                 style={{ backgroundColor: '#f0f0f3', padding: 5, borderRadius: 100, width: "25%", height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                                 {/* <FontAwesomeIcon icon={faArrowRight} color='#7B61FF' /> */}
@@ -111,12 +148,12 @@ export function Referral({ navigation }) {
                                         />
                                         <Text style={{ color: '#2b2c36', fontSize: 15, marginLeft: 5 }}>Referral Bonus</Text>
                                     </View>
-                                    <Text style={{ color: '#2b2c36', fontSize: 15, marginLeft: 5, fontWeight: 'bold' }}>₦{formatMoney(0)}</Text>
+                                    <Text style={{ color: '#2b2c36', fontSize: 15, marginLeft: 5, fontWeight: 'bold' }}>₦ 0.00</Text>
                                 </View>
                             </View>
 
 
-                            <TouchableOpacity onPress={closeModal}
+                            <TouchableOpacity onPress={() => { setAccount(); closeModal(); }}
                                 style={styles.action}
                             >
                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
     },
     signupText: {
         color: '#181239',
-        marginBottom: 5,
+        marginBottom: 10,
         fontSize: 15
     },
     country: {

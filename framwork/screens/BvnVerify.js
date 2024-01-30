@@ -236,7 +236,7 @@ export function BvnVerify({ navigation }) {
                                                         <View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦50,000</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦0.00</Text>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>
@@ -260,11 +260,11 @@ export function BvnVerify({ navigation }) {
                                                                 <View>
                                                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                                 <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦200,000</Text>
+                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦300,000</Text>
                                                                         </View>
                                                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                                 <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>
-                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦500,000</Text>
+                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>Unlimited</Text>
                                                                         </View>
 
                                                                 </View>
@@ -272,7 +272,7 @@ export function BvnVerify({ navigation }) {
                                                         </View>
                                                 </TouchableOpacity>
 
-                                                <TouchableOpacity
+                                                {/* <TouchableOpacity
                                                         onPress={closeModal2}
                                                         style={{ backgroundColor: '#b8adf1', padding: 15, margin: 10, borderRadius: 8 }}>
                                                         <View style={{}}>
@@ -297,16 +297,16 @@ export function BvnVerify({ navigation }) {
                                                                 </View>
 
                                                         </View>
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
 
 
 
 
 
-
+{/* 
                                                 <TouchableOpacity style={[styles.getStarted, { padding: 8, margin: 10 }]}>
                                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white', fontWeight: 'bold' }}>Upgrade</Text>
-                                                </TouchableOpacity>
+                                                </TouchableOpacity> */}
 
                                                 {/* <TouchableOpacity style={{ padding: 8 }}>
                                                         <TouchableOpacity onPress={BankAuth} disabled={bvn == "" ? true : false}

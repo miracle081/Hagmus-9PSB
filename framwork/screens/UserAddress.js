@@ -123,23 +123,23 @@ export function UserAddress({ navigation }) {
                         <FontAwesomeIcon
                             icon={faChevronLeft}
                             size={25}
-                            color='grey'
+                            color='grey' 
                         />
                     </TouchableOpacity>
                     <View style={styles.header}>
                         <View style={styles.stepIndicator}>
-                            <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
-                            <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
-                            <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
-                            <View style={[styles.indicator, { backgroundColor: "white" }]}></View>
+                            <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
+                            <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
+                            <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
+                            <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
                         </View>
                         <Text style={styles.text1}>Step 4/4</Text>
                     </View>
+                    <ScrollView>
                     <KeyboardAvoidingView
                         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                         style={{ flex: 1 }}
                     >
-                        <ScrollView>
                             <View style={styles.formContainer}>
                                 <Text style={styles.signupText}>City</Text>
                                 <TextInput
@@ -172,6 +172,7 @@ export function UserAddress({ navigation }) {
                                     onChangeText={(text) => setPostal_code(text.trim())}
                                     keyboardType='number-pad'
                                 />
+                                <Text style={styles.signupText}>Country</Text>
                                 <TouchableOpacity activeOpacity={0.5} onPress={closeModal} >
                                     <View style={styles.country}>
                                         {
@@ -184,7 +185,7 @@ export function UserAddress({ navigation }) {
                                                 <>
                                                     <Image source={{ uri: selectedCountry.flag }}
                                                         style={{ width: 25, height: 25, marginRight: 10, borderRadius: 100 }} />
-                                                    <Text style={{ color: '#787A8D' }}>{selectedCountry.country}</Text>
+                                                    <Text style={{ color: '#141125' }}>{selectedCountry.country}</Text>
                                                 </>
                                         }
                                     </View>
@@ -208,8 +209,8 @@ export function UserAddress({ navigation }) {
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                        </ScrollView>
                     </KeyboardAvoidingView>
+                        </ScrollView>
                 </View>
 
                 <Modal
@@ -220,13 +221,13 @@ export function UserAddress({ navigation }) {
                     <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
                         <Pressable style={{ flex: 1 }} onPress={closeModal} >
                         </Pressable>
-                        <View style={{ backgroundColor: "#16171D", borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                        <View style={{ backgroundColor: "#fcfbff", borderTopRightRadius: 20, borderTopLeftRadius: 20, height:150 }}>
                             <View style={{ alignItems: 'flex-end', margin: 10 }}>
                                 <TouchableOpacity onPress={closeModal}>
                                     <FontAwesomeIcon
                                         icon={faXmark}
                                         size={24}
-                                        color='#787A8D'
+                                        color='#7B61FF'
                                     />
                                 </TouchableOpacity>
                             </View>
@@ -241,12 +242,12 @@ export function UserAddress({ navigation }) {
                                                 <View style={{ margin: 10, padding: 5, flexDirection: 'row', alignItems: 'center' }}>
                                                     <Image source={{ uri: item.flag || null }} style={{ width: 35, height: 35, borderRadius: 100, marginRight: 5 }} />
                                                     <View>
-                                                        <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold', marginLeft: 5 }}>{item.country}</Text>
-                                                        <Text style={{ fontSize: 12, color: 'gray', marginLeft: 5 }}>{item.currency.toUpperCase()}</Text>
+                                                        <Text style={{ color: '#141125', fontSize: 15, fontWeight: 'bold', marginLeft: 5 }}>{item.country}</Text>
+                                                        <Text style={{ fontSize: 12, color: '#141125', marginLeft: 5 }}>{item.currency.toUpperCase()}</Text>
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>
-                                            <View style={{ borderBottomColor: 'grey', borderBottomWidth: StyleSheet.hairlineWidth, margin: 10 }} />
+                                            <View style={{ borderBottomColor: '#baadfe', borderBottomWidth: StyleSheet.hairlineWidth, margin: 10 }} />
                                         </>
                                     )
                                 }} key={({ item }) => { item.id }} />
