@@ -195,7 +195,7 @@ export function UserAddress({ navigation }) {
                                 <TextInput
                                     style={[styles.inputStyle, { marginBottom: 0 }]}
                                     selectionColor={'grey'}
-                                    placeholder='Enter your username'
+                                    placeholder='Enter your address'
                                     mode='outlined'
                                     placeholderTextColor='#787A8D'
                                     onChangeText={(text) => setAddress(text.trim())}

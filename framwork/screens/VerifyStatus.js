@@ -51,7 +51,7 @@ export function VerifyStatus({ navigation }) {
           <View style={styles.formContainer}>
 
             <View style={styles.imageContain}>
-              <Image source={require('../../assets/pending.png')} style={styles.image} />
+              {/* <Image source={require('../../assets/pending.png')} style={styles.image} /> */}
             </View>
             <View style={styles.pending}>
               <Text style={styles.text1}>Pending..</Text>

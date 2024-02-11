@@ -49,7 +49,7 @@ export function LandingPage({ navigation }) {
                 <View style={styles.register}>
                     <TouchableOpacity style={styles.getStarted}
                         onPress={() => navigation.navigate('Login')}>
-                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, }}>Get Started</Text>
+                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color:'white'}}>Get Started</Text>
                     </TouchableOpacity>
                 </View>
             </View>

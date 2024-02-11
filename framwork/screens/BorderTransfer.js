@@ -4,10 +4,7 @@ import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, 
 import { styles } from "../styles/hagmustransfer";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../globals/AppContext";
-import { addDoc, collection, doc, getDocs, onSnapshot, query, runTransaction, where } from "firebase/firestore";
-import { db } from "../../firebase/firebase";
 import { ToastApp } from "../components/Toast";
-import { dateTime, generateRef } from "../components/DateTime";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { symbol } from "../components/currencySymbols";
 import axios from "axios";
@@ -164,7 +161,7 @@ export function BorderTransfer({ navigation }) {
       beneficiaryAccountNumber: accountNumber,
       amount: amount,
       narration: narration,
-      pin,
+      pin
     };
 
     const requestOptions = {
@@ -181,7 +178,7 @@ export function BorderTransfer({ navigation }) {
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
-        // console.log(response);
+        console.log(response);
         setPreloader(false)
         if (status == "success") {
           setAmount(0)
@@ -195,7 +192,11 @@ export function BorderTransfer({ navigation }) {
         }
         handleError(status, message);
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
 
   }
 
@@ -248,7 +249,7 @@ export function BorderTransfer({ navigation }) {
         </View>
         <View style={{ alignItems: 'center', marginBottom: 15 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 23, color: 'black' }}>Send Money Faster</Text>
-         </View>
+        </View>
 
         <ScrollView style={{ flex: 1 }}>
           <View style={{
@@ -259,9 +260,9 @@ export function BorderTransfer({ navigation }) {
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginBottom: 10 }}>
 
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "", bankCode: "", img: "https://wenethub.com/imageslink/webuse.png" })}>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "HAGMUS", bankCode: "HAGMUS", img: "https://wenethub.com/imageslink/webuse.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/webuse.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/webuse.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
                 <View style={{
                   margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-100%", borderTopRightRadius: 10,
@@ -272,41 +273,41 @@ export function BorderTransfer({ navigation }) {
                   }}>Free</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity >
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "UNITED BANK FOR AFRICA", bankCode: "000004", img: "https://wenethub.com/imageslink/uba.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/uba.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/uba.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST BANK OF NIGERIA", bankCode: "000016", img: "https://wenethub.com/imageslink/firstbank.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/firstbank.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/firstbank.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "ZENITH BANK", bankCode: "000015", img: "https://wenethub.com/imageslink/zenith.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/zenith.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/zenith.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, }}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "GTBANK PLC", bankCode: "000013", img: "https://wenethub.com/imageslink/gtb.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/gtb.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/gtb.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "ACCESS BANK", bankCode: "000014", img: "https://wenethub.com/imageslink/Access.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/Access.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/Access.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST CITY MONUMENT BANK", bankCode: "000003", img: "https://wenethub.com/imageslink/fcmb.png" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/fcmb.png' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/fcmb.png' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedBank({ name: "STANBIC IBTC BANK", bankCode: "000012", img: "https://wenethub.com/imageslink/stanbic.jpeg" })}>
                 <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/stanbic.jpeg' }} // Replace with your image URL
+                  source={{ uri: 'https://wenethub.com/imageslink/stanbic.jpeg' }}
                   style={{ width: 40, height: 40, borderRadius: 8 }} />
               </TouchableOpacity>
             </View>
@@ -380,7 +381,7 @@ export function BorderTransfer({ navigation }) {
           </View>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('HagmusTfHistory')}
+            onPress={() => navigation.navigate('History')}
             activeOpacity={0.5}
             style={{
               backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,

@@ -8,12 +8,16 @@ function AppProvider({ children }) {
      const [userUID, setUserUID] = useState('');
      const [preloader, setPreloader] = useState(false);
      const [earnBalance, setEarnBalance] = useState(0);
-     const [profileImage, setProfileImage] = useState(require("../assets/icon.png"));
+     const [profileImage, setProfileImage] = useState(require("../assets/person.png"));
      const [userInfo, setUserInfo] = useState({ username: '', first_name: "", last_name: "", name: "" });
      const [docID, setDocID] = useState('');
      const [ID, setID] = useState('');
      const [notification, setNotification] = useState([]);
-     const [carouselLinks, setCarouselLinks] = useState([]);
+     const [carouselLinks, setCarouselLinks] = useState([
+          { uri: "https://wenethub.com/imageslink/bonus.png" },
+          { uri: "https://wenethub.com/imageslink/refer.png" },
+          // { uri: "https://wenethub.com/imageslink/bills.png" },
+     ]);
      const [userCards, setUserCards] = useState([]);
      const [welcomeModal, setWelcomeModal] = useState(true);
      const [referralBonus, setReferralBonus] = useState(0);

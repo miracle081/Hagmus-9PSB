@@ -39,7 +39,7 @@ const installedAppVersion = Constants.expoConfig.version
 
 function HomeScreen({ navigation }) {
   const {
-    userUID, setWelcomeModal, welcomeModal, getAccountInfo, setCarouselLinks,
+    userUID, setWelcomeModal, welcomeModal, getAccountInfo, carouselLinks,
     setReferralBonus, profileImage, setProfileImage, token, getUserInfo, accountInfo,
     setPreloader, userInfo, notification, setNotification, getUserCards
   } = useContext(AppContext);
@@ -63,7 +63,6 @@ function HomeScreen({ navigation }) {
     // getCoinsFromAPI();
     onSnapshot(doc(db, "admin", "zlICMjBKgTSOknW1TsMk"), (doc) => {
       const info = doc.data()
-      setCarouselLinks(info.carouselLinks);
       setAppVersion(info.appVersion);
     });
     getAccountInfo()
@@ -96,7 +95,7 @@ function HomeScreen({ navigation }) {
   }, [appIsReady]);
 
   const openPlayStore = () => {
-    const packageName = 'com.hagmuspay.dev'; // Replace with your app's package name
+    const packageName = 'com.hagmussend.dev';
 
     Linking.openURL(`market://details?id=${packageName}`)
       .catch((error) => {
@@ -336,33 +335,28 @@ function HomeScreen({ navigation }) {
                 </View>
               </View>
               {/* ============== carousel zone ============== */}
-              {/* <View style={{ flex: 1, marginVertical: 10, }}>
-            <Carousel
-              loop
-              width={screenWidth}
-              height={170}
-              autoPlay={true}
-              data={carouselLinks}
-              scrollAnimationDuration={2000}
-              renderItem={({ index }) => (
-                <View
-                  style={{ margin: 1 }}
-                >
-                  <Image
-                    style={{
-                      width: '100%',
-                      height: 170,
-                      borderRadius: 10,
-                    }}
-                    source={carouselLinks[index]} />
-                </View>
-              )}
-            />
-          </View> */}
-              <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity style={{ alignItems: 'center', marginBottom: 10, marginTop: 5 }}>
-                  <Image source={require('../../assets/hppp.png')} style={{ height: 170, width: 410, marginRight: 13 }} />
-                </TouchableOpacity>
+              <View style={{ flex: 1, marginVertical: 10, }}>
+                <Carousel
+                  loop
+                  width={screenWidth}
+                  height={170}
+                  autoPlay={true}
+                  data={carouselLinks}
+                  scrollAnimationDuration={2000}
+                  renderItem={({ index }) => (
+                    <View
+                      style={{ margin: 1 }}
+                    >
+                      <Image
+                        style={{
+                          width: '100%',
+                          height: 170,
+                          borderRadius: 10,
+                        }}
+                        source={carouselLinks[index]} />
+                    </View>
+                  )}
+                />
               </View>
             </View>
           </ScrollView>

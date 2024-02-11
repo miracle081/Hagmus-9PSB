@@ -3,7 +3,7 @@ import { faArrowDown, faArrowLeft, faArrowRight, faLightbulb, faMobileScreenButt
 
 export const ServicesIcons = [
     { name: "withdrawal", icon: faArrowRight, rotate: -45, color: "#bb0802", background: "#ff413b34" },
-    { name: "transfer", icon: faArrowLeft, rotate: 135, color: "#016f19", background: "#016f192f" },
+    { name: "transfer", icon: faArrowLeft, rotate: -45, color: "#016f19", background: "#016f192f" },
     { name: "deposit", icon: faArrowDown, rotate: 45, color: "#016f19", background: "#016f192f" },
     { name: "airtime", icon: faSquarePhone, rotate: 0, color: "#7B61FF", background: "#7b61ff27" },
     { name: "data", icon: faMobileScreenButton, rotate: 0, color: "#8b0187", background: "#6f016b38" },

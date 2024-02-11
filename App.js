@@ -12,14 +12,14 @@ import { EBGaramond_400Regular, EBGaramond_600SemiBold, EBGaramond_700Bold } fro
 import { Kurale_400Regular } from "@expo-google-fonts/kurale";
 import { Inter_400Regular, Inter_700Bold } from "@expo-google-fonts/inter";
 import { Quicksand_400Regular, Quicksand_700Bold, Quicksand_600SemiBold } from "@expo-google-fonts/quicksand";
-import registerNNPushToken from 'native-notify';
+// import registerNNPushToken from 'native-notify';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { LeaveMsg } from "./framwork/screens/LeaveMsg";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage"]);
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  registerNNPushToken(14154, 'N5giMDhOo3VVDMQelhuPpv');
+  // registerNNPushToken(14154, 'N5giMDhOo3VVDMQelhuPpv');
 
   useEffect(() => {
     async function prepare() {

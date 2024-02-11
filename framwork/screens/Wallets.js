@@ -136,7 +136,7 @@ export function Wallets({ navigation }) {
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={{ fontSize: 15, color: '#28243d' }}>
                       Fund</Text>
-                    <Image source={require('../../assets/usflag.jpg')} style={{ width: 15, height: 15, borderRadius: 100, marginLeft: 5 }} />
+                    {/* <Image source={require('../../assets/usflag.jpg')} style={{ width: 15, height: 15, borderRadius: 100, marginLeft: 5 }} /> */}
                   </View>
                 </View>
               </TouchableOpacity>
@@ -171,7 +171,7 @@ export function Wallets({ navigation }) {
                 <View style={styles.News}>
                   <View style={{ marginRight: 10 }}>
                     <View>
-                      <Image source={require('../../assets/usflag.jpg')} style={{ width: 30, height: 30, borderRadius: 100 }} />
+                      {/* <Image source={require('../../assets/usflag.jpg')} style={{ width: 30, height: 30, borderRadius: 100 }} /> */}
                     </View>
                   </View>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -297,7 +297,7 @@ export function Wallets({ navigation }) {
 
               <View>
                 <View style={{ padding: 7, flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
-                  <Image source={require('../../assets/usflag.jpg')} style={{ width: 25, height: 25, marginRight: 7, borderRadius: 100 }} />
+                  {/* <Image source={require('../../assets/usflag.jpg')} style={{ width: 25, height: 25, marginRight: 7, borderRadius: 100 }} /> */}
                   <TextInput
                     style={styles.inputStyle}
                     keyboardType='numeric'

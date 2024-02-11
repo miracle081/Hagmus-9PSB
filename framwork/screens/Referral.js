@@ -134,7 +134,7 @@ export function Referral({ navigation }) {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ backgroundColor: "#f6f5f9" }}>
+                    <View style={{ backgroundColor: "#f6f5f9",marginBottom:20 }}>
 
                         <View style={styles.EarnAssets}>
 
@@ -296,7 +296,7 @@ export function Referral({ navigation }) {
                                 </View>
                             </TouchableOpacity>
 
-                            <View style={{ flex: 1, marginVertical: 15, }}>
+                            {/* <View style={{ flex: 1, marginVertical: 15, }}>
                                 <Carousel
                                     loop
                                     width={screenWidth}
@@ -318,7 +318,7 @@ export function Referral({ navigation }) {
                                         </View>
                                     )}
                                 />
-                            </View>
+                            </View> */}
 
                         </View>
 

@@ -153,14 +153,14 @@ export function ProfileSettings({ navigation }) {
           {/* <ScrollView > */}
           <View style={styles.header}>
             <View style={{ position: "relative" }}>
-              <Pressable onPress={imageModal}>
+              <View onPress={imageModal}>
                 <Image source={profileImage} style={styles.ProfileImage}
                   defaultSource={require('../../assets/person.png')}
                 />
-              </Pressable>
-              <TouchableOpacity onPress={closeModal} style={styles.BtnIcon}>
+              </View>
+              {/* <TouchableOpacity onPress={closeModal} style={styles.BtnIcon}>
                 <FontAwesomeIcon icon={faCameraRetro} color="#16171D" size={15} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
 

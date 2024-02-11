@@ -43,7 +43,7 @@ export function PinTransactionModal({ visibility, onClose, onVerify, }) {
                             secureTextEntry
                         />
                         <TouchableOpacity disabled={pin.length === 4 ? false : true} onPress={onVerify}
-                            style={[styles.getStarted, { backgroundColor: pin.length === 4 ? '#7b61ff70' : '#7B61FF', }]}>
+                            style={[styles.getStarted, { backgroundColor: pin.length === 4 ? '#7b61ff' : '#7B61FF70', }]}>
                             <Text style={{ fontSize: 16, color: "white" }}>Pay</Text>
                         </TouchableOpacity>
                         {userInfo.is_pin_set == 0 ?

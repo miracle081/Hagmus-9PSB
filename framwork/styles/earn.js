@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fcfbff',
     },
     body: {
+        flex:1,
         marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null,
         // marginHorizontal:5,
         // alignItems:'center',

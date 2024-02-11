@@ -86,83 +86,6 @@ export function HagmusTransfer({ navigation }) {
 
   }
 
-  async function send() {
-    setModalVisibility2(false)
-    setPreloader(true)
-    if (userInfo.userStatus == "verified") {
-      try {
-        await runTransaction(db, (transaction) => {
-          transaction.update(doc(db, 'users', userUID), { [selectedCoin.name]: Number(userInfo[selectedCoin.name]) - Number(amount) })
-          return Promise.resolve()
-        })
-        console.log(Number(recieverInfo[selectedCoin.name]) + Number(amount));
-        updateDoc(doc(db, 'users', recieverInfo.uid), {
-          [selectedCoin.name]: Number(recieverInfo[selectedCoin.name]) + Number(amount)
-        })
-          .then(() => {
-            addDoc(collection(db, 'histories'), {
-              category: "transfer",
-              UID: recieverInfo.uid,
-              dataID: new Date().getTime(),
-              coinName: selectedCoin.name,
-              image: selectedCoin.img,
-              // symbol: selectedCoin.symbol,
-              coinValue: amount,
-              date: dateTime(),
-              description: `${userInfo.first_name} ${userInfo.last_name}.`,
-              transType: "received",
-              refID: generateRef(15),
-            })
-            addDoc(collection(db, 'histories'), {
-              category: "transfer",
-              UID: userUID,
-              dataID: new Date().getTime(),
-              coinName: selectedCoin.name,
-              image: selectedCoin.img,
-              // symbol: selectedCoin.symbol,
-              coinValue: amount,
-              date: dateTime(),
-              description: `${recieverInfo.fname} ${recieverInfo.lname}.`,
-              refID: generateRef(15),
-              transType: "sent"
-            })
-              .then(() => {
-                setSelectedCoin({ id: "", name: "", symbol: "", img: null, coinValue: 0, docId: "", rank: 0 })
-                setuserName("")
-                setAmount(0)
-                setPreloader(false)
-                navigation.navigate("Successful", {
-                  name: selectedCoin.name,
-                  amount,
-                  message: `${symbol(selectedCoin.name)}${amount} has been transfered to ${recieverInfo.fname} ${recieverInfo.lname} successfuly`,
-                  screen: "HagmusTransfer"
-                })
-              })
-              .catch((e) => {
-                console.log(e);
-                setPreloader(false)
-                ToastApp('Something went wrong, please try again', "LONG");
-              })
-          })
-          .catch((e) => {
-            console.log(e);
-            setPreloader(false)
-            ToastApp('Something went wrong, please try again', "LONG");
-          })
-      } catch {
-        setPreloader(false)
-      }
-    } else if (userInfo.userStatus == "pending") {
-      Alert.alert("Failed", "Your documents are under review.")
-    }
-    else {
-      Alert.alert("Failed", "Please verify your account to continue this process",
-        [{ text: "Verify Account", onPress: () => navigation.navigate("Kyc") }]
-      )
-    }
-
-  }
-
   function transfer() {
     setPreloader(true)
     const data = {
@@ -320,7 +243,7 @@ export function HagmusTransfer({ navigation }) {
             {btnVal()}
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('HagmusTfHistory')}
+            onPress={() => navigation.navigate('History')}
             activeOpacity={0.5}
             style={{
               backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,

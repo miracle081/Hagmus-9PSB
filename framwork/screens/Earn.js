@@ -7,7 +7,8 @@ import { useContext } from "react";
 import { formatMoney } from "../components/FormatMoney";
 
 export function Earn({ navigation }) {
-    const { userInfo ,accountInfo} = useContext(AppContext);
+    const { userInfo, accountInfo } = useContext(AppContext);
+    
 
     return (
         <View style={styles.container}>
@@ -22,11 +23,11 @@ export function Earn({ navigation }) {
                         />
                     </TouchableOpacity>
                 </View> */}
-                
+
             </View>
 
             <ScrollView style={{ flex: 1 }}>
-                <View style={{ padding: 20, margin: 8,borderWidth:1 ,borderRadius:8,borderColor:'#d3ceeb'}}>
+                <View style={{ padding: 20, margin: 8, borderWidth: 1, borderRadius: 8, borderColor: '#d3ceeb' }}>
                     <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
                         <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>Referral Code</Text>
                         <View style={{ flexDirection: 'row' }}>
@@ -49,9 +50,9 @@ export function Earn({ navigation }) {
 
 
                     <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
-                        <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>Referral Bonus</Text>
+                        <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>Total Bonus</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>₦{formatMoney(Number(accountInfo.cashback_balance))}</Text>
+                            <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>₦{formatMoney(Number(accountInfo.cashback_balance) + Number(accountInfo.referral_bonus))}</Text>
 
                         </View>
                     </View>
@@ -67,11 +68,11 @@ export function Earn({ navigation }) {
                 </View>
 
                 <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
-                        {/* <Text style={{ fontWeight: 'bold', fontSize: 15, color: 'white' }}>Referral Info</Text> */}
-                        <Image source={require('../../assets/bns.png')} style={{ width: 410, height: 170 }} />
-                    </View>
+                    {/* <Text style={{ fontWeight: 'bold', fontSize: 15, color: 'white' }}>Referral Info</Text> */}
+                    <Image source={require('../../assets/bns.png')} style={{ width: 410, height: 170 }} />
+                </View>
 
-                    <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
+                <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 15, color: 'white' }}>Referral Info</Text> */}
                     <Image source={require('../../assets/referralbns.jpeg')} style={{ width: '100%', height: 170 }} />
                 </View>

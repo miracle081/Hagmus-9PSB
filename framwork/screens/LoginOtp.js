@@ -149,7 +149,7 @@ export function LoginOtp({ navigation }) {
               </View>
 
               <TouchableOpacity onPress={verifyPin} style={styles.getStarted}>
-                <Text style={{ fontSize: 16, }}>Verify</Text>
+                <Text style={{ fontSize: 16, color:'white'}}>Verify</Text>
               </TouchableOpacity>
             </View>
           </View>

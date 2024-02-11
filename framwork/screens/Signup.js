@@ -187,11 +187,7 @@ export function Signup({ navigation }) {
                   <Text style={{ color: '#0d0b14', margin: 15 }}>Already have an account?
                     <Text style={{ color: '#7B61FF', fontFamily: 'Inter_400Regular' }}> Login</Text></Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('NinVerification')}>
-                  <Text style={{ color: '#0d0b14', margin: 15 }}>Test
-                    <Text style={{ color: '#7B61FF', fontFamily: 'Inter_400Regular' }}> NIN</Text></Text>
-                </TouchableOpacity>
+           
               </View>
             </View>
             {/* <View style={{ alignItems: 'center', height: 90, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>

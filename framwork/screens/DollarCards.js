@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Pressable, TextInput } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, Pressable, TextInput, Alert } from "react-native";
 import { styles } from "../styles/aboutus";
 import { Checkbox } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -66,7 +66,6 @@ export function DollarCards({ navigation }) {
         return result
     }
 
-
     function getRate() {
         setPreloader(true)
         const requestOptions = {
@@ -81,11 +80,11 @@ export function DollarCards({ navigation }) {
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
-                // console.log(result);
+                console.log(result);
+                setPreloader(false)
                 if (status == "success") {
                     setRate(data.rate)
                     setConvertionAmount(data.rate * 3)
-                    setPreloader(false)
                 }
                 handleError(status, message);
             })
@@ -94,6 +93,19 @@ export function DollarCards({ navigation }) {
                 console.log('error', error)
             });
     }
+
+    function bvnCheckBeforeCreatingCard() {
+        if (userInfo.bvn_verified == 0) {
+            Alert.alert(
+                "Unverified BVN",
+                "You need to verify your BVN to create a card.",
+                [{ text: "Verify BVN", onPress: () => navigation.navigate("BvnVerify") }]
+            )
+        } else {
+            createCard()
+        }
+    }
+
     useEffect(() => {
         // setPreloader(false)
         getRate()
@@ -261,7 +273,7 @@ export function DollarCards({ navigation }) {
 
                         <View style={{ marginTop: 20, }}>
                             <TouchableOpacity
-                                onPress={() => { closeModal(); createCard() }}
+                                onPress={() => { closeModal(); bvnCheckBeforeCreatingCard() }}
                                 style={{ backgroundColor: '#7B61FF', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center' }}>
                                 <Text style={{ color: 'white', fontSize: 15 }}>Create</Text>
                             </TouchableOpacity>

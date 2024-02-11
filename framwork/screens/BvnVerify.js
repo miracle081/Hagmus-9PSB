@@ -38,6 +38,7 @@ export function BvnVerify({ navigation }) {
         };
 
         useEffect(() => {
+                // setPreloader(false)
                 //   console.log(userInfo);
         }, [])
 
@@ -47,7 +48,7 @@ export function BvnVerify({ navigation }) {
                 setPreloader(true)
                 const formdata = {
                         bvn: bvn,
-                        date_of_birth: dob,
+                        date_of_birth: userInfo.dob,
                         phone_number: userInfo.phone,
                         otp,
                         otp_id,
@@ -104,7 +105,7 @@ export function BvnVerify({ navigation }) {
                         .then(response => {
                                 const { data, status, message } = response;
                                 setPreloader(false)
-                                // console.log(response);
+                                console.log(response);
                                 if (status == "success") {
                                         closeModal();
                                         setOtp_id(data.otpId)
@@ -303,7 +304,7 @@ export function BvnVerify({ navigation }) {
 
 
 
-{/* 
+                                                {/* 
                                                 <TouchableOpacity style={[styles.getStarted, { padding: 8, margin: 10 }]}>
                                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white', fontWeight: 'bold' }}>Upgrade</Text>
                                                 </TouchableOpacity> */}
@@ -371,7 +372,8 @@ export function BvnVerify({ navigation }) {
                                                                         selectionColor={'grey'}
                                                                         mode='outlined'
                                                                         placeholderTextColor='#787A8D'
-                                                                        onChangeText={inp => setDob(inp.trim())}
+                                                                        value={userInfo.dob}
+                                                                        editable={false}
                                                                 />
                                                                 {/* <TextInput
                                                                         style={[styles.inputStyle, { marginBottom: 20, color: "gray" }]}
@@ -392,17 +394,17 @@ export function BvnVerify({ navigation }) {
                                                                         onChangeText={inp => setBvn(inp.trim())}
                                                                 /> */}
                                                         </ScrollView>
-                                                        <TouchableOpacity onPress={verifyBVN} style={styles.getStarted}>
+                                                        <TouchableOpacity onPress={() => { closeModal(); verifyBVN() }} style={styles.getStarted}>
                                                                 <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Upgrade</Text>
                                                         </TouchableOpacity>
                                                 </View>
 
                                         </View>
                                 </View>
-                        </Modal>
+                        </Modal >
                         {/* ============== Tier3 Modal2 ============== */}
 
-                        <Modal
+                        <Modal Modal
                                 visible={modalVisibility2}
                                 animationType="slide"
                                 transparent={true}
@@ -490,8 +492,8 @@ export function BvnVerify({ navigation }) {
 
                                         </View>
                                 </View>
-                        </Modal>
-                </View>
+                        </Modal >
+                </View >
         )
 }
 

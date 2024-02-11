@@ -61,7 +61,7 @@ export function Electricity({ navigation }) {
         setPreloader(true);
 
         const data = {
-            phone_number: userInfo.phone || "08166811697",
+            phone_number: userInfo.phone,
             network: network.id,
             amount: String(electricity.amount),
             plan_code: method,
@@ -82,16 +82,25 @@ export function Electricity({ navigation }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                // console.log(response);
+                console.log(response);
                 setPreloader(false)
                 if (status == "success") {
                     setPin("")
-                    navigation.navigate("Successful", {
-                        name: "",
-                        amount: `${symbol("ngn")}${electricity.amount}`,
-                        message: `${network.name} bought successfuly`,
-                        screen: "Electricity"
-                    })
+                    if (data.status == 'Pending') {
+                        Alert.alert(
+                            'Transaction Pending',
+                            "Your transaction is processing, please check back later",
+                        )
+                    }
+
+                    if (data.status == "Completed") {
+                        navigation.navigate("Successful", {
+                            name: "",
+                            amount: `${symbol("ngn")}${electricity.amount}`,
+                            message: `${network.name} bought successfuly \n Token: ${data.transfer_source}`,
+                            screen: "Electricity"
+                        })
+                    }
                 }
                 handleError(status, message);
             })
@@ -99,42 +108,6 @@ export function Electricity({ navigation }) {
                 setPreloader(false)
                 console.log('error', error)
             });
-
-        // const url = 'https://api-service.vtpass.com/api/pay';
-        // const apiKey = VTPass.apiKey;
-        // const secretKey = VTPass.secretKey;
-        // const payload = {
-        //     request_id: generateRequestId(),
-        //     serviceID: network.id,
-        //     billersCode: phone,
-        //     variation_code: method,
-        //     amount: electricity.amount,
-        //     phone: userInfo.phone || "08166811697",
-        // };
-
-
-        // try {
-        //     const data = await fetch(url, {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'api-key': apiKey,
-        //             'secret-key': secretKey
-        //         },
-        //         body: JSON.stringify(payload)
-        //     });
-        //     const dataReturn = await data.json();
-        //     setPreloader(false)
-        //     if (dataReturn.code == "000") {
-        //         setPin("")
-        //         debitUser();
-        //     } else {
-        //         Alert.alert("Status", dataReturn.response_description)
-        //     }
-        // } catch (error) {
-        //     setPreloader(false)
-        //     console.log("error: ", error);
-        // }
     }
 
     async function verifyCard(card) {
@@ -195,7 +168,7 @@ export function Electricity({ navigation }) {
 
     function input(inp) {
         setPhone(inp)
-        if (inp.length == 13) {
+        if (inp.length == 11) {
             verifyCard(inp)
         }
     }

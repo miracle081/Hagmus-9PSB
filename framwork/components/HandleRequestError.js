@@ -5,7 +5,7 @@ export function handleError(status, message) {
         return null
     } else if (status == "error") {
         Alert.alert(
-            'Access denied',
+            'An error occurred',
             message,
             [{ text: 'Try again' }]
         )
