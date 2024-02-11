@@ -195,9 +195,10 @@ export function BorderTransfer({ navigation }) {
         }
         handleError(status, message);
       })
-      .catch(error => {
+     .catch(error => {
         setPreloader(false)
         console.log('error', error)
+        Alert.alert("Error!", error.message)
       });
 
   }
