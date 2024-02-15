@@ -84,7 +84,7 @@ export function HelpSupport({ navigation }) {
                                         </View>
 
                                         <View style={{alignItems:'center'}}>
-                                                <Text style={{fontWeight:'bold',fontSize:18}}>Support@hagmuspay.com</Text>
+                                                <Text style={{fontWeight:'bold',fontSize:18}}>Support@hagmus.com</Text>
                                         </View>
                                 </ScrollView>
                         </View>

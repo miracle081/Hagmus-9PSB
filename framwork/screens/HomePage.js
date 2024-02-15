@@ -75,7 +75,7 @@ function HomeScreen({ navigation }) {
         const objInfo = JSON.stringify(userInfo)
         await AsyncStorage.setItem("userInfo", objInfo)
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     setAsyncItem();
@@ -345,7 +345,7 @@ function HomeScreen({ navigation }) {
                   scrollAnimationDuration={2000}
                   renderItem={({ index }) => (
                     <View
-                      style={{ margin: 1 }}
+                      style={{ margin: 1,}}
                     >
                       <Image
                         style={{
@@ -383,7 +383,7 @@ function HomeScreen({ navigation }) {
                 </TouchableOpacity>
               </View>
               <View style={{ alignItems: "center", marginBottom: 20 }}>
-                <Image source={require("../../assets/HAGMUS.png")} style={{ width: 80, height: 80, }} />
+                <Image source={require("../../assets/icon.png")} style={{ width: 80, height: 80, }} />
                 <Text style={{ color: "white", fontSize: 18, fontWeight: 'bold', }}>Welcome to Hagmus</Text>
                 <Text style={{ color: "white", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your account has just been created successfully. Your account need to be verified before any trade or transaction of any kind will be made</Text>
                 <TouchableOpacity onPress={() => { navigation.navigate('Kyc'), setWelcomeModal(false) }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
@@ -411,7 +411,7 @@ function HomeScreen({ navigation }) {
                 <View style={{ alignItems: "center", marginBottom: 20 }}>
                   <Image source={require("../../assets/icon.png")} style={{ width: 80, height: 80, }} />
                   <Text style={{ fontSize: 18, fontWeight: 'bold', }}>New Update Available!</Text>
-                  <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus Pay app is outdated, {"\n"}We recommend that you upgrade to the latest version.</Text>
+                  <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus app is outdated {"\n"}upgrade to the latest version.</Text>
                   <TouchableOpacity onPress={() => { openPlayStore('Kyc'), updateModal() }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'white' }}>Update now</Text>
                   </TouchableOpacity>

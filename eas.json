@@ -14,11 +14,7 @@
   },
   "submit": {
     "production": {
-      "ios":{
-        "appleId":"israel@hagmus.com",
-        "ascAppId":"6473706399",
-        "appleTeamId":"ALGM993ZAN"
-      }
+     
     }
   }
 }

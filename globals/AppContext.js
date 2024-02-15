@@ -14,9 +14,11 @@ function AppProvider({ children }) {
      const [ID, setID] = useState('');
      const [notification, setNotification] = useState([]);
      const [carouselLinks, setCarouselLinks] = useState([
-          { uri: "https://wenethub.com/imageslink/bonus.png" },
-          { uri: "https://wenethub.com/imageslink/refer.png" },
+          // { uri: "https://wenethub.com/imageslink/bonus.png" },
+          // { uri: "https://wenethub.com/imageslink/refer.png" },
           // { uri: "https://wenethub.com/imageslink/bills.png" },
+          { uri: "https://wenethub.com/imageslink/referralB.png" },
+          { uri: "https://wenethub.com/imageslink/NewCashB.png" },
      ]);
      const [userCards, setUserCards] = useState([]);
      const [welcomeModal, setWelcomeModal] = useState(true);

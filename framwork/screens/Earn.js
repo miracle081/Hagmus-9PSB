@@ -8,6 +8,8 @@ import { formatMoney } from "../components/FormatMoney";
 
 export function Earn({ navigation }) {
     const { userInfo, accountInfo } = useContext(AppContext);
+
+    const imageUrl = 'https://wenethub.com/imageslink/referralB.png';
     
 
     return (
@@ -69,7 +71,8 @@ export function Earn({ navigation }) {
 
                 <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 15, color: 'white' }}>Referral Info</Text> */}
-                    <Image source={require('../../assets/bns.png')} style={{ width: 410, height: 170 }} />
+                    {/* <Image source={require('../../assets/bns.png')} style={{ width: 410, height: 170 }} /> */}
+                    <Image  source={{ uri: imageUrl }} style={{ width: '100%', height: 170 }}/>
                 </View>
 
                 <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
