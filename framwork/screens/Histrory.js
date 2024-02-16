@@ -76,7 +76,7 @@ export function History({ navigation }) {
           <FlatList style={{ flex: 1 }}
             data={histories} renderItem={({ item }) => {
               const icon = ServicesIcons.find(all => all.name == item.category)
-              console.log(item.category);
+              // console.log(item.category);
               return (
                 <View
                   onPress={closeModal}

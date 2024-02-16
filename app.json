@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hagmussend.dev"
+      "package": "com.hagmus.dev"
     },
     "web": {
       "favicon": "./assets/favicon.png"
