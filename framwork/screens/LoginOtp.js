@@ -77,8 +77,10 @@ export function LoginOtp({ navigation }) {
           verificationTimer()
           console.log(OTP);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(error => {
+          setPreloader(false)
+          console.log('error', error)
+          Alert.alert("Error!", error.message)
         });
     } catch (error) {
       console.log(error);
@@ -149,7 +151,7 @@ export function LoginOtp({ navigation }) {
               </View>
 
               <TouchableOpacity onPress={verifyPin} style={styles.getStarted}>
-                <Text style={{ fontSize: 16, color:'white'}}>Verify</Text>
+                <Text style={{ fontSize: 16, color: 'white' }}>Verify</Text>
               </TouchableOpacity>
             </View>
           </View>

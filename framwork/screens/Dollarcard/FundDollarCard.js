@@ -118,7 +118,7 @@ export function FundDollarCard({ navigation }) {
                     navigation.navigate("Successful", {
                         name: "",
                         amount: symbol("usdt") + formatMoney(amount),
-                        message: `Your card has been funded successfuly`,
+                        message: `Your card has been funded successfully`,
                         screen: "ViewCard"
                     })
                 }

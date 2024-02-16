@@ -97,7 +97,7 @@ export function Electricity({ navigation }) {
                         navigation.navigate("Successful", {
                             name: "",
                             amount: `${symbol("ngn")}${electricity.amount}`,
-                            message: `${network.name} bought successfuly \n Token: ${data.transfer_source}`,
+                            message: `${network.name} bought successfully \n Token: ${data.transfer_source}`,
                             screen: "Electricity"
                         })
                     }
@@ -174,7 +174,7 @@ export function Electricity({ navigation }) {
     }
 
     return (
-        <AppSafeAreaView>
+        <AppSafeAreaView backgroundColor={"#e4e2eb"}>
             <View style={styles.container}>
                 <View style={styles.body}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

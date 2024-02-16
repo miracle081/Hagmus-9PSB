@@ -80,35 +80,6 @@ export function Tv({ navigation }) {
         fetchVariation()
     }, []);
 
-    // function updateUser(refID) {
-    //     updateDoc(doc(db, 'users', userUID), {
-    //         ngn: Number(userInfo.ngn) - Number(service.amount)
-    //     }).then(() => {
-    //         addDoc(collection(db, 'histories'), {
-    //             category: "tv",
-    //             UID: userUID,
-    //             dataID: new Date().getTime(),
-    //             networkName: network.name,
-    //             image: network.image,
-    //             amount: service.amount,
-    //             description: phone,
-    //             date: dateTime(),
-    //             refID,
-    //             // transType: "TV s"
-    //         })
-    //         navigation.navigate("Successful", {
-    //             name: "",
-    //             amount: `${symbol("ngn")}${service.amount}`,
-    //             message: `${service.name} successfuly`,
-    //             screen: "Tv"
-    //         })
-    //         setPreloader(false)
-    //     }).catch((e) => {
-    //         console.log(e);
-    //         setPreloader(false)
-    //         ToastApp('Something went wrong, please try again', "LONG");
-    //     })
-    // }
 
     async function buyTVSub() {
         setPreloader(true);
@@ -141,7 +112,7 @@ export function Tv({ navigation }) {
                     navigation.navigate("Successful", {
                         name: "",
                         amount: `${symbol("ngn")}${service.amount}`,
-                        message: `${service.name} successfuly`,
+                        message: `${service.name} successfully`,
                         screen: "Tv"
                     })
                 }
@@ -254,7 +225,7 @@ export function Tv({ navigation }) {
     }
 
     return (
-        <AppSafeAreaView>
+        <AppSafeAreaView backgroundColor={"#e4e2eb"}>
             <View style={styles.container}>
                 <View style={styles.body}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -456,7 +427,7 @@ export function Tv({ navigation }) {
                                             </View>
                                             <View style={styles.register}>
                                                 <TouchableOpacity onPress={() => { closeModal2(); pinModal(); }} style={styles.getStarted}>
-                                                    <Text style={{ fontSize: 16,color:"white" }}>Continue</Text>
+                                                    <Text style={{ fontSize: 16, color: "white" }}>Continue</Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>

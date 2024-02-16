@@ -135,7 +135,7 @@ export function BorderTransfer({ navigation }) {
           navigation.navigate("Successful", {
             name: "",
             amount: `${symbol("ngn")}${amount}`,
-            message: `${symbol("ngn")}${amount} has been transfered to ${actName.name} successfuly`,
+            message: `${symbol("ngn")}${amount} has been transfered to ${actName.name} successfully`,
             screen: "BorderTransfer"
           })
         }

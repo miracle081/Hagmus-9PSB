@@ -2,9 +2,10 @@ import { faArrowLeft, faAngleRight, faEnvelope, faEnvelopeOpen, faCopy, faEdit, 
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Dimensions, Button, Image } from "react-native";
 import { styles } from "../styles/notification";
-import { AppContext } from "../../globals/AppContext";
 import { useContext } from "react";
 import { formatMoney } from "../components/FormatMoney";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AppContext } from "../../globals/AppContext";
 
 export function Earn({ navigation }) {
     const { userInfo, accountInfo } = useContext(AppContext);
@@ -13,7 +14,7 @@ export function Earn({ navigation }) {
     
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.body}>
                 {/* <View style={{ marginTop: 30, flexDirection: 'row', alignItems: 'center', marginLeft: 5 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -88,6 +89,6 @@ export function Earn({ navigation }) {
                     <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white', fontWeight: 'bold' }}>Bonus Account</Text>
                 </TouchableOpacity>
             </View>
-        </View >
+        </SafeAreaView >
     )
 }

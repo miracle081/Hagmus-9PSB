@@ -105,7 +105,7 @@ export function BvnVerify({ navigation }) {
                         .then(response => {
                                 const { data, status, message } = response;
                                 setPreloader(false)
-                                console.log(response);
+                                // console.log(response);
                                 if (status == "success") {
                                         closeModal();
                                         setOtp_id(data.otpId)

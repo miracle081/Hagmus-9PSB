@@ -22,12 +22,12 @@ const networkList = [
 ]
 
 export function Data({ navigation }) {
-    const { setPreloader, token, pin, setPin } = useContext(AppContext);
+    const { setPreloader, token, pin, setPin, userInfo } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [service, setService] = useState({ amount: 0, cashBack: 0, variation_code: "", data: "" });
     const [network, setNetwork] = useState(networkList[0]);
-    const [phone, setPhone] = useState("08011111111");
+    const [phone, setPhone] = useState(userInfo.phone);
     const [variation, setVariation] = useState('');
 
     async function fetchVariation(net) {
@@ -92,7 +92,7 @@ export function Data({ navigation }) {
                     navigation.navigate("Successful", {
                         name: "",
                         amount: `${symbol("ngn")}${service.amount}`,
-                        message: `${service.data} ${network.name} was bought successfuly`,
+                        message: `${service.data} ${network.name} was bought successfully`,
                         screen: "Data"
                     })
                 }
@@ -118,7 +118,7 @@ export function Data({ navigation }) {
     };
 
     return (
-        <AppSafeAreaView>
+        <AppSafeAreaView backgroundColor={"#e4e2eb"}>
             <View style={styles.container}>
                 <View style={styles.body}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

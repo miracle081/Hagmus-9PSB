@@ -180,7 +180,7 @@ export function BankTransfer({ navigation }) {
                   navigation.navigate("Successful", {
                     name: selectedCoin.name,
                     amount,
-                    message: `${amount}${selectedCoin.symbol.toUpperCase()} has been transfered to ${recieverInfo.fname} ${recieverInfo.lname} successfuly`,
+                    message: `${amount}${selectedCoin.symbol.toUpperCase()} has been transfered to ${recieverInfo.fname} ${recieverInfo.lname} successfully`,
                     screen: "HagmusTransfer"
                   })
                 })
@@ -235,7 +235,7 @@ export function BankTransfer({ navigation }) {
                   navigation.navigate("Successful", {
                     name: selectedCoin.name,
                     amount,
-                    message: `${amount}${selectedCoin.symbol.toUpperCase()} has been transfered to ${recieverInfo.fname} ${recieverInfo.lname} successfuly`,
+                    message: `${amount}${selectedCoin.symbol.toUpperCase()} has been transfered to ${recieverInfo.fname} ${recieverInfo.lname} successfully`,
                     screen: "HagmusTransfer"
                   })
                 })

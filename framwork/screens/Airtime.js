@@ -81,7 +81,7 @@ export function Airtime({ navigation }) {
                     navigation.navigate("Successful", {
                         name: "",
                         amount: symbol("ngn") + airTime.amount,
-                        message: `${symbol("ngn")}${airTime.amount} ${network.name} was bought successfuly`,
+                        message: `${symbol("ngn")}${airTime.amount} ${network.name} was bought successfully`,
                         screen: "Airtime"
                     })
                 }
@@ -126,7 +126,7 @@ export function Airtime({ navigation }) {
     }
 
     return (
-        <AppSafeAreaView>
+        <AppSafeAreaView  backgroundColor={"#e4e2eb"}>
             <View style={styles.container}>
                 <View style={styles.body}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>

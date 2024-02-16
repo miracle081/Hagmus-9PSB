@@ -24,6 +24,7 @@ export function Login({ navigation }) {
   const [userAsync, setUserAsync] = useState(null);
 
   useEffect(() => {
+    // console.log(userAsync);
     setPreloader(true)
     const getData = async () => {
       try {
@@ -62,7 +63,7 @@ export function Login({ navigation }) {
   }
 
   return (
-    <AppSafeAreaView>
+    <View style={{flex:1}}>
       <View style={styles.container}>
         <View style={{ alignItems: 'center', height: 140, }}>
           <Image source={require('../../assets/888.png')} style={{ height: 300, width: '100%', }} />
@@ -125,8 +126,9 @@ export function Login({ navigation }) {
                   setPreloader(false)
                 })
                 .catch(error => {
-                  console.log('error', error)
                   setPreloader(false)
+                  console.log('error', error)
+                  Alert.alert("Error!", error.message)
                 });
             }}
 
@@ -229,6 +231,6 @@ export function Login({ navigation }) {
           </View>
         </View>
       </View>
-    </AppSafeAreaView>
+    </View>
   )
 }

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, Alert, } from "react-native";
 import { styles } from "../styles/history";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faBank, faCancel, faCheckCircle, faFaceSmile, faLightbulb, faXmark, } from "@fortawesome/free-solid-svg-icons";
@@ -49,6 +49,7 @@ export function History({ navigation }) {
       .catch(error => {
         setPreloader(false)
         console.log('error', error)
+        Alert.alert("Error!", error.message)
       });
   }
 
@@ -150,7 +151,7 @@ export function History({ navigation }) {
                 <View style={{ backgroundColor: '#fff1b9', padding: 8, borderRadius: 100 }}>
                   <FontAwesomeIcon icon={faLightbulb} color="#ffcc00" size={25} />
                 </View>
-                <Text style={{ marginTop: 8, fontSize: 18 }}>Electricity</Text>
+                <Text style={{ marginTop: 8, fontSize: 18, textTransform: "capitalize" }}>{transaction.category}</Text>
                 <Text style={{ marginTop: 8, fontSize: 30, fontWeight: 'bold' }}>{transaction.type == "credit" ? "+" : "-"}₦{transaction.amount}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
                   <FontAwesomeIcon icon={transaction.status == "Completed" ? faCheckCircle : faCancel} color="#169544" />
@@ -159,11 +160,12 @@ export function History({ navigation }) {
               </View>
 
               <View style={{
-                marginTop: 18, borderWidth: 1, borderRadius: 8, padding: 10,
+                display: transaction.category == "electricity" ? "flex" : "none",
+                marginTop: 18, borderWidth: 1, borderRadius: 8, padding: 10, marginBottom: 20,
                 flexDirection: 'row', justifyContent: 'space-between', borderColor: 'grey'
               }}>
                 <Text style={{ color: 'grey' }}>Token</Text>
-                <Text style={{ fontSize: 15 }}>1543 7262 6735 8365 846</Text>
+                <Text style={{ fontSize: 15, fontWeight: "bold" }}>{transaction.transfer_source}</Text>
               </View>
 
               <View>

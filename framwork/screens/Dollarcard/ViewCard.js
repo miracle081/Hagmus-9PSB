@@ -152,7 +152,7 @@ export function ViewCard({ navigation }) {
                     navigation.navigate("Successful", {
                         name: "",
                         amount: symbol("usdt") + formatMoney(amount),
-                        message: `${symbol("usdt") + formatMoney(amount)} withdrawal successfuly`,
+                        message: `${symbol("usdt") + formatMoney(amount)} withdrawal successfully`,
                         screen: "ViewCard"
                     })
                 }

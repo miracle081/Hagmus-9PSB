@@ -29,26 +29,7 @@ export function Settings({ navigation }) {
   const closeModal = () => {
     setModalVisibility(!modalVisibility);
   };
-
-  function changeCurrency(inp) {
-    if (inp != userInfo.defaultCurrency) {
-      setPreloader(true)
-      updateDoc(doc(db, "users", userUID), {
-        defaultCurrency: inp
-      })
-        .then(() => {
-          ToastApp(`${inp.toUpperCase()} has been set as your default currency`, "LONG");
-          setPreloader(false)
-        })
-        .catch(() => {
-          ToastApp('Something went wrong, please try again', "LONG");
-          setPreloader(false)
-        })
-    } else {
-      ToastApp(`${inp.toUpperCase()} is currently the default currency`, "LONG");
-    }
-  }
-
+  
   //Share App content begins
   const onShare = async () => {
     try {

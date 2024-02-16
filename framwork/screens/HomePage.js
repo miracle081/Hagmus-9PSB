@@ -144,7 +144,7 @@ function HomeScreen({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
+                {/* <TouchableOpacity onPress={() => navigation.navigate("Notification")}>
                   <View style={{ alignItems: 'center', position: "relative", marginRight: 0 }}>
                     <View style={{ backgroundColor: "#7B61FF", zIndex: 11, borderRadius: 50, position: "absolute", right: 0, top: 0 }}>
                       <Text style={{
@@ -158,7 +158,7 @@ function HomeScreen({ navigation }) {
                       size={20}
                     />
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
             <View style={styles.accountHold}>
@@ -338,14 +338,14 @@ function HomeScreen({ navigation }) {
               <View style={{ flex: 1, marginVertical: 10, }}>
                 <Carousel
                   loop
-                  width={screenWidth}
+                  width={screenWidth - 20}
                   height={170}
                   autoPlay={true}
                   data={carouselLinks}
                   scrollAnimationDuration={2000}
                   renderItem={({ index }) => (
                     <View
-                      style={{ margin: 1,}}
+                      style={{flexDirection: "row", justifyContent: "center" }}
                     >
                       <Image
                         style={{
