@@ -1,6 +1,7 @@
 import { createContext, useState } from "react";
 import { baseURL } from "../config";
 import { handleError } from "../framwork/components/HandleRequestError";
+import { Alert } from "react-native";
 
 const AppContext = createContext();
 
@@ -75,7 +76,11 @@ function AppProvider({ children }) {
                     }
                     handleError(status, message);
                })
-               .catch(error => console.log('error', error));
+               .catch(error => {
+                    setPreloader(false)
+                    console.log('error', error)
+                    Alert.alert("Error!", error.message)
+               });
      }
 
      function getUserCards() {
@@ -98,7 +103,11 @@ function AppProvider({ children }) {
                     }
                     handleError(status, message);
                })
-               .catch(error => console.log('error', error));
+               .catch(error => {
+                    setPreloader(false)
+                    console.log('error', error)
+                    Alert.alert("Error!", error.message)
+               });
      }
 
      return (

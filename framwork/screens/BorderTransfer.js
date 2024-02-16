@@ -52,7 +52,11 @@ export function BorderTransfer({ navigation }) {
           handleError(status, message);
           setPreloader(false)
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+          setPreloader(false)
+          console.log('error', error)
+          Alert.alert("Error!", error.message)
+        });
     }
     fetchBankList();
   }, []);
@@ -89,7 +93,11 @@ export function BorderTransfer({ navigation }) {
         handleError(status, message);
         setPreloader(false)
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
 
     // const authOptions = {
     //   method: 'POST',

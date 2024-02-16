@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Alert, ImageBackground, ScrollView} from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Alert, ImageBackground, ScrollView } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/login";
 import { Kurale_400Regular } from "@expo-google-fonts/kurale";
@@ -52,76 +52,80 @@ export function PasswordReset({ navigation }) {
         handleError(status, message);
         setPreloader(false)
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
   }
 
   return (
     <AppSafeAreaView>
       <View style={styles.container}>
-      <ImageBackground
-        source={require('../../assets/newD.png')} // Replace with the path to your image
-        style={{height:200}}
-      >
-        {/* Other components can be placed inside ImageBackground */}
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <ImageBackground
+          source={require('../../assets/newD.png')} // Replace with the path to your image
+          style={{ height: 200 }}
+        >
+          {/* Other components can be placed inside ImageBackground */}
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <FontAwesomeIcon
               icon={faArrowLeft}
               color='#ffffff'
               size={25}
-              style={{marginTop:47,marginLeft:10}}
+              style={{ marginTop: 47, marginLeft: 10 }}
             />
           </TouchableOpacity>
-       
-      </ImageBackground>
-         <ScrollView>
-        <View style={styles.body}>
-    <View style={{alignItems:'center',marginBottom:3}}>
-            <Text style={styles.text1}>Password Reset</Text>
-          </View>
 
-          <View style={styles.formContainer}>
-            <Text style={styles.signupText}>Current Password</Text>
-            <TextInput
-              style={{borderWidth:1,padding:6,borderRadius:8,borderColor:'#7B61FF',marginBottom:10}}
-              keyboardType='default'
-              // placeholder='Current password'
-              selectionColor={'#7B61FF'}
-              secureTextEntry={true}
-              onChangeText={inp => setCurrentPassword(inp.trim())}
-              mode='outlined'
-            />
+        </ImageBackground>
+        <ScrollView>
+          <View style={styles.body}>
+            <View style={{ alignItems: 'center', marginBottom: 3 }}>
+              <Text style={styles.text1}>Password Reset</Text>
+            </View>
 
-            <Text style={styles.signupText}>New Password</Text>
-            <TextInput
-              style={{borderWidth:1,padding:6,borderRadius:8,borderColor:'#7B61FF',marginBottom:10}}
-              keyboardType='default'
-              // placeholder='Confirm Password'
-              selectionColor={'#7B61FF'}
-              secureTextEntry={true}
-              onChangeText={inp => setNewPassword(inp.trim())}
-              mode='outlined'
-            />
+            <View style={styles.formContainer}>
+              <Text style={styles.signupText}>Current Password</Text>
+              <TextInput
+                style={{ borderWidth: 1, padding: 6, borderRadius: 8, borderColor: '#7B61FF', marginBottom: 10 }}
+                keyboardType='default'
+                // placeholder='Current password'
+                selectionColor={'#7B61FF'}
+                secureTextEntry={true}
+                onChangeText={inp => setCurrentPassword(inp.trim())}
+                mode='outlined'
+              />
 
-            <Text style={styles.signupText}>Confirm Password</Text>
-            <TextInput
-               style={{borderWidth:1,padding:6,borderRadius:8,borderColor:'#7B61FF'}}
-              keyboardType='default'
-              // placeholder='New Password'
-              selectionColor={'#7B61FF'}
-              secureTextEntry={true}
-              onChangeText={inp => setConfirm_password(inp.trim())}
-              mode='outlined'
-            />
+              <Text style={styles.signupText}>New Password</Text>
+              <TextInput
+                style={{ borderWidth: 1, padding: 6, borderRadius: 8, borderColor: '#7B61FF', marginBottom: 10 }}
+                keyboardType='default'
+                // placeholder='Confirm Password'
+                selectionColor={'#7B61FF'}
+                secureTextEntry={true}
+                onChangeText={inp => setNewPassword(inp.trim())}
+                mode='outlined'
+              />
+
+              <Text style={styles.signupText}>Confirm Password</Text>
+              <TextInput
+                style={{ borderWidth: 1, padding: 6, borderRadius: 8, borderColor: '#7B61FF' }}
+                keyboardType='default'
+                // placeholder='New Password'
+                selectionColor={'#7B61FF'}
+                secureTextEntry={true}
+                onChangeText={inp => setConfirm_password(inp.trim())}
+                mode='outlined'
+              />
 
               <TouchableOpacity
                 onPress={changePassword}
-                style={{backgroundColor:'#7B61FF',padding:10,alignItems:'center',borderRadius:8,marginTop:10}}>
-                <Text style={{ fontSize: 16, color:'white'}}>Reset</Text>
+                style={{ backgroundColor: '#7B61FF', padding: 10, alignItems: 'center', borderRadius: 8, marginTop: 10 }}>
+                <Text style={{ fontSize: 16, color: 'white' }}>Reset</Text>
               </TouchableOpacity>
 
+            </View>
           </View>
-        </View>
-         </ScrollView>
+        </ScrollView>
       </View>
     </AppSafeAreaView>
   )

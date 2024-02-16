@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, FlatList, TextInput, Pressable } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, ImageBackground, FlatList, TextInput, Pressable, Alert } from "react-native";
 import { styles } from "../../styles/aboutus";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight, faArrowLeft, faCircleExclamation, faCirclePlus, faGlobe, faRotate, faTag, faTags, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -124,7 +124,11 @@ export function FundDollarCard({ navigation }) {
                 }
                 handleError(status, message);
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+                Alert.alert("Error!", error.message)
+            });
     }
 
 
