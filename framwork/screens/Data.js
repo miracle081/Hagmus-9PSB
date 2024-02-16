@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Image, Pressable, FlatList, } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Image, Pressable, FlatList, Alert, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/airtime";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -22,7 +22,7 @@ const networkList = [
 ]
 
 export function Data({ navigation }) {
-    const { setPreloader, token, pin,setPin } = useContext(AppContext);
+    const { setPreloader, token, pin, setPin } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [service, setService] = useState({ amount: 0, cashBack: 0, variation_code: "", data: "" });
@@ -98,7 +98,11 @@ export function Data({ navigation }) {
                 }
                 handleError(status, message);
             })
-            .catch(error => console.log('error', error));
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+                Alert.alert("Error!", error.message)
+            });
     }
 
     const closeModal = () => {

@@ -1,7 +1,7 @@
-import { View, Text, FlatList, TouchableOpacity, Pressable, } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, } from "react-native";
 import { styles } from "../styles/history";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowLeft, faBank, faCheckCircle, faFaceSmile, faLightbulb, faXmark, } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBank, faCancel, faCheckCircle, faFaceSmile, faLightbulb, faXmark, } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { AppContext } from "../../globals/AppContext";
@@ -19,13 +19,14 @@ import { Modal } from "react-native";
 export function History({ navigation }) {
   const { setDocID, setPreloader, token } = useContext(AppContext);
   const [histories, setHistories] = useState([]);
+  const [transaction, setTransaction] = useState({});
   const [modalVisibility, setModalVisibility] = useState(false)
 
   const closeModal = () => {
     setModalVisibility(!modalVisibility);
   };
 
-  async function fetchVariation(net) {
+  async function fetchVariation() {
     setPreloader(true)
     const requestOptions = {
       method: 'GET',
@@ -73,17 +74,17 @@ export function History({ navigation }) {
       </View>
       <View style={styles.body}>
         {histories.length > 0 ?
-          <FlatList style={{ flex: 1 }}
+          <FlatList refreshControl={
+            <RefreshControl refreshing={false} onRefresh={fetchVariation} />
+          } style={{ flex: 1 }}
             data={histories} renderItem={({ item }) => {
               const icon = ServicesIcons.find(all => all.name == item.category)
-              // console.log(item.category);
+              // console.log(item);
               return (
-                <View
-                  onPress={closeModal}
+                <TouchableOpacity
+                  onPress={() => { setTransaction(item); closeModal() }}
                   style={{ marginBottom: 5 }}>
-                  <View
-                    onPress={() => { navigation.navigate('HistoryDetails'); setDocID(item.docId) }}
-                  >
+                  <View >
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between" }}>
                       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ marginRight: 10, backgroundColor: icon.background, borderRadius: 100, padding: 10 }}>
@@ -108,7 +109,7 @@ export function History({ navigation }) {
                       marginTop: 8,
                     }}
                   />
-                </View>
+                </TouchableOpacity>
               )
             }} key={({ item }) => { item.id }} /> :
           <View
@@ -150,10 +151,10 @@ export function History({ navigation }) {
                   <FontAwesomeIcon icon={faLightbulb} color="#ffcc00" size={25} />
                 </View>
                 <Text style={{ marginTop: 8, fontSize: 18 }}>Electricity</Text>
-                <Text style={{ marginTop: 8, fontSize: 30, fontWeight: 'bold' }}>-₦5,000</Text>
+                <Text style={{ marginTop: 8, fontSize: 30, fontWeight: 'bold' }}>{transaction.type == "credit" ? "+" : "-"}₦{transaction.amount}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
-                  <FontAwesomeIcon icon={faCheckCircle} color="#169544" />
-                  <Text style={{ marginLeft: 5, color: '#169544' }}>Successful</Text>
+                  <FontAwesomeIcon icon={transaction.status == "Completed" ? faCheckCircle : faCancel} color="#169544" />
+                  <Text style={{ marginLeft: 5, color: transaction.status == "Completed" ? '#00C566' : '#FF403B', }}>{transaction.status}</Text>
                 </View>
               </View>
 
@@ -167,6 +168,18 @@ export function History({ navigation }) {
 
               <View>
                 <Text>Transaction Details</Text>
+                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
+                  <Text style={{ color: 'grey' }}>Narration</Text>
+                  <Text style={{ fontSize: 15 }}>{transaction.narration}</Text>
+                </View>
+                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
+                  <Text style={{ color: 'grey' }}>Reference ID</Text>
+                  <Text style={{ fontSize: 15 }}>{transaction.reference}</Text>
+                </View>
+                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
+                  <Text style={{ color: 'grey' }}>Date</Text>
+                  <Text style={{ fontSize: 15 }}>{dateTime(transaction.created_at)}</Text>
+                </View>
               </View>
 
 

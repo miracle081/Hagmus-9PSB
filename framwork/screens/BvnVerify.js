@@ -150,7 +150,11 @@ export function BvnVerify({ navigation }) {
                                 }
                                 handleError(status, message);
                         })
-                        .catch(error => console.log('error', error));
+                        .catch(error => {
+                                setPreloader(false)
+                                console.log('error', error)
+                                Alert.alert("Error!", error.message)
+                        });
         }
 
         const readFile = async (uri, tapID) => {

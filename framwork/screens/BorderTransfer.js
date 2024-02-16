@@ -1,6 +1,6 @@
 import { faAngleRight, faArrowLeft, faBank, faCheckCircle, faChevronRight, faFaceSadCry, faFaceSmile, faScroll, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, RefreshControl, } from "react-native";
 import { styles } from "../styles/hagmustransfer";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../globals/AppContext";
@@ -29,31 +29,35 @@ export function BorderTransfer({ navigation }) {
 
 
 
+  function fetchBankList() {
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        authorization: `bearer ${token}`
+      }
+    };
+
+    fetch(baseURL + "/api/transfers/banks", requestOptions)
+      .then(response => response.json())
+      .then(response => {
+        const { data, status, message } = response
+        if (status == "success") {
+          // console.log(data); 
+          setBankList(data)
+          setFilteredBanks(data)
+        }
+        handleError(status, message);
+        setPreloader(false)
+      })
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
+  }
   useEffect(() => {
     setPreloader(true)
-    function fetchBankList() {
-      const requestOptions = {
-        method: 'GET',
-        redirect: 'follow',
-        headers: {
-          authorization: `bearer ${token}`
-        }
-      };
-
-      fetch(baseURL + "/api/transfers/banks", requestOptions)
-        .then(response => response.json())
-        .then(response => {
-          const { data, status, message } = response
-          if (status == "success") {
-            // console.log(data); 
-            setBankList(data)
-            setFilteredBanks(data)
-          }
-          handleError(status, message);
-          setPreloader(false)
-        })
-        .catch(error => console.log('error', error));
-    }
     fetchBankList();
   }, []);
 
@@ -89,66 +93,11 @@ export function BorderTransfer({ navigation }) {
         handleError(status, message);
         setPreloader(false)
       })
-      .catch(error => console.log('error', error));
-
-    // const authOptions = {
-    //   method: 'POST',
-    //   url: 'https://api.safehavenmfb.com/oauth2/token',
-    //   headers: { accept: 'application/json', 'content-type': 'application/json' },
-    //   data: {
-    //     grant_type: 'client_credentials',
-    //     client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer',
-    //     client_assertion: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZWNtdXMub3JnIiwic3ViIjoiMjAwNGQyM2I2MDMxODhkOTJhNjg1OThhNWYwMTI1NWUiLCJhdWQiOiJodHRwczovL2FwaS5zYWZlaGF2ZW5tZmIuY29tIiwiaWF0IjoxNzAyNzQwMjI0LCJleHAiOjE5MDI3NDA4MjR9.wLLK8VJTQCxvL_K9f0kk2aqt5KCi-wMifyJJ_9ZVt7nV4Gk1IIeieRFuxBsy2bhu-LyO2TvPR71z5cnt49HSEsJQ0WZ7ElRg9mE4BIGHqcqVVuFZc1SaKLAebwClH8NQ7wSypB5SHpSFG7Mo3tD5J0IgInvaxyQGZAUSyUtLpXc',
-    //     client_id: '2004d23b603188d92a68598a5f01255e'
-    //   }
-    // };
-
-    // axios
-    //   .request(authOptions)
-    //   .then(response => {
-    //     const { data } = response
-    //     if ("access_token" in data) {
-    //       fetchBankList(data.access_token, data.ibs_client_id)
-    //       const nameOptions = {
-    //         method: 'POST',
-    //         url: 'https://api.safehavenmfb.com/transfers/name-enquiry',
-    //         headers: {
-    //           accept: 'application/json',
-    //           ClientID: data.ibs_client_id,
-    //           'content-type': 'application/json',
-    //           authorization: `Bearer ${data.access_token}`
-    //         },
-    //         data: {
-    //           bankCode: selectedBank.bankCode,
-    //           accountNumber
-    //         }
-    //       };
-    //       axios
-    //         .request(nameOptions)
-    //         .then(function (response) {
-    //           console.log(response.data);
-    //           if ("data" in response.data) {
-    //             const accountName = response.data.data.accountName
-    //             const sessionId = response.data.data.sessionId
-    //             setActName({ name: accountName, color: "#00C566", sessionId })
-    //           } else {
-    //             setActName({ name: response.data.message, color: "#ff0000be", })
-    //           }
-    //           setPreloader(false)
-    //         })
-    //         .catch(function (error) {
-    //           setPreloader(false)
-    //           console.error(error);
-    //         });
-    //     } else {
-    //       setPreloader(false)
-    //       ToastApp("Unable to authenticate")
-    //     }
-    //   })
-    //   .catch(error => {
-    //     setPreloader(false)
-    //     console.error(error);
-    //   });
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
   }
 
   function transfer() {
@@ -251,7 +200,10 @@ export function BorderTransfer({ navigation }) {
           <Text style={{ fontWeight: 'bold', fontSize: 23, color: 'black' }}>Send Money Faster</Text>
         </View>
 
-        <ScrollView style={{ flex: 1 }}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={fetchBankList} />
+          } style={{ flex: 1 }}>
           <View style={{
             backgroundColor: '#f6f5f9', margin: 8, borderRadius: 10, padding: 10
           }}>

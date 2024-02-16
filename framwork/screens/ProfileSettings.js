@@ -128,7 +128,11 @@ export function ProfileSettings({ navigation }) {
         handleError(status, message);
         getAccountInfo();
       })
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        Alert.alert("Error!", error.message)
+      });
   }
 
   const uploadImage = async () => {
