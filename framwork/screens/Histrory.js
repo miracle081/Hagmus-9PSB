@@ -83,7 +83,7 @@ export function History({ navigation }) {
               // console.log(item);
               return (
                 <TouchableOpacity
-                  onPress={() => { setTransaction(item); closeModal() }}
+                  onPress={() => { setTransaction({ ...item, ...icon }); closeModal() }}
                   style={{ marginBottom: 5 }}>
                   <View >
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "space-between" }}>
@@ -148,9 +148,10 @@ export function History({ navigation }) {
 
             <View style={{ margin: 20, }}>
               <View style={{ alignItems: 'center' }}>
-                <View style={{ backgroundColor: '#fff1b9', padding: 8, borderRadius: 100 }}>
-                  <FontAwesomeIcon icon={faLightbulb} color="#ffcc00" size={25} />
+                <View style={{ backgroundColor: transaction.background, borderRadius: 100, padding: 10 }}>
+                  <FontAwesomeIcon icon={transaction.icon} color={transaction.color} size={25} style={{ transform: [{ rotate: transaction.rotate + 'deg' }] }} />
                 </View>
+
                 <Text style={{ marginTop: 8, fontSize: 18, textTransform: "capitalize" }}>{transaction.category}</Text>
                 <Text style={{ marginTop: 8, fontSize: 30, fontWeight: 'bold' }}>{transaction.type == "credit" ? "+" : "-"}₦{transaction.amount}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>

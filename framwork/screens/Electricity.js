@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from 'react';
-import { Text, View, TextInput, Modal, TouchableOpacity, Alert, Image, Pressable, ScrollView, FlatList, StyleSheet, } from "react-native";
+import { Text, View, TextInput, Modal, TouchableOpacity, Alert, Image, Pressable, ScrollView, FlatList, StyleSheet, KeyboardAvoidingView, Platform, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/airtime";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -36,7 +36,7 @@ const networkList = [
 ]
 
 export function Electricity({ navigation }) {
-    const { accountInfo, setPreloader, userInfo, token, pin, setPin } = useContext(AppContext);
+    const { accountInfo, setPreloader, userInfo, token, pin, setPin, getAccountInfo } = useContext(AppContext);
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [modalVisibility, setModalVisibility] = useState(false);
@@ -82,7 +82,7 @@ export function Electricity({ navigation }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                console.log(response);
+                // console.log(response);
                 setPreloader(false)
                 if (status == "success") {
                     setPin("")
@@ -94,6 +94,7 @@ export function Electricity({ navigation }) {
                     }
 
                     if (data.status == "Completed") {
+                        getAccountInfo();
                         navigation.navigate("Successful", {
                             name: "",
                             amount: `${symbol("ngn")}${electricity.amount}`,
@@ -184,160 +185,164 @@ export function Electricity({ navigation }) {
                             size={25}
                         />
                     </TouchableOpacity>
-                    <ScrollView>
-                        <View style={styles.header}>
-                            <Text style={styles.text1}>Electricity</Text>
-                        </View>
-
-                        <View style={{ backgroundColor: '#f1f1f5', borderRadius: 8, }}>
-                            <Text style={{ padding: 8, marginLeft: 5, color: 'grey', fontSize: 16 }}>Select Provider</Text>
-                            <TouchableOpacity
-                                style={{
-                                    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                    backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8,
-                                }}
-                                onPress={closeModal}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                    <Image source={{ uri: network.image }} style={{ width: 40, height: 40, borderRadius: 100, marginRight: 8 }} />
-                                    <Text>{network.name} ({network.abName})</Text>
-                                </View>
-                                <FontAwesomeIcon icon={faCaretDown} color='grey' />
-                            </TouchableOpacity>
-
-                            <View
-                                style={{
-                                    borderBottomColor: 'grey',
-                                    borderBottomWidth: StyleSheet.hairlineWidth,
-                                    marginBottom: 15
-                                }}
-                            />
-
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 10 }}>
-                                <TouchableOpacity onPress={() => setMethod("prepaid")}
-                                    style={{ backgroundColor: '#d3d1de', width: 105, borderRadius: 10, opacity: method == "prepaid" ? 1 : 0.4 }}>
-                                    <View style={{ padding: 0, alignItems: 'center', width: 105, marginTop: 8 }}>
-                                        <Text style={{ marginBottom: 3, marginTop: 3, color: '#08080e', }}>Prepaid</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-betwee' }}>
-                                        <View style={{ backgroundColor: method == "prepaid" ? '#5d5593' : "#6b6b6b9c", padding: 3, borderTopRightRadius: 12, borderBottomLeftRadius: 12, }}>
-                                            <FontAwesomeIcon icon={faCheck} size={15} color='#d3d1de' />
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => setMethod("postpaid")}
-                                    style={{ backgroundColor: '#d3d1de', width: 105, borderRadius: 10, opacity: method == "postpaid" ? 1 : 0.4 }}>
-                                    <View style={{ padding: 0, alignItems: 'center', width: 105, marginTop: 8, }}>
-                                        <Text style={{ marginBottom: 3, marginTop: 3, color: '#08080e', }}>Postpaid</Text>
-                                    </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-betwee' }}>
-                                        <View style={{ backgroundColor: method == "postpaid" ? '#5d5593' : "#6b6b6b9c", padding: 3, borderTopRightRadius: 12, borderBottomLeftRadius: 12, }}>
-                                            <FontAwesomeIcon icon={faCheck} size={15} color='#d3d1de' />
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-
-
-                        {/* Top Up */}
-                        <View style={{ backgroundColor: '#f1f1f5', padding: 18, borderRadius: 8, marginTop: 18, }}>
-
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <Text style={{ color: 'grey' }}>Meter Number</Text>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                    <Text style={{ color: 'grey', marginRight: 4 }}>Beneficiaries</Text>
-                                    <FontAwesomeIcon icon={faAngleRight} color='grey' size={18} />
-                                </View>
+                    <KeyboardAvoidingView style={{ flex: 1 }}
+                        behavior={Platform.OS === 'ios' ? 'padding' : null}
+                    >
+                        <ScrollView>
+                            <View style={styles.header}>
+                                <Text style={styles.text1}>Electricity</Text>
                             </View>
 
-                            <View style={{
-                                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                backgroundColor: '#cdcdd3', borderRadius: 8, padding: 10, marginTop: 8
-                            }}>
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    keyboardType='phone-pad'
-                                    placeholder='Input Number'
-                                    selectionColor={'grey'}
-                                    onChangeText={inp => input(inp.trim())}
-                                    value={`${phone}`}
+                            <View style={{ backgroundColor: '#f1f1f5', borderRadius: 8, }}>
+                                <Text style={{ padding: 8, marginLeft: 5, color: 'grey', fontSize: 16 }}>Select Provider</Text>
+                                <TouchableOpacity
+                                    style={{
+                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                        backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8,
+                                    }}
+                                    onPress={closeModal}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <Image source={{ uri: network.image }} style={{ width: 40, height: 40, borderRadius: 100, marginRight: 8 }} />
+                                        <Text>{network.name} ({network.abName})</Text>
+                                    </View>
+                                    <FontAwesomeIcon icon={faCaretDown} color='grey' />
+                                </TouchableOpacity>
+
+                                <View
+                                    style={{
+                                        borderBottomColor: 'grey',
+                                        borderBottomWidth: StyleSheet.hairlineWidth,
+                                        marginBottom: 15
+                                    }}
                                 />
-                            </View>
-                            {card.name != "" ? <Text style={{ color: card.color }}>{card.name}</Text> : null}
 
-                            <View style={{ marginTop: 10 }}>
-                                <Text style={{ color: 'grey', }}>Select Amount</Text>
-                                <View style={{ flexDirection: 'row', padding: 10 }}>
-
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 1000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>1000</Text></Text>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', marginBottom: 10 }}>
+                                    <TouchableOpacity onPress={() => setMethod("prepaid")}
+                                        style={{ backgroundColor: '#d3d1de', width: 105, borderRadius: 10, opacity: method == "prepaid" ? 1 : 0.4 }}>
+                                        <View style={{ padding: 0, alignItems: 'center', width: 105, marginTop: 8 }}>
+                                            <Text style={{ marginBottom: 3, marginTop: 3, color: '#08080e', }}>Prepaid</Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-betwee' }}>
+                                            <View style={{ backgroundColor: method == "prepaid" ? '#5d5593' : "#6b6b6b9c", padding: 3, borderTopRightRadius: 12, borderBottomLeftRadius: 12, }}>
+                                                <FontAwesomeIcon icon={faCheck} size={15} color='#d3d1de' />
+                                            </View>
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 2000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>2000</Text></Text>
+                                    <TouchableOpacity onPress={() => setMethod("postpaid")}
+                                        style={{ backgroundColor: '#d3d1de', width: 105, borderRadius: 10, opacity: method == "postpaid" ? 1 : 0.4 }}>
+                                        <View style={{ padding: 0, alignItems: 'center', width: 105, marginTop: 8, }}>
+                                            <Text style={{ marginBottom: 3, marginTop: 3, color: '#08080e', }}>Postpaid</Text>
                                         </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 3000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>3000</Text></Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{ flexDirection: 'row', padding: 10 }}>
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 4000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>4000</Text></Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 5000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>5000</Text></Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setElectricity({ amount: 6000, }); closeModal2() }}
-                                        style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
-                                        <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
-                                            <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>6000</Text></Text>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-betwee' }}>
+                                            <View style={{ backgroundColor: method == "postpaid" ? '#5d5593' : "#6b6b6b9c", padding: 3, borderTopRightRadius: 12, borderBottomLeftRadius: 12, }}>
+                                                <FontAwesomeIcon icon={faCheck} size={15} color='#d3d1de' />
+                                            </View>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
                             </View>
 
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 4 }}>₦</Text>
+
+
+                            {/* Top Up */}
+                            <View style={{ backgroundColor: '#f1f1f5', padding: 18, borderRadius: 8, marginTop: 18, }}>
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text style={{ color: 'grey' }}>Meter Number</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                        <Text style={{ color: 'grey', marginRight: 4 }}>Beneficiaries</Text>
+                                        <FontAwesomeIcon icon={faAngleRight} color='grey' size={18} />
+                                    </View>
+                                </View>
+
                                 <View style={{
                                     flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                                    backgroundColor: '#e8e8f0', borderRadius: 5, padding: 10, marginTop: 8, borderBottomWidth: 1,
-                                    borderColor: 'grey', width: '95%'
+                                    backgroundColor: '#cdcdd3', borderRadius: 8, padding: 10, marginTop: 8
                                 }}>
                                     <TextInput
                                         style={styles.inputStyle}
-                                        keyboardType='phone-pad'
-                                        placeholder='Enter Amount'
+                                        keyboardType='default'
+                                        placeholder='Input Number'
                                         selectionColor={'grey'}
-                                        onChangeText={inp => validateAmount(inp.trim())}
-                                    // value={`${electricity.amount}`}
+                                        onChangeText={inp => input(inp.trim())}
+                                        value={`${phone}`}
                                     />
                                 </View>
-                            </View>
-                            {message != "" ? <Text style={{ color: color, marginStart: 20, fontSize: 14 }}>{message}</Text> : null}
-                        </View>
+                                {card.name != "" ? <Text style={{ color: card.color }}>{card.name}</Text> : null}
 
-                        <View style={[styles.register, { marginBottom: 20 }]}>
-                            <TouchableOpacity disabled={!electricity.status}
-                                onPress={closeModal2} style={[styles.getStarted, { backgroundColor: electricity.status ? "#7B61FF" : "#7b61ff96" }]}>
-                                <Text style={{ fontSize: 16, color: "white" }}>Proceed</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </ScrollView>
+                                <View style={{ marginTop: 10 }}>
+                                    <Text style={{ color: 'grey', }}>Select Amount</Text>
+                                    <View style={{ flexDirection: 'row', padding: 10 }}>
+
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 1000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>1000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 2000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>2000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 3000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 0, marginTop: 10, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>3000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', padding: 10 }}>
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 4000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>4000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 5000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>5000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setElectricity({ amount: 6000, }); closeModal2() }}
+                                            style={{ alignItems: 'center', marginBottom: 10, marginTop: 0, marginRight: 7 }}>
+                                            <View style={{ backgroundColor: '#d3d1de', padding: 5, borderRadius: 10, alignItems: 'center', width: 90, }}>
+                                                <Text style={{ fontSize: 13, fontWeight: 'bold', margin: 10, fontSize: 13 }}>₦<Text style={{ fontSize: 17 }}>6000</Text></Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 18, marginRight: 4 }}>₦</Text>
+                                    <View style={{
+                                        flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                                        backgroundColor: '#e8e8f0', borderRadius: 5, padding: 10, marginTop: 8, borderBottomWidth: 1,
+                                        borderColor: 'grey', width: '95%'
+                                    }}>
+                                        <TextInput
+                                            style={styles.inputStyle}
+                                            keyboardType='phone-pad'
+                                            placeholder='Enter Amount'
+                                            selectionColor={'grey'}
+                                            onChangeText={inp => validateAmount(inp.trim())}
+                                        // value={`${electricity.amount}`}
+                                        />
+                                    </View>
+                                </View>
+                                {message != "" ? <Text style={{ color: color, marginStart: 20, fontSize: 14 }}>{message}</Text> : null}
+                            </View>
+
+                            <View style={[styles.register, { marginBottom: 20 }]}>
+                                <TouchableOpacity disabled={!electricity.status}
+                                    onPress={closeModal2} style={[styles.getStarted, { backgroundColor: electricity.status ? "#7B61FF" : "#7b61ff96" }]}>
+                                    <Text style={{ fontSize: 16, color: "white" }}>Proceed</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
                 </View>
 
                 {/* ============== Subscription provider modal ============== */}

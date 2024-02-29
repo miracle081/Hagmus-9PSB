@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         // marginTop: 15,
     },
     text1: {
-        color: '#787A8D',
+        color: '#3017b0',
         marginTop: 10,
         fontSize: 23,
         fontWeight: 'bold'

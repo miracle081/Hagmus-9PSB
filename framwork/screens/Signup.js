@@ -160,16 +160,18 @@ export function Signup({ navigation }) {
                       </Text>
 
                       <View style={styles.terms}>
+                        <View style={{borderWidth:0.2}}>
                         <Checkbox status={checked ? 'checked' : 'unchecked'}
                           onPress={() => setChecked(!checked)}
                           color='#7B61FF'
                           uncheckedColor='gray'
                         />
+                        </View>
                         <Text style={styles.signupText}>
                           Accept <Text style={{ color: '#7B61FF', fontSize: 13 }}
-                            onPress={() => navigation.navigate('Web', { uri: "https://hagmusinfo.com/Hagmus/Terms.html" })}>Terms of use</Text> &
+                            onPress={() => navigation.navigate('Web', { uri: "https://hagmus.com/privacypolicy.html" })}>Terms of use</Text> &
                           <Text style={{ color: '#7B61FF', fontSize: 13 }}
-                            onPress={() => navigation.navigate('Web', { uri: "https://hagmusinfo.com/Hagmus/privacypolicy.html" })}> Privacy Policy </Text> </Text>
+                            onPress={() => navigation.navigate('Web', { uri: "https://hagmus.com/privacypolicy.html" })}> Privacy Policy </Text> </Text>
                       </View>
 
 

@@ -27,8 +27,8 @@ export function CardIntro({ navigation }) {
 
       <ScrollView>
         <View style={styles.body}>
-          <View style={{ alignItems: 'center' }}>
-            <Image source={require('../../assets/card1.png')} style={{ width: 250, height: 350 }} />
+          <View style={{ alignItems: 'center' ,marginBottom:20}}>
+            <Image source={require('../../assets/card1.png')} style={{ width: 250, height: 375, marginBottom:5 }} />
           </View>
           <View style={{ alignItems: 'center', margin: 20 }}>
             <Text style={{ fontSize: 15, color: '#464646' }}>Your online needs, Shop and Pay Globally</Text>

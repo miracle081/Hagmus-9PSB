@@ -69,7 +69,8 @@ export function CashbackHistory({ navigation }) {
                 {histories.length > 0 ?
                     <FlatList style={{ flex: 1 }}
                         data={histories} renderItem={({ item }) => {
-                            const icon = ServicesIcons.find(all => all.name == item.category)
+                            const icon = ServicesIcons.find(all => all.name == item.transaction.category)
+                            console.log(item);
                             return (
                                 <View style={{ marginBottom: 5 }}>
                                     <View
@@ -81,7 +82,7 @@ export function CashbackHistory({ navigation }) {
                                                     <FontAwesomeIcon icon={icon.icon} color={icon.color} size={20} style={{ transform: [{ rotate: icon.rotate + 'deg' }] }} />
                                                 </View>
                                                 <View>
-                                                    <Text style={{ color: '#3b3c43', fontSize: 15, textTransform: "capitalize" }}>{item.category}</Text>
+                                                    <Text style={{ color: '#3b3c43', fontSize: 15, textTransform: "capitalize" }}>{item.transaction.category}</Text>
                                                     <Text style={{ color: '#787A8D', fontSize: 11 }}>{dateTime(item.created_at)}</Text>
                                                 </View>
                                             </View>

@@ -22,7 +22,7 @@ const networkList = [
 ]
 
 export function Data({ navigation }) {
-    const { setPreloader, token, pin, setPin, userInfo } = useContext(AppContext);
+    const { setPreloader, token, pin, setPin, userInfo, getAccountInfo, } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [service, setService] = useState({ amount: 0, cashBack: 0, variation_code: "", data: "" });
@@ -57,7 +57,7 @@ export function Data({ navigation }) {
     }
 
     useEffect(() => {
-        console.log(pin);
+        // console.log(service);
         fetchVariation()
     }, [])
 
@@ -89,6 +89,7 @@ export function Data({ navigation }) {
                 setPreloader(false)
                 if (status == "success") {
                     setPin("")
+                    getAccountInfo();
                     navigation.navigate("Successful", {
                         name: "",
                         amount: `${symbol("ngn")}${service.amount}`,
@@ -135,7 +136,7 @@ export function Data({ navigation }) {
 
 
                     <View style={{}}>
-                        <Image source={require('../../assets/cashback.png')} style={{ width: '100%', height: 70, marginBottom: 10, borderRadius: 8 }} />
+                        <Image source={require('../../assets/lkdnd.png')} style={{ width: '100%', height: 90, marginBottom: 10, borderRadius: 8 }} />
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8, }}>
@@ -172,7 +173,7 @@ export function Data({ navigation }) {
                             initialNumToRender={10}
                             style={{ flex: 1 }}
                             renderItem={({ item }) => {
-                                const cashBack = formatDecimal(Number(item.variation_amount) * 1.7 / 100, 2);
+                                const cashBack = formatDecimal(Number(item.variation_amount) * 2 / 100, 2);
                                 const amount = network.name == "Airtel" ? Number(item.variation_amount) + 1 : item.variation_amount
                                 return (
                                     <TouchableOpacity onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name }); closeModal2() }}
@@ -264,6 +265,7 @@ export function Data({ navigation }) {
                                 <View style={{ padding: 10, }}>
                                     <View style={{ alignItems: 'center', marginBottom: 8 }}>
                                         <Text>₦<Text style={{ fontSize: 25 }}>{service.amount}</Text></Text>
+                                        <Text style={{ fontSize: 16, marginVertical: 10 }}>{service.data}</Text>
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 5 }}>
                                         <Text style={{ color: "#727272" }}>Product</Text>

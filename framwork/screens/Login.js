@@ -226,9 +226,9 @@ export function Login({ navigation }) {
               </TouchableOpacity> : null
             }
           </View>
-          <View style={{ alignItems: 'center', height: 180, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>
+          {/* <View style={{ alignItems: 'center', height: 180, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>
             <Image source={require('../../assets/44.png')} style={{ height: 330, width: '100%', }} />
-          </View>
+          </View> */}
         </View>
       </View>
     </View>

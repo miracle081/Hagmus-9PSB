@@ -64,6 +64,7 @@ import { FundDollarCard } from "../screens/Dollarcard/FundDollarCard";
 import { CardSettings } from "../screens/Dollarcard/CardSettings";
 import { NinVerification } from "../screens/NinVerification";
 import { UserAddress } from "../screens/UserAddress";
+import { Treasury } from "../screens/Savings/Treasury";
 
 const Stack = createNativeStackNavigator();
 
@@ -163,6 +164,7 @@ export function StackNavigator() {
             <Stack.Screen name='CardSettings' component={CardSettings} />
             <Stack.Screen name='NinVerification' component={NinVerification} />
             <Stack.Screen name='UserAddress' component={UserAddress} />
+            <Stack.Screen name='Treasury' component={Treasury} />
         </Stack.Navigator>
     )
 }

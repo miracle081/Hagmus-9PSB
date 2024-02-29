@@ -1,6 +1,6 @@
 import { faAngleRight, faArrowLeft, faBank, faCheckCircle, faChevronRight, faFaceSadCry, faFaceSmile, faScroll, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, RefreshControl, } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, RefreshControl, KeyboardAvoidingView, Platform, } from "react-native";
 import { styles } from "../styles/hagmustransfer";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../globals/AppContext";
@@ -14,7 +14,7 @@ import { baseURL } from "../../config";
 import { PinTransactionModal } from "../components/PinModal";
 
 export function BorderTransfer({ navigation }) {
-  const { token, setPreloader, userInfo, accountInfo, pin, setPin } = useContext(AppContext);
+  const { token, setPreloader, userInfo, accountInfo, pin, setPin, getAccountInfo } = useContext(AppContext);
   const [message, setmessage] = useState('');
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalVisibility2, setModalVisibility2] = useState(false);
@@ -127,11 +127,12 @@ export function BorderTransfer({ navigation }) {
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
-        console.log(response);
+        // console.log(response);
         setPreloader(false)
         if (status == "success") {
           setAmount(0)
           setPin("")
+          getAccountInfo();
           navigation.navigate("Successful", {
             name: "",
             amount: `${symbol("ngn")}${amount}`,
@@ -164,7 +165,7 @@ export function BorderTransfer({ navigation }) {
       return (
         <TouchableOpacity onPress={() => setModalVisibility2(true)}
           style={styles.getStarted}>
-          <Text style={{ fontSize: 16, }}>Next</Text>
+          <Text style={{ fontSize: 16, color: 'white' }}>Next</Text>
         </TouchableOpacity>
       )
     } else {
@@ -199,158 +200,160 @@ export function BorderTransfer({ navigation }) {
         <View style={{ alignItems: 'center', marginBottom: 15 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 23, color: 'black' }}>Send Money Faster</Text>
         </View>
-
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={false} onRefresh={fetchBankList} />
-          } style={{ flex: 1 }}>
-          <View style={{
-            backgroundColor: '#f6f5f9', margin: 8, borderRadius: 10, padding: 10
-          }}>
-            <View style={{ marginBottom: 10 }}>
-              <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}>Quick Tap</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginBottom: 10 }}>
-
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "HAGMUS", bankCode: "HAGMUS", img: "https://wenethub.com/imageslink/webuse.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/webuse.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-                <View style={{
-                  margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-100%", borderTopRightRadius: 10,
-                  borderBottomRightRadius: 10, borderTopLeftRadius: 10, width: 40,
-                }}>
-                  <Text style={{
-                    fontSize: 9, width: 30, padding: 3,
-                  }}>Free</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "UNITED BANK FOR AFRICA", bankCode: "000004", img: "https://wenethub.com/imageslink/uba.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/uba.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST BANK OF NIGERIA", bankCode: "000016", img: "https://wenethub.com/imageslink/firstbank.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/firstbank.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "ZENITH BANK", bankCode: "000015", img: "https://wenethub.com/imageslink/zenith.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/zenith.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, }}>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "GTBANK PLC", bankCode: "000013", img: "https://wenethub.com/imageslink/gtb.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/gtb.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "ACCESS BANK", bankCode: "000014", img: "https://wenethub.com/imageslink/Access.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/Access.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST CITY MONUMENT BANK", bankCode: "000003", img: "https://wenethub.com/imageslink/fcmb.png" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/fcmb.png' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setSelectedBank({ name: "STANBIC IBTC BANK", bankCode: "000012", img: "https://wenethub.com/imageslink/stanbic.jpeg" })}>
-                <Image
-                  source={{ uri: 'https://wenethub.com/imageslink/stanbic.jpeg' }}
-                  style={{ width: 40, height: 40, borderRadius: 8 }} />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ backgroundColor: '#f6f5f9', borderRadius: 8, marginHorizontal: 8 }}>
-
-            <View style={{ margin: 15 }}>
-
-              {/* <Text style={styles.signupText}>Select Bank</Text> */}
-              <TouchableOpacity onPress={closeModal}
-                activeOpacity={0.5}
-              >
-                <View style={{
-                  padding: 10, flexDirection: 'row', borderBottomWidth: 0.8, borderColor: '#cac3ee',
-                  alignItems: 'center', justifyContent: 'space-between', borderRadius: 5, marginBottom: 25
-                }}>
-                  {selectedBank.img == null && selectedBank.name == "" ?
-                    <Text style={{ color: '#999aa5', fontSize: 15 }}>Select Bank</Text> :
-                    <View style={{ flexDirection: 'row', alignItems: "center" }}>
-                      {selectedBank.img == null ?
-                        <FontAwesomeIcon icon={faBank} color="#7B61FF" size={17} /> :
-                        <Image source={{ uri: selectedBank.img }} style={{ width: 35, height: 35, borderRadius: 50 }} />
-                      }
-                      <Text style={{ color: '#2e2e2e', fontSize: 14, marginStart: 10, textTransform: "uppercase" }}>{selectedBank.name}</Text>
-                    </View>
-                  }
-                  <FontAwesomeIcon
-                    icon={faAngleRight}
-                    color={"#787A8D"}
-                  />
-                </View>
-              </TouchableOpacity>
-
-              <Text style={styles.signupText}>Recipient Account</Text>
-              <TextInput
-                style={[styles.inputStyle, { marginBottom: 0 }]}
-                keyboardType='number-pad'
-                placeholder='Enter 10 digits Account Number'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor='#999aa5'
-                onChangeText={inp => { setAccountNumber(inp); inp.length == 10 ? verifyName(inp) : null }}
-              />
-              {"name" in actName ?
-                <Text style={{ fontSize: 15, color: actName.color }}>{actName.name}</Text> : null
-              }
-
-              <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
-              <TextInput
-                style={styles.inputStyle}
-                keyboardType='numeric'
-                placeholder='0'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor="#999aa5"
-                onChangeText={inp => setAmount(Number(inp.trim()))}
-              />
-
-              <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder='Narration'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor="#999aa5"
-                onChangeText={inp => setNarration(inp.trim())}
-              />
-            </View>
-
-            {btnVal()}
-          </View>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate('History')}
-            activeOpacity={0.5}
-            style={{
-              backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,
-              flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+        <KeyboardAvoidingView style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+        >
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing={false} onRefresh={fetchBankList} />
+            } style={{ flex: 1 }}>
+            <View style={{
+              backgroundColor: '#f6f5f9', margin: 8, borderRadius: 10, padding: 10
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: 8, backgroundColor: 'white', padding: 6, borderRadius: 8 }}>
-                <FontAwesomeIcon icon={faScroll} size={20} color="#312183" />
+              <View style={{ marginBottom: 10 }}>
+                <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}>Quick Tap</Text>
               </View>
-              <Text>Transaction History</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginBottom: 10 }}>
+
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "HAGMUS", bankCode: "HAGMUS", img: "https://wenethub.com/imageslink/webuse.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/webuse.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                  <View style={{
+                    margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-100%", borderTopRightRadius: 10,
+                    borderBottomRightRadius: 10, borderTopLeftRadius: 10, width: 40,
+                  }}>
+                    <Text style={{
+                      fontSize: 9, width: 30, padding: 3,
+                    }}>Free</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "UNITED BANK FOR AFRICA", bankCode: "000004", img: "https://wenethub.com/imageslink/uba.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/uba.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST BANK OF NIGERIA", bankCode: "000016", img: "https://wenethub.com/imageslink/firstbank.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/firstbank.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "ZENITH BANK", bankCode: "000015", img: "https://wenethub.com/imageslink/zenith.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/zenith.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, }}>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "GTBANK PLC", bankCode: "000013", img: "https://wenethub.com/imageslink/gtb.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/gtb.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "ACCESS BANK", bankCode: "000014", img: "https://wenethub.com/imageslink/Access.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/Access.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "FIRST CITY MONUMENT BANK", bankCode: "000003", img: "https://wenethub.com/imageslink/fcmb.png" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/fcmb.png' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setSelectedBank({ name: "STANBIC IBTC BANK", bankCode: "000012", img: "https://wenethub.com/imageslink/stanbic.jpeg" })}>
+                  <Image
+                    source={{ uri: 'https://wenethub.com/imageslink/stanbic.jpeg' }}
+                    style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </TouchableOpacity>
+              </View>
             </View>
-            <FontAwesomeIcon icon={faChevronRight} color="#312183" />
-          </TouchableOpacity>
+            <View style={{ backgroundColor: '#f6f5f9', borderRadius: 8, marginHorizontal: 8 }}>
+
+              <View style={{ margin: 15 }}>
+
+                {/* <Text style={styles.signupText}>Select Bank</Text> */}
+                <TouchableOpacity onPress={closeModal}
+                  activeOpacity={0.5}
+                >
+                  <View style={{
+                    padding: 10, flexDirection: 'row', borderBottomWidth: 0.8, borderColor: '#cac3ee',
+                    alignItems: 'center', justifyContent: 'space-between', borderRadius: 5, marginBottom: 25
+                  }}>
+                    {selectedBank.img == null && selectedBank.name == "" ?
+                      <Text style={{ color: '#999aa5', fontSize: 15 }}>Select Bank</Text> :
+                      <View style={{ flexDirection: 'row', alignItems: "center" }}>
+                        {selectedBank.img == null ?
+                          <FontAwesomeIcon icon={faBank} color="#7B61FF" size={17} /> :
+                          <Image source={{ uri: selectedBank.img }} style={{ width: 35, height: 35, borderRadius: 50 }} />
+                        }
+                        <Text style={{ color: '#2e2e2e', fontSize: 14, marginStart: 10, textTransform: "uppercase" }}>{selectedBank.name}</Text>
+                      </View>
+                    }
+                    <FontAwesomeIcon
+                      icon={faAngleRight}
+                      color={"#787A8D"}
+                    />
+                  </View>
+                </TouchableOpacity>
+
+                <Text style={styles.signupText}>Recipient Account</Text>
+                <TextInput
+                  style={[styles.inputStyle, { marginBottom: 0 }]}
+                  keyboardType='number-pad'
+                  placeholder='Enter 10 digits Account Number'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor='#999aa5'
+                  onChangeText={inp => { setAccountNumber(inp); inp.length == 10 ? verifyName(inp) : null }}
+                />
+                {"name" in actName ?
+                  <Text style={{ fontSize: 15, color: actName.color }}>{actName.name}</Text> : null
+                }
+
+                <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  keyboardType='numeric'
+                  placeholder='0'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor="#999aa5"
+                  onChangeText={inp => setAmount(Number(inp.trim()))}
+                />
+
+                <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder='Narration'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor="#999aa5"
+                  onChangeText={inp => setNarration(inp.trim())}
+                />
+              </View>
+
+              {btnVal()}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('History')}
+              activeOpacity={0.5}
+              style={{
+                backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ marginRight: 8, backgroundColor: 'white', padding: 6, borderRadius: 8 }}>
+                  <FontAwesomeIcon icon={faScroll} size={20} color="#312183" />
+                </View>
+                <Text>Transaction History</Text>
+              </View>
+              <FontAwesomeIcon icon={faChevronRight} color="#312183" />
+            </TouchableOpacity>
 
 
-        </ScrollView>
-
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
 
       {/* ================ Assets Modal ============= */}
@@ -422,24 +425,26 @@ export function BorderTransfer({ navigation }) {
           <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
             <Pressable style={{ flex: 1 }} onPress={closeModal2} >
             </Pressable>
-            <View style={{ backgroundColor: "#16171D", borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+            <View style={{ backgroundColor: "#fcfbff", borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
               <View style={{ alignItems: 'flex-end', margin: 10, marginBottom: 0 }}>
                 <TouchableOpacity onPress={closeModal2}>
                   <FontAwesomeIcon
                     icon={faXmark}
                     size={24}
-                    color='#787A8D'
+                    color='#7B61FF'
                   />
                 </TouchableOpacity>
               </View>
               <Text style={{
-                color: 'white', fontWeight: 'bold', marginTop: 0,
+                color: '#0e0a20', fontWeight: 'bold', marginTop: 0,
                 fontSize: 17, margin: 10, textAlign: "center"
               }}>Confirm Details</Text>
               <View>
-                <Text style={{ backgroundColor: '#21242D', marginHorizontal: 10, padding: 7, borderRadius: 10, color: "#ffffffab" }}>
-                  Confirm the transfer details are correct before you proceed to avoid mistakes. Successful transfers cannot be reversed.
-                </Text>
+                <View style={{ backgroundColor: '#dbd5fa', padding: 7, marginHorizontal: 10, borderRadius: 10, }}>
+                  <Text style={{ color: "#1e1839" }}>
+                    Confirm the transfer details are correct before you proceed to avoid mistakes. Successful transfers cannot be reversed.
+                  </Text>
+                </View>
 
                 <View style={{ marginVertical: 10 }}>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "center" }}>
@@ -453,31 +458,31 @@ export function BorderTransfer({ navigation }) {
                           <Image source={{ uri: selectedBank.img }} style={{ width: 40, height: 40, borderRadius: 100, }} />
                       }
                       {/* <Image source={selectedBank.img} style={{ width: 50, height: 50, borderRadius: 50 }} /> */}
-                      <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3 }}>{selectedBank.name}</Text>
+                      <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3 }}>{selectedBank.name}</Text>
                     </View>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Account Number</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{accountNumber}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Account Number</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{accountNumber}</Text>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Account Name</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Account Name</Text>
                     <View style={{ alignItems: "flex-end", flex: 1 }}>
                       {/* <FontAwesomeIcon icon={faCheckCircle} color="#7B61FF" /> */}
-                      <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, flex: 1 }}> {actName.name}</Text>
+                      <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, flex: 1 }}> {actName.name}</Text>
                     </View>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Amount</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{amount}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Amount</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{amount}</Text>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Fee</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{0}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Fee</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{20}</Text>
                   </View>
                   <TouchableOpacity onPress={() => { setModalVisibility2(false), pinModal() }}
                     style={styles.getStarted}>
-                    <Text style={{ fontSize: 16, }}>Confirm</Text>
+                    <Text style={{ fontSize: 16, color: 'white' }}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>

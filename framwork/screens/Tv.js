@@ -34,11 +34,11 @@ const networkList = [
     { name: "GOTV", id: "gotv", image: "https://wenethub.com/imageslink/gotv.png" },
     { name: "DSTV", id: "dstv", image: "https://wenethub.com/imageslink/dstv.jpg" },
     { name: "Startimes", id: "startimes", image: "https://wenethub.com/imageslink/star.jpg" },
-    { name: "Showmax", id: "showmax", image: "https://wenethub.com/imageslink/max.png" },
+    // { name: "Showmax", id: "showmax", image: "https://wenethub.com/imageslink/max.png" },
 ]
 
 export function Tv({ navigation }) {
-    const { userUID, setPreloader, userInfo, token, pin, setPin } = useContext(AppContext);
+    const { userUID, setPreloader, userInfo, token, pin, getAccountInfo, setPin } = useContext(AppContext);
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [modalVisibility, setModalVisibility] = useState(false);
@@ -108,7 +108,8 @@ export function Tv({ navigation }) {
                 // console.log(response);
                 setPreloader(false)
                 if (status == "success") {
-                    setPin("")
+                    setPin("");
+                    getAccountInfo();
                     navigation.navigate("Successful", {
                         name: "",
                         amount: `${symbol("ngn")}${service.amount}`,
@@ -280,7 +281,7 @@ export function Tv({ navigation }) {
                         }}>
                             <TextInput
                                 style={styles.inputStyle}
-                                keyboardType='phone-pad'
+                                keyboardType="default"
                                 placeholder='Input Number'
                                 selectionColor={'grey'}
                                 onChangeText={inp => input(inp.trim())}

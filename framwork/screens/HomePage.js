@@ -33,6 +33,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import { handleError } from '../components/HandleRequestError';
 import { MyDollarCard } from './Dollarcard/MyDollarCard';
 import { formatMoney } from '../components/FormatMoney';
+import { Treasury } from './Savings/Treasury';
 
 
 const installedAppVersion = Constants.expoConfig.version
@@ -231,6 +232,7 @@ function HomeScreen({ navigation }) {
                     style={{ alignItems: 'center' }}>
                     <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
                       <FontAwesomeIcon icon={faAddressBook} size={25} color='#4f39bf' />
+                      {/* <Image source={require('../../assets/hsend.png')} style={{height:140,width:100}}/> */}
                     </View>
                     <View style={{
                       margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-70%", borderTopRightRadius: 10,
@@ -240,7 +242,7 @@ function HomeScreen({ navigation }) {
                         fontSize: 7, padding: 3,
                       }}>Free</Text>
                     </View>
-                    <Text style={{ fontSize: 13 }}>To HPay</Text>
+                    <Text style={{ fontSize: 13 }}>Hagmus</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={{ alignItems: 'center' }}>
@@ -443,8 +445,8 @@ export function HomePage() {
           if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           }
-          else if (route.name === 'Markets') {
-            iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+          else if (route.name === 'Treasury') {
+            iconName = focused ? 'diamond' : 'diamond-outline';
           }
           else if (route.name === 'CardIntro' || route.name === "MyDollarCard") {
             iconName = focused ? 'card' : 'card-outline';
@@ -465,8 +467,8 @@ export function HomePage() {
       })}
     >
       <Tab.Screen name='Home' component={HomeScreen} options={{ headerShown: false }} />
-      {/* <Tab.Screen name='Markets' component={Markets} options={{ headerShown: false }} /> */}
       <Tab.Screen name='Earn' component={Earn} options={{ headerShown: false }} />
+      {/* <Tab.Screen name='Treasury' component={Treasury} options={{ headerShown: false }} /> */}
       {userCards.length > 0 ?
         <Tab.Screen name='MyDollarCard' component={MyDollarCard} options={{ headerShown: false, title: "Card" }} /> :
         <Tab.Screen name='CardIntro' component={CardIntro} options={{ headerShown: false, title: "Card" }} />

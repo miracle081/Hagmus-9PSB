@@ -157,9 +157,9 @@ export function LoginOtp({ navigation }) {
           </View>
 
         </ScrollView>
-        <View style={{ alignItems: 'center', height: 140, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>
-          <Image source={require('../../assets/44.png')} style={{ height: 230, width: '100%', }} />
-        </View>
+        {/* <View style={{ alignItems: 'center', height: 140, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>
+          <Image source={require('../../assets/44.png')} style={{ height: 130, width: '100%', }} />
+        </View> */}
       </View>
     </AppSafeAreaView>
   )

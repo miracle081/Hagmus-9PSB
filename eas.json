@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 5.3.0"
+    "version": ">= 5.3.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -10,13 +11,15 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "autoIncrement": true
+    }
   },
   "submit": {
     "production": {
       "ios":{
         "appleId":"israel@hagmus.com",
-        "ascAppId":"6473706399",
+        "ascAppId":"6478056491",
         "appleTeamId":"ALGM993ZAN"
       }
     }

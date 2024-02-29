@@ -1,6 +1,6 @@
 import { faAngleRight, faArrowLeft, faCheckCircle, faChevronRight, faFaceSadCry, faFaceSmile, faScroll, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, ActivityIndicator, Pressable, FlatList, Image, Modal, Alert, ScrollView, KeyboardAvoidingView, Platform, } from "react-native";
 import { styles } from "../styles/hagmustransfer";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../globals/AppContext";
@@ -16,22 +16,10 @@ import { baseURL } from "../../config";
 import { handleError } from "../components/HandleRequestError";
 
 export function HagmusTransfer({ navigation }) {
-  const { userUID, setPreloader, userInfo, accountInfo, pin, setPin, token } = useContext(AppContext);
-  const [activity, setActivity] = useState(false);
-  const [message, setmessage] = useState('');
-  const [modalVisibility, setModalVisibility] = useState(false);
+  const { setPreloader, accountInfo, pin, getAccountInfo, setPin, token } = useContext(AppContext);
   const [modalVisibility2, setModalVisibility2] = useState(false);
   const [pinModalVisibility, setPinMetModalVisibility] = useState(false);
-  const [userName, setuserName] = useState('');
-  const [userCoins, setUserCoins] = useState([]);
-  const [selectedCoin, setSelectedCoin] = useState({ id: "", name: "", symbol: "", img: null, coinValue: 0, docId: "", rank: 0 });
-  const [mColor, setmColor] = useState('gray');
   const [amount, setAmount] = useState(0);
-  const [recieverCoin, setRecieverCoin] = useState([{ docId: "", coinValue: 0 }]);
-  const [allUsers, setallUsers] = useState([{ userName: '' }]);
-  const [recieverInfo, setrecieverInfo] = useState({ userName: '', uid: "", fname: "", lname: '' });
-  const [color, setColor] = useState('gray');
-  const [message2, setMessage2] = useState('');
   const [narration, setNarration] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [actName, setActName] = useState({});
@@ -117,7 +105,8 @@ export function HagmusTransfer({ navigation }) {
         setPreloader(false)
         if (status == "success") {
           setAmount(0)
-          setPin("")
+          setPin("");
+          getAccountInfo();
           navigation.navigate("Successful", {
             name: "",
             amount: `${symbol("ngn")}${amount}`,
@@ -134,26 +123,6 @@ export function HagmusTransfer({ navigation }) {
 
   }
 
-
-  function validation(input) {
-    const limit = selectedCoin.name == 'ngn' ? 100 : 1
-    if (input >= limit) {
-      if (input < userInfo[selectedCoin.name]) {
-        setAmount(Number(input))
-        setMessage2('Amount Ok');
-        setColor('#02904bff')
-      } else {
-        setMessage2(`Insufficient Balace (Bal: ${userInfo.ngn})`);
-        setColor('#ff0000be')
-        setAmount(0)
-      }
-    }
-    else {
-      setMessage2(`Amount must be above ${symbol(selectedCoin.name)}${limit}`);
-      setColor('#ff0000ff')
-      setAmount(0)
-    }
-  }
 
   function btnVal() {
     if (amount > 0 || accountNumber.length == 10) {
@@ -187,79 +156,83 @@ export function HagmusTransfer({ navigation }) {
           <Text style={{ fontSize: 18, color: 'black', }}>Transfer To HagmusPay</Text>
         </View>
 
-        <ScrollView>
-          <View style={{
-            flexDirection: 'row', alignItems: 'center', backgroundColor: '#cfc8f0',
-            padding: 5, borderRadius: 8, marginTop: 6, justifyContent: 'center', marginHorizontal: 15
-          }}>
-            <FontAwesomeIcon icon={faClock} color="#5a3def" />
-            <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#5a3def', marginLeft: 5 }}>Credited in 60s Guaranteed</Text>
-          </View>
-
-          <View>
-            <View style={{ alignItems: 'center' }}>
-              <TouchableOpacity onPress={() => navigation.navigate('Airtime')}>
-                <Image source={require('../../assets/BONUSF.png')} style={{ height: 150, width: 410, }} />
-              </TouchableOpacity>
-            </View>
-            <View style={{ margin: 15, backgroundColor: '#f6f5f9', padding: 15, borderRadius: 8 }}>
-
-              <Text style={styles.signupText}>Recipient Account</Text>
-              <TextInput
-                style={[styles.inputStyle, { marginBottom: 0 }]}
-                keyboardType='number-pad'
-                placeholder='Enter 10 digits Account Number'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor='#999aa5'
-                onChangeText={inp => { setAccountNumber(inp); inp.length == 10 ? verifyName(inp) : null }}
-              />
-              {"name" in actName ?
-                <Text style={{ fontSize: 15, color: actName.color }}>{actName.name}</Text> : null
-              }
-
-              <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
-              <TextInput
-                style={styles.inputStyle}
-                keyboardType='numeric'
-                placeholder='0'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor="#999aa5"
-                onChangeText={inp => setAmount(Number(inp.trim()))}
-              />
-
-              <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
-              <TextInput
-                style={styles.inputStyle}
-                placeholder='Narration'
-                selectionColor={'#7B61FF'}
-                mode='outlined'
-                placeholderTextColor="#999aa5"
-                onChangeText={inp => setNarration(inp.trim())}
-              />
-            </View>
-
-            {btnVal()}
-          </View>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('History')}
-            activeOpacity={0.5}
-            style={{
-              backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,
-              flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+        <KeyboardAvoidingView style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : null}
+        >
+          <ScrollView>
+            <View style={{
+              flexDirection: 'row', alignItems: 'center', backgroundColor: '#cfc8f0',
+              padding: 5, borderRadius: 8, marginTop: 6, justifyContent: 'center', marginHorizontal: 15
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={{ marginRight: 8, backgroundColor: 'white', padding: 6, borderRadius: 8 }}>
-                <FontAwesomeIcon icon={faScroll} size={20} color="#312183" />
-              </View>
-              <View>
-                <Text>Transaction History</Text>
-              </View>
+              <FontAwesomeIcon icon={faClock} color="#5a3def" />
+              <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#5a3def', marginLeft: 5 }}>Credited in 60s Guaranteed</Text>
             </View>
-            <FontAwesomeIcon icon={faChevronRight} color="#312183" />
-          </TouchableOpacity>
-        </ScrollView>
+
+            <View>
+              <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => navigation.navigate('Airtime')}>
+                  <Image source={require('../../assets/BONUSF.png')} style={{ height: 150, width: 410, }} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ margin: 15, backgroundColor: '#f6f5f9', padding: 15, borderRadius: 8 }}>
+
+                <Text style={styles.signupText}>Recipient Account</Text>
+                <TextInput
+                  style={[styles.inputStyle, { marginBottom: 0 }]}
+                  keyboardType='number-pad'
+                  placeholder='Enter 10 digits Account Number'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor='#999aa5'
+                  onChangeText={inp => { setAccountNumber(inp); inp.length == 10 ? verifyName(inp) : null }}
+                />
+                {"name" in actName ?
+                  <Text style={{ fontSize: 15, color: actName.color }}>{actName.name}</Text> : null
+                }
+
+                <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  keyboardType='numeric'
+                  placeholder='0'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor="#999aa5"
+                  onChangeText={inp => setAmount(Number(inp.trim()))}
+                />
+
+                <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
+                <TextInput
+                  style={styles.inputStyle}
+                  placeholder='Narration'
+                  selectionColor={'#7B61FF'}
+                  mode='outlined'
+                  placeholderTextColor="#999aa5"
+                  onChangeText={inp => setNarration(inp.trim())}
+                />
+              </View>
+
+              {btnVal()}
+            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('History')}
+              activeOpacity={0.5}
+              style={{
+                backgroundColor: '#f6f5f9', margin: 10, padding: 10, borderRadius: 8,
+                flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ marginRight: 8, backgroundColor: 'white', padding: 6, borderRadius: 8 }}>
+                  <FontAwesomeIcon icon={faScroll} size={20} color="#312183" />
+                </View>
+                <View>
+                  <Text>Transaction History</Text>
+                </View>
+              </View>
+              <FontAwesomeIcon icon={faChevronRight} color="#312183" />
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
 
       {/* =============== Confirmation Modal =============== */}

@@ -96,6 +96,8 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 10,
         alignItems: 'center',
+        // borderWidth:1,
+        // borderRadius:8
     },
     errorMessage: {
         color: 'red'

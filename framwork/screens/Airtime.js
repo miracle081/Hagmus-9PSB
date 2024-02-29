@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Alert, Image, Pressable, ScrollView, FlatList, } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Alert, Image, Pressable, ScrollView, FlatList, KeyboardAvoidingView, Platform, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/airtime";
 import { Kurale_400Regular } from "@expo-google-fonts/kurale";
@@ -21,12 +21,12 @@ import { handleError } from '../components/HandleRequestError';
 import { PinTransactionModal } from '../components/PinModal';
 
 const airTimeService = [
-    { amount: 50, cashBack: 0.8 },
-    { amount: 100, cashBack: 1.7 },
-    { amount: 200, cashBack: 3.4 },
-    { amount: 500, cashBack: 8.5 },
-    { amount: 1000, cashBack: 17 },
-    { amount: 2000, cashBack: 34, },
+    { amount: 50, cashBack: 50 * 2 / 100 },
+    { amount: 100, cashBack: 100 * 2 / 100 },
+    { amount: 200, cashBack: 200 * 2 / 100 },
+    { amount: 500, cashBack: 500 * 2 / 100 },
+    { amount: 1000, cashBack: 1000 * 2 / 100 },
+    { amount: 2000, cashBack: 2000 * 2 / 100 },
 ]
 
 const networkList = [
@@ -37,7 +37,7 @@ const networkList = [
 ]
 
 export function Airtime({ navigation }) {
-    const { userUID, setPreloader, userInfo, accountInfo, token, pin, setPin } = useContext(AppContext);
+    const { userUID, setPreloader, userInfo, accountInfo, token, pin, getAccountInfo, setPin } = useContext(AppContext);
     const [newPassword, setNewPassword] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [modalVisibility, setModalVisibility] = useState(false);
@@ -78,6 +78,7 @@ export function Airtime({ navigation }) {
                 setPreloader(false)
                 if (status == "success") {
                     setPin("")
+                    getAccountInfo();
                     navigation.navigate("Successful", {
                         name: "",
                         amount: symbol("ngn") + airTime.amount,
@@ -113,7 +114,7 @@ export function Airtime({ navigation }) {
             setAirTime({ amount: 0, cashBack: 0 })
         } else {
             if (amt < accountInfo.account_balance) {
-                const cal = amt * 1.7 / 100;
+                const cal = amt * 2 / 100;
                 setAirTime({ amount: amt, cashBack: cal })
                 setMessage('Amount Ok');
                 setColor('#02904bff')
@@ -126,7 +127,7 @@ export function Airtime({ navigation }) {
     }
 
     return (
-        <AppSafeAreaView  backgroundColor={"#e4e2eb"}>
+        <AppSafeAreaView backgroundColor={"#e4e2eb"}>
             <View style={styles.container}>
                 <View style={styles.body}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -139,89 +140,93 @@ export function Airtime({ navigation }) {
                     <View style={styles.header}>
                         <Text style={styles.text1}>Airtime</Text>
                     </View>
+                    <View style={{}}>
+                        <Image source={require('../../assets/lkdn.png')} style={{ width: '100%', height: 95, marginBottom: 10, borderRadius: 8 }} />
+                    </View>
+                    <KeyboardAvoidingView style={{ flex: 1 }}
+                        behavior={Platform.OS === 'ios' ? 'padding' : null}
+                    >
+                        <ScrollView style={{ flex: 1 }}>
 
-                    <ScrollView style={{ flex: 1 }}>
-                        <View style={{}}>
-                            <Image source={require('../../assets/cashback.png')} style={{ width: '100%', height: 70, marginBottom: 10, borderRadius: 8 }} />
-                        </View>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8, }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity
-                                    onPress={closeModal}
-                                    style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Image source={{ uri: network.image }} style={{ width: 40, height: 40, borderRadius: 100, marginRight: 5 }} />
-                                    <FontAwesomeIcon icon={faCaretDown} color='grey' />
-                                </TouchableOpacity>
-                                <Text style={{ borderLeftWidth: 2, borderColor: '#9387cf', height: 30, marginLeft: 14 }}></Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8, }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        onPress={closeModal}
+                                        style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Image source={{ uri: network.image }} style={{ width: 40, height: 40, borderRadius: 100, marginRight: 5 }} />
+                                        <FontAwesomeIcon icon={faCaretDown} color='grey' />
+                                    </TouchableOpacity>
+                                    <Text style={{ borderLeftWidth: 2, borderColor: '#9387cf', height: 30, marginLeft: 14 }}></Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <TextInput
+                                        style={styles.inputStyle}
+                                        keyboardType='phone-pad'
+                                        placeholder='Input Number'
+                                        selectionColor={'grey'}
+                                        onChangeText={inp => setPhone(inp.trim())}
+                                        value={`${phone}`}
+                                    />
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    keyboardType='phone-pad'
-                                    placeholder='Input Number'
-                                    selectionColor={'grey'}
-                                    onChangeText={inp => setPhone(inp.trim())}
-                                    value={`${phone}`}
-                                />
-                            </View>
-                        </View>
 
 
-                        {/* Top Up */}
-                        <View style={{ backgroundColor: '#f1f1f5', padding: 18, borderRadius: 8, marginTop: 18, }}>
-                            <View style={{ padding: 3, }}>
+                            {/* Top Up */}
+                            <View style={{ backgroundColor: '#f1f1f5', padding: 18, borderRadius: 8, marginTop: 18, }}>
+                                <View style={{ padding: 3, }}>
 
-                                {airTimeService.map(item => {
-                                    return (
-                                        <TouchableOpacity key={item.amount}
-                                            onPress={() => { setAirTime(item), closeModal2() }}
-                                            style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", backgroundColor: '#dcdcdc7e', padding: 15, borderRadius: 8, marginTop: 5, paddingVertical: 10, flex: 1, }}>
-                                            <View style={{ flex: 1 }}>
-                                                <Text style={{ fontSize: 14, color: '#343434', fontWeight: "bold" }}>₦{item.amount}</Text>
-                                                <Text style={{ fontSize: 11, marginBottom: 2, color: '#5541b7' }}>+₦{item.cashBack} bonus</Text>
-                                            </View>
-                                            <TouchableOpacity
+                                    {airTimeService.map(item => {
+                                        return (
+                                            <TouchableOpacity key={item.amount}
                                                 onPress={() => { setAirTime(item), closeModal2() }}
-                                                style={[styles.getStarted, { borderRadius: 50, padding: 5, paddingHorizontal: 15, marginTop: 0 }]}>
-                                                <Text style={{ fontSize: 12, color: "white" }}>Buy</Text>
+                                                style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", backgroundColor: '#dcdcdc7e', padding: 15, borderRadius: 8, marginTop: 5, paddingVertical: 10, flex: 1, }}>
+                                                <View style={{ flex: 1 }}>
+                                                    <Text style={{ fontSize: 14, color: '#343434', fontWeight: "bold" }}>₦{item.amount}</Text>
+                                                    <Text style={{ fontSize: 11, marginBottom: 2, color: '#5541b7' }}>+₦{item.cashBack} bonus</Text>
+                                                </View>
+                                                <TouchableOpacity
+                                                    onPress={() => { setAirTime(item), closeModal2() }}
+                                                    style={[styles.getStarted, { borderRadius: 50, padding: 5, paddingHorizontal: 15, marginTop: 0 }]}>
+                                                    <Text style={{ fontSize: 12, color: "white" }}>Buy</Text>
+                                                </TouchableOpacity>
                                             </TouchableOpacity>
-                                        </TouchableOpacity>
-                                    )
-                                })
-                                }
+                                        )
+                                    })
+                                    }
+                                </View>
                             </View>
-                        </View>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8, marginTop: 10 }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f1f5', padding: 10, borderRadius: 8, marginTop: 10 }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                                <Text style={{ marginLeft: 14, fontWeight: 'bold', fontSize: 18 }}>₦</Text>
+                                    <Text style={{ marginLeft: 14, fontWeight: 'bold', fontSize: 18 }}>₦</Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <TextInput
+                                        style={styles.inputStyle}
+                                        keyboardType='phone-pad'
+                                        placeholder='50 - 500000'
+                                        selectionColor={'grey'}
+                                        onChangeText={inp => validateAmount(inp.trim())}
+                                    />
+                                </View>
                             </View>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <TextInput
-                                    style={styles.inputStyle}
-                                    keyboardType='phone-pad'
-                                    placeholder='50 - 500000'
-                                    selectionColor={'grey'}
-                                    onChangeText={inp => validateAmount(inp.trim())}
-                                />
+                            {message != "" ? <Text style={{ marginBottom: 25, color: color }}>{message}</Text> : null}
+
+                            <View style={styles.register}>
+                                <TouchableOpacity
+                                    onPress={closeModal2}
+                                    style={styles.getStarted}>
+                                    <Text style={{ fontSize: 16, color: "white" }}>Pay</Text>
+                                </TouchableOpacity>
                             </View>
-                        </View>
-                        {message != "" ? <Text style={{ marginBottom: 25, color: color }}>{message}</Text> : null}
 
-                        <View style={styles.register}>
-                            <TouchableOpacity
-                                onPress={closeModal2}
-                                style={styles.getStarted}>
-                                <Text style={{ fontSize: 16, color: "white" }}>Pay</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={{ marginTop: 20 }}>
-                            <Image source={require('../../assets/cashback.png')} style={{ width: '100%', height: 70, marginBottom: 10, borderRadius: 8 }} />
-                        </View>
-                    </ScrollView>
+                            <View style={{ marginTop: 20 }}>
+                                <Image source={require('../../assets/cashback.png')} style={{ width: '100%', height: 70, marginBottom: 10, borderRadius: 8 }} />
+                            </View>
+                        </ScrollView>
+                    </KeyboardAvoidingView>
                 </View>
 
                 {/* ============== Network provider modal ============== */}
