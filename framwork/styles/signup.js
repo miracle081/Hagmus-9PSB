@@ -9,18 +9,18 @@ export const styles = StyleSheet.create({
         flex: 1,
         marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null,
         marginHorizontal: 0,
-        backgroundColor:'#fcfbff',
-        borderTopLeftRadius:30,
-        borderTopRightRadius:30,
+        backgroundColor: '#fcfbff',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
         // height:'100%'
     },
     header: {
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         marginBottom: 0,
         marginTop: 15,
-        paddingHorizontal:10,
+        paddingHorizontal: 10,
     },
     BtnIcon: {
         backgroundColor: "#7B61FF",
@@ -42,21 +42,21 @@ export const styles = StyleSheet.create({
         fontSize: 13,
         // fontWeight: 'bold'
     },
-    stepIndicator:{
-        flexDirection:"row",
-        gap:5
+    stepIndicator: {
+        flexDirection: "row",
+        gap: 5
     },
-    indicator:{
-        width:20,
-        height:3,
-        borderRadius:5,
-        backgroundColor:"#6b6d7ccd"
+    indicator: {
+        width: 20,
+        height: 3,
+        borderRadius: 5,
+        backgroundColor: "#6b6d7ccd"
     },
-    welcomeNote:{
-        fontSize:23,
-        color:'#0d0b14',
+    welcomeNote: {
+        fontSize: 23,
+        color: '#0d0b14',
         // fontWeight:'bold',
-        marginTop:10,
+        marginTop: 10,
     },
     formContainer: {
         padding: 10,
@@ -70,8 +70,8 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: '#050507',
         fontSize: 16,
-        borderWidth:1,
-        borderColor:'#7B61FF'
+        borderWidth: 1,
+        borderColor: '#7B61FF'
 
     },
     getStarted: {

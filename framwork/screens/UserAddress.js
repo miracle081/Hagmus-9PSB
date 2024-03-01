@@ -123,7 +123,7 @@ export function UserAddress({ navigation }) {
                         <FontAwesomeIcon
                             icon={faChevronLeft}
                             size={25}
-                            color='grey' 
+                            color='grey'
                         />
                     </TouchableOpacity>
                     <View style={styles.header}>
@@ -136,10 +136,10 @@ export function UserAddress({ navigation }) {
                         <Text style={styles.text1}>Step 4/4</Text>
                     </View>
                     <ScrollView>
-                    <KeyboardAvoidingView
-                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        style={{ flex: 1 }}
-                    >
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                            style={{ flex: 1 }}
+                        >
                             <View style={styles.formContainer}>
                                 <Text style={styles.signupText}>City</Text>
                                 <TextInput
@@ -205,12 +205,12 @@ export function UserAddress({ navigation }) {
                                     <TouchableOpacity disabled={btnVali()}
                                         onPress={createAccount}
                                         style={[styles.getStarted, { opacity: btnVali() ? 0.5 : 1 }]}>
-                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16,color:"white" }}>Proceed</Text>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: "white" }}>Proceed</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                    </KeyboardAvoidingView>
-                        </ScrollView>
+                        </KeyboardAvoidingView>
+                    </ScrollView>
                 </View>
 
                 <Modal
@@ -221,7 +221,7 @@ export function UserAddress({ navigation }) {
                     <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
                         <Pressable style={{ flex: 1 }} onPress={closeModal} >
                         </Pressable>
-                        <View style={{ backgroundColor: "#fcfbff", borderTopRightRadius: 20, borderTopLeftRadius: 20, height:150 }}>
+                        <View style={{ backgroundColor: "#fcfbff", borderTopRightRadius: 20, borderTopLeftRadius: 20, height: 150 }}>
                             <View style={{ alignItems: 'flex-end', margin: 10 }}>
                                 <TouchableOpacity onPress={closeModal}>
                                     <FontAwesomeIcon
