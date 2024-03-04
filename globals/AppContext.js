@@ -29,7 +29,7 @@ function AppProvider({ children }) {
      const [cardId, setCardId] = useState("");
      const [account, setAccount] = useState({ email: "", password: "", });
      const [accountInfo, setAccountInfo] = useState({ account_balance: 0, account_name: "", account_number: "" });
-
+     const [expoPushToken, setExpoPushToken] = useState('');
 
      function getUserInfo() {
           setPreloader(true)
@@ -112,6 +112,27 @@ function AppProvider({ children }) {
                });
      }
 
+     function sendNotification(title, body) {
+          const message = {
+               to: expoPushToken,
+               sound: "default",
+               title,
+               body
+          }
+          fetch("https://exp.host/--/api/v2/push/send", {
+               method: "POST",
+               headers: {
+                    host: "exp.host",
+                    accept: "application/json",
+                    "accept-encoding": "gzip, deflate",
+                    "content-type": "application/json"
+               },
+               body: JSON.stringify(message),
+          })
+               .then((d) => console.log(title, body))
+               .catch(e => console.log(e))
+     }
+
      return (
           <AppContext.Provider value={{
                ID, setID,
@@ -131,7 +152,9 @@ function AppProvider({ children }) {
                profileImage, setProfileImage,
                carouselLinks, setCarouselLinks,
                referralBonus, setReferralBonus,
-               getUserInfo, getAccountInfo, getUserCards
+               expoPushToken, setExpoPushToken,
+               getUserInfo, getAccountInfo, getUserCards,
+               sendNotification,
           }}>
                {children}
           </AppContext.Provider>

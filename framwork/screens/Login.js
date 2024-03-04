@@ -20,7 +20,7 @@ const formRules = yup.object({
 
 
 export function Login({ navigation }) {
-  const { setUserUID, setPreloader, setUserInfo, setToken } = useContext(AppContext);
+  const { setUserUID, setPreloader, setUserInfo, setToken, sendNotification } = useContext(AppContext);
   const [userAsync, setUserAsync] = useState(null);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function Login({ navigation }) {
   }
 
   return (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={{ alignItems: 'center', height: 140, }}>
           <Image source={require('../../assets/888.png')} style={{ height: 300, width: '100%', }} />
@@ -189,7 +189,7 @@ export function Login({ navigation }) {
 
                   <View style={styles.login}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('ForgotPassword')}
+                      onPress={() => sendNotification('ForgotPassword', "You are going to Forgot Password screen")}
                     >
                       <Text style={{ color: '#7B61FF', fontWeight: 'bold' }}>Forgot Password</Text>
                     </TouchableOpacity>

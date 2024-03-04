@@ -4330,6 +4330,21 @@ expo-modules-core@1.5.12:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
+expo-notifications@^0.20.1:
+  version "0.20.1"
+  resolved "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.20.1.tgz"
+  integrity sha512-Y4Y8IWYj/cSWCP/P167z3GRg//5ZlsznfMXi4ABdWOOpF0RGNpd5N17TxioNivtt7tMhZ/o1vmzFxulhy0nBWg==
+  dependencies:
+    "@expo/image-utils" "^0.3.18"
+    "@ide/backoff" "^1.0.0"
+    abort-controller "^3.0.0"
+    assert "^2.0.0"
+    badgin "^1.1.5"
+    expo-application "~5.3.0"
+    expo-constants "~14.4.2"
+    fs-extra "^9.1.0"
+    uuid "^3.4.0"
+
 expo-notifications@~0.18.1:
   version "0.18.1"
   resolved "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.18.1.tgz"
@@ -4342,21 +4357,6 @@ expo-notifications@~0.18.1:
     badgin "^1.1.5"
     expo-application "~5.1.0"
     expo-constants "~14.2.0"
-    fs-extra "^9.1.0"
-    uuid "^3.4.0"
-
-expo-notifications@~0.20.1:
-  version "0.20.1"
-  resolved "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.20.1.tgz"
-  integrity sha512-Y4Y8IWYj/cSWCP/P167z3GRg//5ZlsznfMXi4ABdWOOpF0RGNpd5N17TxioNivtt7tMhZ/o1vmzFxulhy0nBWg==
-  dependencies:
-    "@expo/image-utils" "^0.3.18"
-    "@ide/backoff" "^1.0.0"
-    abort-controller "^3.0.0"
-    assert "^2.0.0"
-    badgin "^1.1.5"
-    expo-application "~5.3.0"
-    expo-constants "~14.4.2"
     fs-extra "^9.1.0"
     uuid "^3.4.0"
 
