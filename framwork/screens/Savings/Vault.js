@@ -1,7 +1,7 @@
 import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/vault";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAngleRight, faBullseye, faCirclePlus, faEye, faEyeSlash, faHandHolding, faHandHoldingDollar, faLock, faNairaSign, faSackDollar, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faBullseye, faCirclePlus, faEye, faEyeSlash, faHandHoldingDollar, faLock, faSackDollar, faWallet } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Carousel from "react-native-reanimated-carousel";
 import { AppContext } from "../../../globals/AppContext";
@@ -11,8 +11,7 @@ import { db } from "../../../firebase/firebase";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 
 const targetmenu = ["business", "education", "emergency", "travel", "others"]
-
-export function Treasury({ navigation }) {
+export function Vault({ navigation }) {
   const { userUID, setPreloader, carouselLinks, setVaultInfo, vaultInfo } = useContext(AppContext);
   const [showBalance, setShowBalance] = useState('');
   const [balance, setBalance] = useState(0);
@@ -20,38 +19,38 @@ export function Treasury({ navigation }) {
   const [targetBalance, setTargetBalance] = useState(0);
   const screenWidth = Dimensions.get('screen').width;
 
-  // useEffect(() => {
-  //   onSnapshot(doc(db, "vault", userUID), (doc) => {
-  //     const info = doc.data()
-  //     setVaultInfo(info);
-  //   });
-  // }, []);
+  useEffect(() => {
+    onSnapshot(doc(db, "vault", userUID), (doc) => {
+      const info = doc.data()
+      setVaultInfo(info);
+    });
+  }, []);
+  
 
+  function getTargetBalance() {
+    let amt = 0;
+    JSON.stringify(vaultInfo.business) != '{}' ? vaultInfo.business.deposites.map(d => amt += d.amount + d.interest) : null;
+    JSON.stringify(vaultInfo.education) != '{}' ? vaultInfo.education.deposites.map(d => amt += d.amount + d.interest) : null;
+    JSON.stringify(vaultInfo.emergency) != '{}' ? vaultInfo.emergency.deposites.map(d => amt += d.amount + d.interest) : null;
+    JSON.stringify(vaultInfo.travel) != '{}' ? vaultInfo.travel.deposites.map(d => amt += d.amount + d.interest) : null;
+    JSON.stringify(vaultInfo.others) != '{}' ? vaultInfo.others.deposites.map(d => amt += d.amount + d.interest) : null;
+    setTargetBalance(amt)
+    setBalance(balance + amt);
+  }
 
-  // function getTargetBalance() {
-  //   let amt = 0;
-  //   JSON.stringify(vaultInfo.business) != '{}' ? vaultInfo.business.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.education) != '{}' ? vaultInfo.education.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.emergency) != '{}' ? vaultInfo.emergency.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.travel) != '{}' ? vaultInfo.travel.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.others) != '{}' ? vaultInfo.others.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   setTargetBalance(amt)
-  //   setBalance(balance + amt);
-  // }
+  function getFixedBalance() {
+    let amt = 0
+    vaultInfo.fixed.map(d => amt += d.amount + d.interest)
+    setFixedBalance(amt);
+    setBalance(balance + amt);
+  }
 
-  // function getFixedBalance() {
-  //   let amt = 0
-  //   vaultInfo.fixed.map(d => amt += d.amount + d.interest)
-  //   setFixedBalance(amt);
-  //   setBalance(balance + amt);
-  // }
-
-  // useEffect(() => {
-  //   if (JSON.stringify(vaultInfo) != '{}') {
-  //     getTargetBalance();
-  //     getFixedBalance();
-  //   }
-  // }, [vaultInfo]);
+  useEffect(() => {
+    if (JSON.stringify(vaultInfo) != '{}') {
+      getTargetBalance();
+      getFixedBalance();
+    }
+  }, [vaultInfo]);
 
   return (
     <AppSafeAreaView backgroundColor={'#7B61FF'} style={styles.container}>
@@ -129,20 +128,20 @@ export function Treasury({ navigation }) {
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faNairaSign}
+                      icon={faHandHoldingDollar}
                       color="#019db8ff"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#019db8ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Spend & Retain</Text>
+                    <Text style={{ color: '#019db8ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>USD Savings</Text>
                     <Text style={{ fontSize: 11, color: '#5f5f5f', }}>Coming soon</Text>
                   </View>
                 </View>
               </View>
 
               <TouchableOpacity
-                onPress={() => navigation.navigate('FixedInfo')}
+                onPress={() => vaultInfo.fixed.length == 0 ? navigation.navigate('FixedInfo') : navigation.navigate('FixedMenu')}
                 style={[styles.boxStyle, { backgroundColor: '#a6b10944', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
@@ -167,15 +166,9 @@ export function Treasury({ navigation }) {
             flexDirection: 'row', justifyContent: 'space-between',
             backgroundColor: '#7b61ff5e', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center'
           }}>
-            <View style={{ padding: 5, justifyContent: "center", alignItems: "center" }}>
+            <View style={{ padding: 5, flexDirection: 'row', }}>
               <FontAwesomeIcon
-                icon={faNairaSign}
-                color="#6040fc"
-                style={{ position: "absolute", top: 10, left: 16 }}
-                size={13}
-              />
-              <FontAwesomeIcon
-                icon={faHandHolding}
+                icon={faHandHoldingDollar}
                 color="#6040fc"
                 size={30}
               />

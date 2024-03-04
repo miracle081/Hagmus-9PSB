@@ -15,6 +15,7 @@
     "@expo-google-fonts/open-sans": "^0.2.3",
     "@expo-google-fonts/quicksand": "^0.2.3",
     "@expo-google-fonts/raleway": "^0.2.3",
+    "@expo/vector-icons": "^14.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
     "@fortawesome/free-brands-svg-icons": "^6.4.2",
     "@fortawesome/free-regular-svg-icons": "^6.4.2",

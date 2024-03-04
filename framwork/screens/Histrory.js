@@ -48,8 +48,10 @@ export function History({ navigation }) {
       })
       .catch(error => {
         setPreloader(false)
-        console.log('error', error)
-        Alert.alert("Error!", error.message)
+        console.log(error);
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+        else Alert.alert("Error!", error.message)
+
       });
   }
 

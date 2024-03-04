@@ -3,11 +3,10 @@ import { Text, View, TouchableOpacity, Image, ScrollView, FlatList, Pressable, L
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/homepage";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
 import { Earn } from './Earn';
 import { CardIntro } from './CardIntro';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBuildingColumns, faHeadset, faMobileScreenButton, faPlusCircle, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -28,12 +27,13 @@ import { theme } from '../components/Theme';
 import { baseURL, coingeckoAPIKey } from '../../config';
 import Constants from 'expo-constants';
 import { ToastApp } from '../components/Toast';
-import { faAddressBook, faLightbulb, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import { faAddressBook, faCreditCard, faLightbulb, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import Carousel from 'react-native-reanimated-carousel';
 import { handleError } from '../components/HandleRequestError';
 import { MyDollarCard } from './Dollarcard/MyDollarCard';
 import { formatMoney } from '../components/FormatMoney';
 import { Treasury } from './Savings/Treasury';
+import { Ionicons } from '@expo/vector-icons';
 
 
 const installedAppVersion = Constants.expoConfig.version
@@ -56,6 +56,7 @@ function HomeScreen({ navigation }) {
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalVisibility2, setModalVisibility2] = useState(true);
   const [modalVisibility3, setModalVisibility3] = useState(false);
+  const [modalVisibility4, setModalVisibility4] = useState(false)
 
 
 
@@ -82,6 +83,10 @@ function HomeScreen({ navigation }) {
     setAsyncItem();
   }, [userInfo]);
 
+  const closeModal4 = () => {
+    setModalVisibility4(!modalVisibility4);
+  };
+
   const closeModal = () => {
     setModalVisibility(!modalVisibility);
   };
@@ -98,7 +103,8 @@ function HomeScreen({ navigation }) {
   const openPlayStore = () => {
     const packageName = 'com.hagmussend.dev';
 
-    Linking.openURL(`market://details?id=${packageName}`)
+    // Linking.openURL(`market://details?id=${packageName}`)
+    Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -115,7 +121,7 @@ function HomeScreen({ navigation }) {
       <View style={styles.container}>
         <StatusBar style='light' animated />
         <View style={styles.body}>
-          <ScrollView
+          <ScrollView showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl refreshing={false} onRefresh={handleRefresh} />
             }
@@ -162,77 +168,112 @@ function HomeScreen({ navigation }) {
                 </TouchableOpacity> */}
               </View>
             </View>
-            <View style={styles.accountHold}>
-              <View style={styles.accountBal}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-                  <View style={styles.hideBal}>
-                    <View style={styles.currencyFlag}>
-                      <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#d5d7e7', marginRight: 10 }}>Total Balance</Text>
+            <View style={{ marginTop: 15, }}>
+              <ImageBackground borderRadius={10}
+                source={require('../../assets/bal2.png')}
+                style={{ width: '100%', height: 100, }}
+              >
+                <View style={styles.accountHold}>
+                  <View style={styles.accountBal}>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                      <View style={styles.hideBal}>
+                        <View style={styles.currencyFlag}>
+                          <Text style={{ fontWeight: 'bold', fontSize: 15, color: '#e9eaf2', marginRight: 10 }}>Total Balance</Text>
+                        </View>
+                        <TouchableOpacity onPress={() => {
+                          if (showBalance) {
+                            setShowBalance(false);
+                          } else {
+                            setShowBalance(true);
+                          }
+                        }}>
+                          <FontAwesomeIcon
+                            icon={showBalance ? faEye : faEyeSlash}
+                            color='#e9eaf2'
+                            size={18}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity onPress={() => navigation.navigate("History")} style={{ flexDirection: "row", alignItems: "center" }}>
+                        <FontAwesomeIcon icon={faFileInvoice} color='#e9eaf2' size={15} />
+                        <Text style={{ fontSize: 12, color: '#e9eaf2', }}>History</Text>
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={() => {
-                      if (showBalance) {
-                        setShowBalance(false);
-                      } else {
-                        setShowBalance(true);
-                      }
-                    }}>
-                      <FontAwesomeIcon
-                        icon={showBalance ? faEye : faEyeSlash}
-                        color='#d5d7e7'
-                        size={18}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  <TouchableOpacity onPress={() => navigation.navigate("History")} style={{ flexDirection: "row", alignItems: "center" }}>
-                    <Text style={{ fontSize: 12, color: '#d5d7e7', }}>Transaction History</Text>
-                    <FontAwesomeIcon icon={faAngleRight} color='#d5d7e7' size={11} />
-                  </TouchableOpacity>
-                </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <View>
-                    <View style={styles.mainBal}>
-                      <Text style={{ fontWeight: 'bold', fontSize: 25, color: 'white', }}>{symbol(userInfo.countryCurrency)}</Text>
-                      <Text style={{ fontWeight: 'bold', fontSize: 25, color: 'white' }}>
-                        {showBalance ? formatMoney(accountInfo.account_balance) : '****'}</Text>
-                    </View>
-                    {/* <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#AED2FF', }}> {showBalance ? symbol("usdt") + Number(userInfo.usdt).toFixed(2) : '****'}</Text> */}
-                  </View>
-                  <TouchableOpacity
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <View>
+                        <View style={styles.mainBal}>
+                          <Text style={{ marginTop: 8, color: '#e9eaf2', fontSize: 17 }}>₦</Text>
+                          <Text style={{ fontWeight: 'bold', fontSize: 30, color: '#e9eaf2', }}>{symbol(userInfo.countryCurrency)}</Text>
+                          <Text style={{ fontWeight: 'bold', fontSize: 30, color: '#e9eaf2' }}>
+                            {showBalance ? formatMoney(accountInfo.account_balance) : '****'}</Text>
+                        </View>
+                        {/* <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#AED2FF', }}> {showBalance ? symbol("usdt") + Number(userInfo.usdt).toFixed(2) : '****'}</Text> */}
+                      </View>
+                      {/* <TouchableOpacity
                     onPress={() => { setAdsCatigory("buy"), closeModal() }}
                     style={{ backgroundColor: '#f0f0f3', padding: 5, borderRadius: 100, width: "25%", height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <FontAwesomeIcon icon={faPlusCircle} color='#7B61FF' />
                     <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: '#7B61FF' }}>Fund</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
+                    </View>
+
+                  </View>
+
                 </View>
-
-              </View>
-
+              </ImageBackground>
             </View>
-
             <View>
               {/* Menu section begins */}
-              <View style={{ backgroundColor: '#f8f8f8', padding: 20, borderRadius: 8, marginBottom: 20 }}>
-                <View style={{ marginBottom: 10 }}>
+              <View style={{ backgroundColor: '#f8f8f8', padding: 0, borderRadius: 8, marginBottom: 20, }}>
+                {/* <View style={{ marginBottom: 10 }}>
                   <Text style={{ fontWeight: 'bold' }}>Money Transfer</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', padding: 5 }}>
+                </View> */}
+                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', padding: 10 }}>
 
 
-
-                  <TouchableOpacity onPress={() => navigation.navigate("BorderTransfer")} style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faBuildingColumns} size={25} color='#4f39bf' />
+                  <TouchableOpacity
+                    onPress={() => { setAdsCatigory("buy"), closeModal() }}
+                    style={{
+                      backgroundColor: '#cec5ff', padding: 6, width: '50%',
+                      alignItems: 'center', borderRadius: 10, marginRight: 5,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Text style={{ color: 'white', marginRight: 5, color: '#7B61FF', fontSize: 16 }}>Deposit</Text>
+                      <View style={{ backgroundColor: '#fcfbff', borderRadius: 100, padding: 5 }}>
+                        <FontAwesomeIcon icon={faPlusCircle} color='#7B61FF' />
+                      </View>
                     </View>
-                    <Text style={{ fontSize: 13 }}>To Bank</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
+                    onPress={closeModal4}
+                    style={{
+                      backgroundColor: '#cec5ff', padding: 6, width: '50%',
+                      alignItems: 'center', borderRadius: 10, borderWidth: 2, borderColor: '#cec5ff'
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Text style={{ color: 'white', marginRight: 5, color: '#7B61FF', fontSize: 16 }}>Transfer</Text>
+                      <View style={{ backgroundColor: 'white', borderRadius: 100, padding: 5 }}>
+                        <FontAwesomeIcon icon={faArrowUp} color='#7B61FF' />
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+
+
+
+                  {/* <TouchableOpacity onPress={() => navigation.navigate("BorderTransfer")} style={{ alignItems: 'center' }}>
+                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faBuildingColumns} size={25} color='#7B61FF' />
+                    </View>
+                    <Text style={{ fontSize: 13 }}>To Bank</Text>
+                  </TouchableOpacity> */}
+
+                  {/* <TouchableOpacity
                     onPress={() => navigation.navigate('HagmusTransfer')}
                     style={{ alignItems: 'center' }}>
                     <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faAddressBook} size={25} color='#4f39bf' />
-                      {/* <Image source={require('../../assets/hsend.png')} style={{height:140,width:100}}/> */}
+                      <FontAwesomeIcon icon={faAddressBook} size={25} color='#7B61FF' />
                     </View>
                     <View style={{
                       margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-70%", borderTopRightRadius: 10,
@@ -243,14 +284,14 @@ function HomeScreen({ navigation }) {
                       }}>Free</Text>
                     </View>
                     <Text style={{ fontSize: 13 }}>Hagmus</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
 
-                  <TouchableOpacity style={{ alignItems: 'center' }}>
+                  {/* <TouchableOpacity style={{ alignItems: 'center' }}>
                     <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faPaperPlane} size={25} color='#4f39bf' />
+                      <FontAwesomeIcon icon={faPaperPlane} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>Border Pay</Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
 
                 </View>
               </View>
@@ -259,44 +300,53 @@ function HomeScreen({ navigation }) {
 
 
               {/* V section begins */}
-              <View style={{ backgroundColor: '#f8f8f8', padding: 20, borderRadius: 8, }}>
+              <View style={{ backgroundColor: '#f8f8f8', padding: 0, borderRadius: 8, }}>
                 <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontWeight: 'bold' }}>Services</Text>
+                  <Text style={{ fontWeight: 'bold' }}>Quick Tap</Text>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', padding: 5 }}>
 
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Airtime")}
-                    style={{ alignItems: 'center' }}>
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, marginRight: 5, borderRadius: 8
+                    }}>
 
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faSquarePhone} size={25} color='#4f39bf' />
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faSquarePhone} size={25} color='#7B61FF' />
                     </View>
-                    <View style={{
+                    {/* <View style={{
                       margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-75%", borderTopRightRadius: 10,
                       borderBottomRightRadius: 10, borderTopLeftRadius: 10, width: 40,
                     }}>
                       <Text style={{
                         fontSize: 7, padding: 3,
                       }}>Up to 8%</Text>
-                    </View>
+                    </View> */}
                     <Text style={{ fontSize: 13 }}>Airtime</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Data")}
-                    style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faMobileScreenButton} size={25} color='#4f39bf' />
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, borderRadius: 8
+                    }}>
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faMobileScreenButton} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>Data</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Tv")}
-                    style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faTelevision} size={25} color='#4f39bf' />
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, borderRadius: 8
+                    }}>
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faTelevision} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>Tv</Text>
                   </TouchableOpacity>
@@ -305,37 +355,55 @@ function HomeScreen({ navigation }) {
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', padding: 5, marginTop: 10 }}>
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Earn')}
-                    style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faSackDollar} size={25} color='#4f39bf' />
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, borderRadius: 8
+                    }}>
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faCreditCard} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>Bonus</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Electricity")}
-                    style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faLightbulb} size={25} color='#4f39bf' />
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, borderRadius: 8
+                    }}>
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faLightbulb} size={25} color='#7B61FF' />
                     </View>
-                    <View style={{
-                      margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-48%", borderTopRightRadius: 10,
+                    {/* <View style={{
+                      margin: 10, position: 'absolute', top: -15, backgroundColor: '#FF7000', right: "-38%", borderTopRightRadius: 10,
                       borderBottomRightRadius: 10, borderTopLeftRadius: 10, width: 40,
                     }}>
                       <Text style={{
                         fontSize: 7, padding: 3,
                       }}>Up to 9%</Text>
-                    </View>
+                    </View> */}
                     <Text style={{ fontSize: 13, }}>Electricity</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{ alignItems: 'center' }}>
-                    <View style={{ backgroundColor: '#e3e0f0', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faTicket} size={25} color='#4f39bf' />
+                  <TouchableOpacity style={{
+                    alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                    width: 100, borderRadius: 8
+                  }}>
+                    <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
+                      <FontAwesomeIcon icon={faTicket} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>Tickets</Text>
                   </TouchableOpacity>
                 </View>
               </View>
+
+              <View style={{
+                borderWidth: 2, borderColor: '#d7d1f4', borderRadius: 8, padding: 8,
+                marginTop: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+              }}>
+                <Text>Portfolio Tracker</Text>
+                <FontAwesomeIcon icon={faChartPie} size={20} color='#7B61FF' />
+              </View>
+
               {/* ============== carousel zone ============== */}
               <View style={{ flex: 1, marginVertical: 10, }}>
                 <Carousel
@@ -347,7 +415,7 @@ function HomeScreen({ navigation }) {
                   scrollAnimationDuration={2000}
                   renderItem={({ index }) => (
                     <View
-                      style={{flexDirection: "row", justifyContent: "center" }}
+                      style={{ flexDirection: "row", justifyContent: "center" }}
                     >
                       <Image
                         style={{
@@ -364,6 +432,65 @@ function HomeScreen({ navigation }) {
           </ScrollView>
         </View>
       </View>
+
+      {/* ============== Transfer Modal ============== */}
+      <Modal
+        visible={modalVisibility4}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+          <Pressable style={{ flex: 1 }} onPress={closeModal4} >
+          </Pressable>
+          <View style={{ backgroundColor: "#fcfbff", height: 300, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+            <View style={{ alignItems: 'flex-end', margin: 10 }}>
+              <TouchableOpacity onPress={closeModal4}>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  size={24}
+                  color='#7B61FF'
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ color: '#493c86', margin: 10, fontWeight: "bold", fontSize: 25 }}>Send Money</Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => { closeModal4(); navigation.navigate("BorderTransfer") }}
+                style={{
+                  flexDirection: 'row', justifyContent: 'space-between',
+                  alignItems: 'center', padding: 10, borderWidth: 2, margin: 13, borderRadius: 8,
+                  borderColor: '#7B61FF', backgroundColor: '#7B61FF'
+                }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>Send to Bank</Text>
+                <View style={{ backgroundColor: "white", borderRadius: 100, padding: 8 }}>
+                  <FontAwesomeIcon icon={faBank} color='#7B61FF' />
+                </View>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => { closeModal4(); navigation.navigate('HagmusTransfer') }}
+                style={{
+                  flexDirection: 'row', justifyContent: 'space-between',
+                  alignItems: 'center', padding: 10, borderWidth: 2, margin: 13, borderRadius: 8,
+                  borderColor: '#7B61FF', backgroundColor: '#7B61FF'
+                }}>
+                <Text style={{ color: 'white', fontSize: 18 }}>To Hagmus User</Text>
+                <View style={{ backgroundColor: "white", borderRadius: 100, padding: 8 }}>
+                  <FontAwesomeIcon icon={faContactBook} color='#7B61FF' />
+                </View>
+              </TouchableOpacity>
+
+
+
+            </View>
+
+          </View>
+        </View>
+      </Modal>
 
       {/* ============== Welcome modal ============== */}
       {userInfo.userStatus == "unverified" ?
@@ -468,11 +595,11 @@ export function HomePage() {
     >
       <Tab.Screen name='Home' component={HomeScreen} options={{ headerShown: false }} />
       <Tab.Screen name='Earn' component={Earn} options={{ headerShown: false }} />
-      {/* <Tab.Screen name='Treasury' component={Treasury} options={{ headerShown: false }} /> */}
       {userCards.length > 0 ?
         <Tab.Screen name='MyDollarCard' component={MyDollarCard} options={{ headerShown: false, title: "Card" }} /> :
         <Tab.Screen name='CardIntro' component={CardIntro} options={{ headerShown: false, title: "Card" }} />
       }
+      <Tab.Screen name='Treasury' component={Treasury} options={{ headerShown: false }} />
       <Tab.Screen name='Settings' component={Settings} options={{ headerShown: false }} />
     </Tab.Navigator>
   )

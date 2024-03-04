@@ -18,16 +18,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   accountHold: {
-    backgroundColor: '#473d7c',
+    // backgroundColor: '#7b61ff',
     padding: 18,
     marginBottom: 15,
     // paddingBottom: 10,
     // paddingTop: 0,
     marginTop: 10,
+    width:'100%',
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-    borderBottomRightRadius: 10,
-    borderBottomLeftRadius: 10
+    // borderBottomRightRadius: 10,
+    // borderBottomLeftRadius: 10
   },
   hideBal: {
     flexDirection: 'row',
@@ -72,7 +73,8 @@ export const styles = StyleSheet.create({
   },
   mainBal: {
     flexDirection: 'row',
-    margin: 5
+    margin: 5,
+    alignItems:'center'
   },
   actionButton: {
     flexDirection: 'row',
