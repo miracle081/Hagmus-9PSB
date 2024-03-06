@@ -1,6 +1,6 @@
 import { faCalendarAlt, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { View, Text, TouchableOpacity, TextInput, Pressable, Modal, ScrollView, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Pressable, Modal, ScrollView, StyleSheet, Alert } from "react-native";
 import { styles } from "../../styles/fixedcreate";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../globals/AppContext";
@@ -13,6 +13,8 @@ import moment from "moment";
 import { Checkbox } from "react-native-paper";
 import { symbol } from "../../components/currencySymbols";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { handleError } from "../../components/HandleRequestError";
+import { baseURL } from "../../../config";
 
 
 // const options = [
@@ -24,7 +26,7 @@ import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 // ];
 
 export function FixedCreate({ navigation }) {
-    const { userUID, setPreloader, userInfo, vaultInfo, fixedRates } = useContext(AppContext);
+    const { userUID, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [checked, setChecked] = useState(false);
@@ -32,10 +34,12 @@ export function FixedCreate({ navigation }) {
     const [message2, setMessage2] = useState('');
     const [amount, setAmount] = useState(0);
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [days, setDays] = useState(0);
     const [pa, setPa] = useState(0);
     const [interest, setInterest] = useState(0);
 
+    // setPreloader(false)
 
     const closeModal = () => {
         setModalVisibility(!modalVisibility);
@@ -46,12 +50,12 @@ export function FixedCreate({ navigation }) {
 
     function validation(inp) {
         if (inp >= 500) {
-            if (inp <= userInfo.ngn) {
+            if (inp <= accountInfo.account_balance) {
                 setAmount(Number(inp))
                 setMessage2('Amount Ok');
                 setColor('#14a301ff');
             } else {
-                setMessage2(`Insufficient funds on NGN (Bal: ${userInfo.ngn})`);
+                setMessage2(`Insufficient funds on NGN(Bal: ${accountInfo.account_balance})`);
                 setColor('#ce0a0ae5')
                 setAmount(0)
             }
@@ -67,7 +71,7 @@ export function FixedCreate({ navigation }) {
         setPreloader(true)
         try {
             await runTransaction(db, (transaction) => {
-                transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) - Number(amount) },)
+                transaction.update(doc(db, 'users', userUID), { ngn: Number(accountInfo.account_balance) - Number(amount) },)
                 return Promise.resolve();
             })
                 .then(() => {
@@ -77,7 +81,7 @@ export function FixedCreate({ navigation }) {
                         ]
                     })
                         .then(() => {
-                            ToastApp(`Deposit of ${amount} was successful`, "LONG");
+                            ToastApp(`Deposit of ${amount} was successful, "LONG"`);
                             setPreloader(false)
                             setAmount(0)
                             setDays(0)
@@ -107,7 +111,7 @@ export function FixedCreate({ navigation }) {
     }
 
     function btnVal() {
-        if (name === "" || amount <= 0 || days == 0) {
+        if (name === "" || amount <= 0) {
             return (
                 <View style={[styles.getStarted, { backgroundColor: "#7b61ff94" }]}>
                     <Text style={{ fontSize: 16, }}>Next</Text>
@@ -144,6 +148,46 @@ export function FixedCreate({ navigation }) {
         setInterest(int)
     }
 
+    function createFixed(params) {
+        setPreloader(true)
+        const formdata = {
+            name,
+            description,
+            amount,
+            type: "fixed",
+            tenure: "30",
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formdata),
+            redirect: 'follow'
+        };
+
+        fetch(baseURL + "/api/savings/create", requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                setPreloader(false)
+                // console.log(response);
+                if (status == "success") {
+                    // closeModal();
+                    Alert.alert(
+                        'Success',
+                        message,
+                    )
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+            });
+    }
+
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
             <View style={styles.container}>
@@ -167,7 +211,7 @@ export function FixedCreate({ navigation }) {
                                 onChangeText={inp => nameCheck(inp.trim())}
                             />
 
-                           
+
 
                             <Text style={styles.signupText}>Amount</Text>
                             <TextInput
@@ -193,16 +237,16 @@ export function FixedCreate({ navigation }) {
                                 </TouchableOpacity>
                             </View>
 
-                            <View style={{marginTop:20}}>
-                            <Text style={styles.signupText}>Description</Text>
-                            <TextInput
-                                style={[styles.inputStyle, { marginBottom: 20 }]}
-                                keyboardType='default'
-                                selectionColor={'#7B61FF'}
-                                mode='outlined'
-                                placeholderTextColor="#787A8D"
-                                onChangeText={inp => validation(Number(inp.trim()))}
-                            />
+                            <View style={{ marginTop: 20 }}>
+                                <Text style={styles.signupText}>Description</Text>
+                                <TextInput
+                                    style={[styles.inputStyle, { marginBottom: 20 }]}
+                                    keyboardType='default'
+                                    selectionColor={'#7B61FF'}
+                                    mode='outlined'
+                                    placeholderTextColor="#787A8D"
+                                    onChangeText={inp => setDescription(inp.trim())}
+                                />
                             </View>
                         </View>
 
@@ -237,45 +281,45 @@ export function FixedCreate({ navigation }) {
                             <View style={{ marginTop: 10, padding: 5 }}>
                                 <View>
                                     <ScrollView>
-                                            <TouchableOpacity >
-                                                <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
-                                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                                        {/* <Checkbox
+                                        <TouchableOpacity >
+                                            <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
+                                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                                    {/* <Checkbox
                                                             status={checked === index ? 'checked' : 'unchecked'}
                                                             color='#7B61FF'
                                                         /> */}
-                                                        <Text style={{ fontSize: 13, color: '#46464d' }}>End in 14 days - (2 weeks)</Text>
-                                                    </View>
-                                                    <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                                    <Text style={{ fontSize: 13, color: '#46464d' }}>End in 14 days - (2 weeks)</Text>
                                                 </View>
-                                                <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity >
-                                                <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
-                                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                                        {/* <Checkbox
+                                                <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                            </View>
+                                            <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity >
+                                            <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
+                                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                                    {/* <Checkbox
                                                             status={checked === index ? 'checked' : 'unchecked'}
                                                             color='#7B61FF'
                                                         /> */}
-                                                        <Text style={{ fontSize: 13, color: '#46464d' }}>End in 60 days - (2 month)</Text>
-                                                    </View>
-                                                    <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                                    <Text style={{ fontSize: 13, color: '#46464d' }}>End in 60 days - (2 month)</Text>
                                                 </View>
-                                                <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity >
-                                                <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
-                                                    <View style={{ alignItems: 'center', flexDirection: 'row' }}>
-                                                        {/* <Checkbox
+                                                <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                            </View>
+                                            <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
+                                        </TouchableOpacity>
+                                        <TouchableOpacity >
+                                            <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
+                                                <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                                    {/* <Checkbox
                                                             status={checked === index ? 'checked' : 'unchecked'}
                                                             color='#7B61FF'
                                                         /> */}
-                                                        <Text style={{ fontSize: 13, color: '#46464d' }}>End in 1 year  - (12 month)</Text>
-                                                    </View>
-                                                    <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                                    <Text style={{ fontSize: 13, color: '#46464d' }}>End in 1 year  - (12 month)</Text>
                                                 </View>
-                                                <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
-                                            </TouchableOpacity>
+                                                <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>5 % P.a</Text>
+                                            </View>
+                                            <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
+                                        </TouchableOpacity>
                                     </ScrollView>
                                 </View>
                             </View>
@@ -355,7 +399,7 @@ export function FixedCreate({ navigation }) {
                             </View>
 
                             <View style={{ padding: 15 }}>
-                                <TouchableOpacity onPress={() => { closeModal2(); fundAccount() }} disabled={!checked} style={[styles.getStarted, { backgroundColor: checked ? '#7B61FF' : '#574d8dff' }]}>
+                                <TouchableOpacity onPress={() => { closeModal2(); createFixed() }} disabled={!checked} style={[styles.getStarted, { backgroundColor: checked ? '#7B61FF' : '#574d8dff' }]}>
                                     <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, }}>Fund</Text>
                                 </TouchableOpacity>
                             </View>

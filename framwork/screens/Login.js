@@ -111,7 +111,8 @@ export function Login({ navigation }) {
                       navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
                     } else {
                       if (!userAsync) {
-                        navigation.navigate("LoginOtp")
+                        // navigation.navigate("LoginOtp")
+                        navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
                       } else {
                         navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
                       }

@@ -3,12 +3,10 @@ import { Text, View, TextInput, Alert, TouchableOpacity, Image, StatusBar, Keybo
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { Checkbox } from 'react-native-paper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDown, faAngleUp, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { styles } from "../styles/signup";
-import { useFonts, Inter_900Black, Inter_400Regular, Inter_700Bold } from "@expo-google-fonts/inter";
 import { Formik } from "formik";
 import * as yup from 'yup';
-import { onAuthStateChanged, createUserWithEmailAndPassword } from 'firebase/auth';
 import { AppContext } from '../../globals/AppContext';
 import { authentication, db } from '../../firebase/firebase';
 import { addDoc, doc, setDoc } from 'firebase/firestore';
@@ -26,16 +24,6 @@ export function Signup({ navigation }) {
   const [open, setOpen] = useState(false);
   const { setUserUID, setPreloader, setAccount, account } = useContext(AppContext);
   const [checked, setChecked] = useState(false);
-
-  let [Loaded] = useFonts({
-    Inter_900Black,
-    Inter_400Regular,
-    Inter_700Bold,
-  });
-
-  if (!Loaded) {
-    return null;
-  }
 
   async function setAsyncItem(userUID,) {
     try {
@@ -160,12 +148,12 @@ export function Signup({ navigation }) {
                       </Text>
 
                       <View style={styles.terms}>
-                        <View style={{borderWidth:0.2}}>
-                        <Checkbox status={checked ? 'checked' : 'unchecked'}
-                          onPress={() => setChecked(!checked)}
-                          color='#7B61FF'
-                          uncheckedColor='gray'
-                        />
+                        <View style={{ borderWidth: 0.2 }}>
+                          <Checkbox status={checked ? 'checked' : 'unchecked'}
+                            onPress={() => setChecked(!checked)}
+                            color='#7B61FF'
+                            uncheckedColor='gray'
+                          />
                         </View>
                         <Text style={styles.signupText}>
                           Accept <Text style={{ color: '#7B61FF', fontSize: 13 }}
@@ -189,7 +177,7 @@ export function Signup({ navigation }) {
                   <Text style={{ color: '#0d0b14', margin: 15 }}>Already have an account?
                     <Text style={{ color: '#7B61FF', fontFamily: 'Inter_400Regular' }}> Login</Text></Text>
                 </TouchableOpacity>
-           
+
               </View>
             </View>
             {/* <View style={{ alignItems: 'center', height: 90, marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null, }}>
