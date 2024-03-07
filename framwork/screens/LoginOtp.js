@@ -2,13 +2,6 @@ import { useContext, useEffect, useState, useCallback } from 'react';
 import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, StatusBar, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/signup";
-import { Kurale_400Regular } from "@expo-google-fonts/kurale";
-import { useFonts } from 'expo-font';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { authentication, db } from '../../firebase/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
 import { AppContext } from '../../globals/AppContext';
 import { Mailer } from '../components/Mailer';
 import { ToastApp } from '../components/Toast';
@@ -79,7 +72,9 @@ export function LoginOtp({ navigation }) {
         })
         .catch(error => {
           setPreloader(false)
-          console.log('error', error)
+          setDisable(false)
+          setsec(0)
+          console.log(error)
           Alert.alert("Error!", error.message)
         });
     } catch (error) {

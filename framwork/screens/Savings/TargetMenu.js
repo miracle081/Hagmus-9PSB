@@ -11,16 +11,7 @@ export function TargetMenu({ navigation }) {
   const { vaultInfo, setDocID } = useContext(AppContext);
   const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    let amt = 0;
-    JSON.stringify(vaultInfo.business) != '{}' ? vaultInfo.business.deposites.map(d => amt += d.amount + d.interest) : null;
-    JSON.stringify(vaultInfo.education) != '{}' ? vaultInfo.education.deposites.map(d => amt += d.amount + d.interest) : null;
-    JSON.stringify(vaultInfo.emergency) != '{}' ? vaultInfo.emergency.deposites.map(d => amt += d.amount + d.interest) : null;
-    JSON.stringify(vaultInfo.travel) != '{}' ? vaultInfo.travel.deposites.map(d => amt += d.amount + d.interest) : null;
-    JSON.stringify(vaultInfo.others) != '{}' ? vaultInfo.others.deposites.map(d => amt += d.amount + d.interest) : null;
-    setBalance(amt);
-  }, []);
-  
+
 
   return (
     <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -32,19 +23,13 @@ export function TargetMenu({ navigation }) {
 
             <View style={{ alignItems: 'center', margin: 10 }}>
               <Text style={{ fontSize: 20 }}>Target (Up to 15% p.a)</Text>
-              <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>{balance.toFixed(2)}</Text>
+              <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦0.00</Text>
             </View>
             <ScrollView>
               <View>
-                <TouchableOpacity onPress={() => {
-                  setDocID("business");
-                  if (JSON.stringify(vaultInfo.business) == '{}') {
-                    navigation.navigate('BusinessTargetInfo')
-                  } else {
-                    navigation.navigate("Targets")
-                  }
-                }}
-                  activeOpacity={1}>
+                <TouchableOpacity 
+                onPress={()=>navigation.navigate('BusinessTargetInfo')}
+                  activeOpacity={0.7}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
@@ -59,14 +44,7 @@ export function TargetMenu({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => {
-                  setDocID("emergency");
-                  if (JSON.stringify(vaultInfo.emergency) == '{}') {
-                    navigation.navigate('EmergencyInfo')
-                  } else {
-                    navigation.navigate("Targets")
-                  }
-                }} activeOpacity={1}>
+                <TouchableOpacity  activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
@@ -81,14 +59,7 @@ export function TargetMenu({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => {
-                  setDocID("travel");
-                  if (JSON.stringify(vaultInfo.travel) == '{}') {
-                    navigation.navigate('TravlInfo')
-                  } else {
-                    navigation.navigate("Targets")
-                  }
-                }} activeOpacity={1}>
+                <TouchableOpacity  activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
@@ -103,14 +74,7 @@ export function TargetMenu({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => {
-                  setDocID("education");
-                  if (JSON.stringify(vaultInfo.education) == '{}') {
-                    navigation.navigate('EducationInfo')
-                  } else {
-                    navigation.navigate("Targets")
-                  }
-                }} activeOpacity={1}>
+                <TouchableOpacity activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
@@ -125,14 +89,7 @@ export function TargetMenu({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => {
-                  setDocID("others");
-                  if (JSON.stringify(vaultInfo.others) == '{}') {
-                    navigation.navigate('OthersInfo')
-                  } else {
-                    navigation.navigate("Targets")
-                  }
-                }} activeOpacity={1}>
+                <TouchableOpacity activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>

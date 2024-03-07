@@ -12,10 +12,13 @@ import { ToastApp } from "../../components/Toast";
 import { doc, runTransaction, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { baseURL } from "../../../config";
+import { handleError } from "../../components/HandleRequestError";
+import { dateTime, getFutureTimestamp } from "../../components/DateTime";
 
 
 export function FixedTarget() {
-    const { userInfo, userUID, setPreloader } = useContext(AppContext);
+    const { userInfo, token, setPreloader } = useContext(AppContext);
     const [vaultInfo, setVaultInfo] = useState([]);
     const [balance, setBalance] = useState(0);
     const [fixedInfo, setFixedInfo] = useState({});
@@ -25,17 +28,49 @@ export function FixedTarget() {
         // let amt = 0
         // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
         // setBalance(amt)
+        getTrasctoins();
     }, []);
 
     const closeModal = () => {
         setModalVisibility(!modalVisibility);
     };
 
-    function dateConverter(endDate) {
-        let rDate = new Date(endDate)
+    function dateConverter(days) {
+        const timeS = getFutureTimestamp(days)
+        let rDate = new Date(timeS)
         rDate = rDate.toLocaleDateString()
-        return moment(endDate).format('DD/MM/YYYY, H:m a')
+        return moment(timeS).format('DD/MM/YYYY, h:mm:ss a');
     }
+
+    function getTrasctoins() {
+        setPreloader(true)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                authorization: `bearer ${token}`
+            },
+            redirect: 'follow'
+        };
+        fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                // console.log(data);
+                setPreloader(false)
+                if (status == "success") {
+                    setVaultInfo(data)
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log(error);
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
+
+            });
+    }
+
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -76,13 +111,13 @@ export function FixedTarget() {
                                                 </View>
                                                 <Text style={{ color: 'white', width: 1, backgroundColor: '#787A8D', marginLeft: 5, height: 40 }}></Text>
                                                 <View style={{ alignItems: 'center' }}>
-                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14 }}>Total {item.pa}% p.a</Text>
-                                                    <Text style={{ fontSize: 17, color: '#757577' }}>₦{item.interest}</Text>
+                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14 }}>Total {item.interest_rate}% p.a</Text>
+                                                    <Text style={{ fontSize: 17, color: '#757577' }}>₦{item.total_interest}</Text>
                                                 </View>
                                             </View>
                                             <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginTop: 3, }} />
                                             <Text style={{ fontSize: 12, color: '#7B61FF' }}>Due date:
-                                                <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}> {dateConverter(item.dueDate)}</Text>
+                                                <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}> {dateConverter(item.tenure)}</Text>
                                             </Text>
                                         </TouchableOpacity>
                                     )
@@ -131,7 +166,7 @@ export function FixedTarget() {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
                                     <Text>Total % p.a</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ marginRight: 5 }}>{fixedInfo.pa}</Text>
+                                        <Text style={{ marginRight: 5 }}>{fixedInfo.interest_rate}</Text>
                                     </View>
                                 </View>
                                 <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginRight: 20, marginLeft: 20 }} />
@@ -141,7 +176,7 @@ export function FixedTarget() {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
                                     <Text>Total Interest</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ marginRight: 5 }}>₦{fixedInfo.interest}</Text>
+                                        <Text style={{ marginRight: 5 }}>₦{fixedInfo.total_interest}</Text>
                                     </View>
                                 </View>
                                 <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginRight: 20, marginLeft: 20 }} />
@@ -150,7 +185,7 @@ export function FixedTarget() {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
                                     <Text>Deposit Date</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ marginRight: 5 }}>{dateConverter(fixedInfo.date)}</Text>
+                                        <Text style={{ marginRight: 5 }}>{moment(fixedInfo.created_at).format('DD/MM/YYYY, h:mm:ss a')}</Text>
                                     </View>
                                 </View>
                                 <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginRight: 20, marginLeft: 20 }} />
@@ -159,7 +194,7 @@ export function FixedTarget() {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
                                     <Text>Due Date</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ marginRight: 5 }}>{dateConverter(fixedInfo.endDate)}</Text>
+                                        <Text style={{ marginRight: 5 }}>{dateConverter(fixedInfo.tenure)}</Text>
                                     </View>
                                 </View>
                                 <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginRight: 20, marginLeft: 20 }} />

@@ -35,132 +35,132 @@ export function Targets({ navigation }) {
         setModalVisibility2(!modalVisibility2);
     };
 
-    function validation(inp) {
-        if (inp > 0) {
-            if (inp <= userInfo.ngn) {
-                setAmount(Number(inp))
-                setMessage2('Amount Ok');
-                setColor('#14a301ff')
-            } else {
-                setMessage2(`Insufficient funds on NGN (Bal: ${userInfo.ngn})`);
-                setColor('#ce0a0ae5')
-                setAmount(0)
-            }
-        }
-        else {
-            setMessage2('Amount must not be empty');
-            setColor('#ce0a0ae5')
-            setAmount(0)
-        }
-    }
+    // function validation(inp) {
+    //     if (inp > 0) {
+    //         if (inp <= userInfo.ngn) {
+    //             setAmount(Number(inp))
+    //             setMessage2('Amount Ok');
+    //             setColor('#14a301ff')
+    //         } else {
+    //             setMessage2(`Insufficient funds on NGN (Bal: ${userInfo.ngn})`);
+    //             setColor('#ce0a0ae5')
+    //             setAmount(0)
+    //         }
+    //     }
+    //     else {
+    //         setMessage2('Amount must not be empty');
+    //         setColor('#ce0a0ae5')
+    //         setAmount(0)
+    //     }
+    // }
 
-    useEffect(() => {
-        onSnapshot(doc(db, "vault", userUID), (doc) => {
-            const info = doc.data()[docID]
-            if (JSON.stringify(info) != '{}') {
-                setTarget(info);
-                let amt = 0
-                info.deposites.map(d => amt += d.amount + d.interest)
-                setBalance(amt)
-            } else {
-                setBalance(0)
-                setTarget({ dateCreated: 0, days: 0, deposites: [], dueDate: 0, pa: 0 });
-            }
-        });
-    }, []);
+    // useEffect(() => {
+    //     onSnapshot(doc(db, "vault", userUID), (doc) => {
+    //         const info = doc.data()[docID]
+    //         if (JSON.stringify(info) != '{}') {
+    //             setTarget(info);
+    //             let amt = 0
+    //             info.deposites.map(d => amt += d.amount + d.interest)
+    //             setBalance(amt)
+    //         } else {
+    //             setBalance(0)
+    //             setTarget({ dateCreated: 0, days: 0, deposites: [], dueDate: 0, pa: 0 });
+    //         }
+    //     });
+    // }, []);
 
-    function dateConverter(date) {
-        let rDate = new Date(date)
-        rDate = rDate.toLocaleDateString()
-        return moment(date).format('DD/MM/YYYY')
-    }
+    // function dateConverter(date) {
+    //     let rDate = new Date(date)
+    //     rDate = rDate.toLocaleDateString()
+    //     return moment(date).format('DD/MM/YYYY')
+    // }
 
-    async function fundTarget() {
-        setPreloader(true)
-        try {
-            await runTransaction(db, (transaction) => {
-                transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) - Number(amount) },)
-                return Promise.resolve();
-            })
-                .then(() => {
-                    updateDoc(doc(db, "vault", userUID), {
-                        [docID]: {
-                            ...target, deposites: [
-                                ...target.deposites, {
-                                    amount,
-                                    interest,
-                                    data: new Date()
-                                }
-                            ],
-                        }
-                    })
-                        .then(() => {
-                            ToastApp(`Deposit of ${amount} was successful`, "LONG");
-                            setPreloader(false)
-                            setAmount(0)
-                        })
-                        .catch(() => {
-                            setPreloader(false)
-                            ToastApp('Something went wrong, please try again', "LONG");
-                        })
-                })
-                .catch(() => {
-                    setPreloader(false);
-                    ToastApp('Something went wrong, please try again', "LONG");
-                })
+    // async function fundTarget() {
+    //     setPreloader(true)
+    //     try {
+    //         await runTransaction(db, (transaction) => {
+    //             transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) - Number(amount) },)
+    //             return Promise.resolve();
+    //         })
+    //             .then(() => {
+    //                 updateDoc(doc(db, "vault", userUID), {
+    //                     [docID]: {
+    //                         ...target, deposites: [
+    //                             ...target.deposites, {
+    //                                 amount,
+    //                                 interest,
+    //                                 data: new Date()
+    //                             }
+    //                         ],
+    //                     }
+    //                 })
+    //                     .then(() => {
+    //                         ToastApp(`Deposit of ${amount} was successful`, "LONG");
+    //                         setPreloader(false)
+    //                         setAmount(0)
+    //                     })
+    //                     .catch(() => {
+    //                         setPreloader(false)
+    //                         ToastApp('Something went wrong, please try again', "LONG");
+    //                     })
+    //             })
+    //             .catch(() => {
+    //                 setPreloader(false);
+    //                 ToastApp('Something went wrong, please try again', "LONG");
+    //             })
 
-        } catch {
-            setPreloader(false)
-        }
-    }
+    //     } catch {
+    //         setPreloader(false)
+    //     }
+    // }
 
     
-    async function withdrawTarget() {
-        setPreloader(true)
-        try {
-            await runTransaction(db, (transaction) => {
-                transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) + Number(balance) },)
-                return Promise.resolve();
-            })
-                .then(() => {
-                    updateDoc(doc(db, "vault", userUID), {
-                        [docID]: {}
-                    })
-                        .then(() => {
-                            ToastApp(`Withdrawal of ${amount} was successful`, "LONG");
-                            setPreloader(false)
-                            navigation.goBack();
-                        })
-                        .catch((e) => {
-                            console.log(e);
-                            setPreloader(false)
-                            ToastApp('Something went wrong 2, please try again', "LONG");
-                        })
-                })
-                .catch(() => {
-                    setPreloader(false);
-                    ToastApp('Something went wrong, please try again', "LONG");
-                })
+    // async function withdrawTarget() {
+    //     setPreloader(true)
+    //     try {
+    //         await runTransaction(db, (transaction) => {
+    //             transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) + Number(balance) },)
+    //             return Promise.resolve();
+    //         })
+    //             .then(() => {
+    //                 updateDoc(doc(db, "vault", userUID), {
+    //                     [docID]: {}
+    //                 })
+    //                     .then(() => {
+    //                         ToastApp(`Withdrawal of ${amount} was successful`, "LONG");
+    //                         setPreloader(false)
+    //                         navigation.goBack();
+    //                     })
+    //                     .catch((e) => {
+    //                         console.log(e);
+    //                         setPreloader(false)
+    //                         ToastApp('Something went wrong 2, please try again', "LONG");
+    //                     })
+    //             })
+    //             .catch(() => {
+    //                 setPreloader(false);
+    //                 ToastApp('Something went wrong, please try again', "LONG");
+    //             })
 
-        } catch {
-            setPreloader(false)
-        }
-    }
+    //     } catch {
+    //         setPreloader(false)
+    //     }
+    // }
 
-    function daysRemaining() {
-        const currentTime = Date.now();
-        const timeDifference = target.dueDate - currentTime;
-        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-        return daysRemaining
-    }
+    // function daysRemaining() {
+    //     const currentTime = Date.now();
+    //     const timeDifference = target.dueDate - currentTime;
+    //     const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    //     return daysRemaining
+    // }
 
-    function getInterest(amount) {
-        const month = daysRemaining() / 30
-        const percent = target.pa / 100
-        let int = percent / 12 * month * amount;
-        int = Math.floor(int * 100) / 100;
-        setInterest(int)
-    }
+    // function getInterest(amount) {
+    //     const month = daysRemaining() / 30
+    //     const percent = target.pa / 100
+    //     let int = percent / 12 * month * amount;
+    //     int = Math.floor(int * 100) / 100;
+    //     setInterest(int)
+    // }
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -175,22 +175,26 @@ export function Targets({ navigation }) {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <View style={{ alignItems: 'center' }}>
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
-                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{balance.toFixed(2)}</Text>
+                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>0.00</Text>
                                     </Text>
-                                    <Text style={{ marginStart: 20, }}>Due Date: {dateConverter(target.dueDate)}</Text>
+                                    <Text style={{ marginStart: 20, }}>Due Date: </Text>
                                 </View>
-                                {new Date().getTime() > target.dueDate ?
-                                    <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
-                                        <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
-                                        <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
-                                    </TouchableOpacity>
-                                    :
+                              
+                                   <View>
+                                   
+                                    
                                     <TouchableOpacity onPress={closeModal} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
                                         <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Fund Target</Text>
                                         <FontAwesomeIcon icon={faCirclePlus} color="white" />
                                     </TouchableOpacity>
-                                }
+                                   </View>
+                                   
+                                
                             </View>
+                            <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
+                                        <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
+                                        <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
+                                    </TouchableOpacity>
                         </View>
 
                         <View style={{ alignItems: 'center', marginTop: 10, marginBottom: 15 }}>

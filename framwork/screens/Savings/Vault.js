@@ -62,7 +62,7 @@ export function Vault({ navigation }) {
           <View style={styles.balance}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#787A8D', }}>Vault Balance</Text>
+                <Text style={{ color: '#787A8D', }}>Treasury Balance</Text>
               </View>
 
               <TouchableOpacity>

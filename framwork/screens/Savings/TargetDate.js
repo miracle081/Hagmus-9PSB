@@ -34,11 +34,11 @@ export function TargetDate({ navigation }) {
 
     const [selectedOption, setSelectedOption] = useState(null);
 
-    const handleOptionPress = (optionIndex, d, pa) => {
-        setSelectedOption(optionIndex);
-        setDays(d);
-        setPa(pa);
-    };
+    // const handleOptionPress = (optionIndex, d, pa) => {
+    //     setSelectedOption(optionIndex);
+    //     setDays(d);
+    //     setPa(pa);
+    // };
 
     function dateConverter() {
         const timeS = getFutureTimestamp(days)
@@ -84,43 +84,43 @@ export function TargetDate({ navigation }) {
                                     <Text style={{ color: '#787A8D' }}>Easily accomplish your financial goal</Text>
                                 </View>
                                 <ScrollView>
-                                    {targetRates.map((option, index) => (
-                                        <TouchableOpacity key={index} onPress={() => handleOptionPress(index, option.days, option.pa)}
+                                    
+                                        <TouchableOpacity 
                                             style={{ alignItems: 'center', flexDirection: 'row', padding: 5, paddingBottom: 2, justifyContent: "space-between" }}
                                         >
                                             <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                                <Checkbox
-                                                    status={selectedOption === index ? 'checked' : 'unchecked'}
+                                                {/* <Checkbox
+                                                    // status={selectedOption === index ? 'checked' : 'unchecked'}
                                                     onPress={() => handleOptionPress(index, option.days, option.pa)}
                                                     color='#7B61FF'
-                                                />
-                                                <Text style={{ fontSize: 13, color: '#46464d' }}>End in {option.days} days - ({option.month} months)</Text>
+                                                /> */}
+                                                <Text style={{ fontSize: 13, color: '#46464d' }}>End in days -  months</Text>
                                             </View>
-                                            <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold" }}>{option.pa}% p.a</Text>
+                                            <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold" }}>10% p.a</Text>
                                         </TouchableOpacity>
-                                    ))}
+                                 
                                 </ScrollView>
                             </View>
 
-                            {JSON.stringify(vaultInfo[docID]) != '{}' ?
+                           
                                 < View style={{ padding: 15, marginTop: 10, flexDirection: "row", alignItems: "center" }}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, }}>{docID} Target has been Created </Text>
+                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, }}> Target has been Created </Text>
                                     <FontAwesomeIcon icon={faCheckCircle} color="#7B61FF" />
                                 </View>
-                                :
-                                days ?
+                                
+                                
                                     <>
-                                        <Text style={{ marginTop: 10, marginStart: 20, }}>Due Date: {dateConverter()}</Text>
+                                        <Text style={{ marginTop: 10, marginStart: 20, }}>Due Date: </Text>
                                         < View style={{ padding: 15, marginTop: 10 }}>
-                                            <TouchableOpacity onPress={createTarget}
+                                            <TouchableOpacity onPress={()=>navigation.navigate('Targets')}
                                                 style={styles.getStarted}>
                                                 <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Create Target</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </>
-                                    :
-                                    null
-                            }
+                                    
+                                    
+                            
                         </View>
                     </View>
                 </View>
