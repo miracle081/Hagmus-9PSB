@@ -80,6 +80,8 @@ import { OthersInfo } from "../screens/Savings/OthersInfo";
 import { FixedInfo } from "../screens/Savings/FixedInfo";
 import { FixedMenu } from "../screens/Savings/FixedMenu";
 import { FixedTarget } from "../screens/Savings/FixedTarget";
+import { SpendRetainInfo } from "../screens/Savings/SpendRetainInfo";
+import { SpendRetain } from "../screens/Savings/SpendRetain";
 // import { Treasury } from "../screens/Savings/Treasury";
 
 const Stack = createNativeStackNavigator();
@@ -197,6 +199,8 @@ export function StackNavigator() {
             <Stack.Screen name='FixedMenu' component={FixedMenu} />
             <Stack.Screen name='FixedTarget' component={FixedTarget} />
             <Stack.Screen name='FixedCreate' component={FixedCreate} />
+            <Stack.Screen name='SpendRetainInfo' component={SpendRetainInfo} />
+            <Stack.Screen name='SpendRetain' component={SpendRetain} />
         </Stack.Navigator>
     )
 }

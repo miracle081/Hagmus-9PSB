@@ -84,19 +84,22 @@ export function Treasury({ navigation }) {
 
           <View style={styles.savingsplan}>
             <View style={styles.boxView}>
-              <TouchableOpacity onPress={() => navigation.navigate('Coinlock')}
+             
+            <TouchableOpacity
+                onPress={() => navigation.navigate('FixedInfo')}
                 style={[styles.boxStyle, { backgroundColor: '#7b61ff5e', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faLock}
+                      icon={faWallet}
                       color="#6245f5"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#6040fc', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Coin Lock</Text>
-                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>BTC, ETH ...</Text>
+                    <Text style={{ color: '#6040fc', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Fixed Savings</Text>
+                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
+                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {fixedBalance.toFixed(2)}</Text></Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -123,8 +126,8 @@ export function Treasury({ navigation }) {
 
           <View style={styles.savingsplan}>
             <View style={styles.boxView}>
-              <View
-                // onPress={() => navigation.navigate('UsdSavings')}
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SpendRetainInfo')}
                 style={[styles.boxStyle, { backgroundColor: '#5cbeff5e', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
@@ -139,26 +142,27 @@ export function Treasury({ navigation }) {
                     <Text style={{ fontSize: 11, color: '#5f5f5f', }}>Coming soon</Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => navigation.navigate('FixedInfo')}
+
+              <TouchableOpacity onPress={() => navigation.navigate('Coinlock')}
                 style={[styles.boxStyle, { backgroundColor: '#a6b10944', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faWallet}
+                      icon={faLock}
                       color="#a09d01ff"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Fixed Savings</Text>
-                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
-                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {fixedBalance.toFixed(2)}</Text></Text>
+                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Coin Lock</Text>
+                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>BTC, ETH ...</Text>
                   </View>
                 </View>
               </TouchableOpacity>
+
+             
             </View>
           </View>
 
