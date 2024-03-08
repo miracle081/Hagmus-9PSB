@@ -55,7 +55,8 @@ export function PasswordReset({ navigation }) {
       .catch(error => {
         setPreloader(false)
         console.log('error', error)
-        Alert.alert("Error!", error.message)
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
       });
   }
 

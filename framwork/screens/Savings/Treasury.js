@@ -13,19 +13,21 @@ import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 const targetmenu = ["business", "education", "emergency", "travel", "others"]
 
 export function Treasury({ navigation }) {
-  const { userUID, setPreloader, carouselLinks, setVaultInfo, vaultInfo } = useContext(AppContext);
+  const { userUID, setPreloader, carouselLinks, getSavings, savingsInfo, } = useContext(AppContext);
   const [showBalance, setShowBalance] = useState('');
   const [balance, setBalance] = useState(0);
   const [fixedBalance, setFixedBalance] = useState(0);
   const [targetBalance, setTargetBalance] = useState(0);
   const screenWidth = Dimensions.get('screen').width;
 
-  // useEffect(() => {
-  //   onSnapshot(doc(db, "vault", userUID), (doc) => {
-  //     const info = doc.data()
-  //     setVaultInfo(info);
-  //   });
-  // }, []);
+
+  useEffect(() => {
+    // let amt = 0
+    // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
+    // setBalance(amt)
+    getSavings();
+    // console.log(savingsInfo);
+  }, []);
 
 
   // function getTargetBalance() {
@@ -84,8 +86,8 @@ export function Treasury({ navigation }) {
 
           <View style={styles.savingsplan}>
             <View style={styles.boxView}>
-             
-            <TouchableOpacity
+
+              <TouchableOpacity
                 onPress={() => navigation.navigate('FixedInfo')}
                 style={[styles.boxStyle, { backgroundColor: '#7b61ff5e', }]}>
                 <View style={{ alignItems: 'center' }}>
@@ -162,7 +164,7 @@ export function Treasury({ navigation }) {
                 </View>
               </TouchableOpacity>
 
-             
+
             </View>
           </View>
 

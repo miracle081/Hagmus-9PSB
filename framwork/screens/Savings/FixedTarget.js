@@ -67,7 +67,8 @@ export function FixedTarget() {
                 setPreloader(false)
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else Alert.alert("Error!", error.message)
+                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
 
             });
     }

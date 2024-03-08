@@ -22,6 +22,8 @@ function AppProvider({ children }) {
           { uri: "https://wenethub.com/imageslink/NewCashB.png" },
      ]);
      const [userCards, setUserCards] = useState([]);
+     const [savingsInfo, setSavingsInfo] = useState([]);
+     const [targetName, setTargetName] = useState("");
      const [welcomeModal, setWelcomeModal] = useState(true);
      const [referralBonus, setReferralBonus] = useState(0);
      const [token, setToken] = useState("");
@@ -54,6 +56,8 @@ function AppProvider({ children }) {
                .catch(error => {
                     setPreloader(false)
                     console.log('error', error)
+                    if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
                });
      }
 
@@ -81,7 +85,8 @@ function AppProvider({ children }) {
                .catch(error => {
                     setPreloader(false)
                     console.log('error', error)
-                    Alert.alert("Error!", error.message)
+                    if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
                });
      }
 
@@ -108,7 +113,9 @@ function AppProvider({ children }) {
                .catch(error => {
                     setPreloader(false)
                     console.log('error', error)
-                    Alert.alert("Error!", error.message)
+                    if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
                });
      }
 
@@ -133,6 +140,36 @@ function AppProvider({ children }) {
                .catch(e => console.log(e))
      }
 
+     function getSavings() {
+          setPreloader(true)
+          const requestOptions = {
+               method: 'GET',
+               headers: {
+                    authorization: `bearer ${token}`
+               },
+               redirect: 'follow'
+          };
+          fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+               .then(response => response.json())
+               .then(response => {
+                    const { data, status, message } = response;
+                    setPreloader(false)
+                    if (status == "success") {
+                         // const rinfo = data.find(all => all.name == "business")
+                         // console.log(rinfo);
+                         setSavingsInfo(data)
+                    }
+                    handleError(status, message);
+               })
+               .catch(error => {
+                    setPreloader(false)
+                    console.log(error);
+                    if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
+               });
+     }
+
      return (
           <AppContext.Provider value={{
                ID, setID,
@@ -145,8 +182,10 @@ function AppProvider({ children }) {
                userInfo, setUserInfo,
                userCards, setUserCards,
                preloader, setPreloader,
+               targetName, setTargetName,
                accountInfo, setAccountInfo,
                earnBalance, setEarnBalance,
+               savingsInfo, setSavingsInfo,
                welcomeModal, setWelcomeModal,
                notification, setNotification,
                profileImage, setProfileImage,
@@ -155,6 +194,7 @@ function AppProvider({ children }) {
                expoPushToken, setExpoPushToken,
                getUserInfo, getAccountInfo, getUserCards,
                sendNotification,
+               getSavings
           }}>
                {children}
           </AppContext.Provider>

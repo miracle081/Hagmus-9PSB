@@ -75,7 +75,8 @@ export function LoginOtp({ navigation }) {
           setDisable(false)
           setsec(0)
           console.log(error)
-          Alert.alert("Error!", error.message)
+          if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
         });
     } catch (error) {
       console.log(error);

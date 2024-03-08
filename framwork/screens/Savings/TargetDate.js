@@ -32,7 +32,7 @@ const options = [
 const frequencyOption = ["daily", "weekly", "monthly"]
 
 export function TargetDate({ navigation }) {
-    const { userUID, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
+    const { setPreloader, token, targetName, accountInfo, getSavings } = useContext(AppContext);
     const [days, setDays] = useState(0);
     const [pa, setPa] = useState(0);
     const [color, setColor] = useState('gray');
@@ -100,7 +100,7 @@ export function TargetDate({ navigation }) {
     function createTarget() {
         setPreloader(true)
         const formdata = {
-            name: "business",
+            name: targetName,
             description,
             amount,
             type: "target",
@@ -125,7 +125,8 @@ export function TargetDate({ navigation }) {
                 setPreloader(false)
                 // console.log(response);
                 if (status == "success") {
-                    navigation.navigate('Targets')
+                    getSavings();
+                    navigation.navigate('TargetMenu')
                     Alert.alert(
                         'Success',
                         message,
@@ -145,7 +146,7 @@ export function TargetDate({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.body}>
                     <View style={{ alignItems: 'center', margin: 15 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white' }}>Set Target duration</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', textTransform: "capitalize" }}>Create {targetName} Target</Text>
                     </View>
                     <View style={styles.vault}>
 
@@ -182,7 +183,7 @@ export function TargetDate({ navigation }) {
                                             onChangeText={inp => setTargetAmount(Number(inp.trim()))}
                                         />
 
-                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Payback Date</Text>
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
                                         <View style={{ position: "relative" }}>
                                             <Pressable>
                                                 <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>

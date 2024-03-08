@@ -73,7 +73,6 @@ import { TargetMenu } from "../screens/Savings/TargetMenu";
 import { BusinessTargetInfo } from "../screens/Savings/BusinessTargetInfo";
 import { TargetDate } from "../screens/Savings/TargetDate";
 import { EmergencyInfo } from "../screens/Savings/EmergencyInfo";
-import { TravlInfo } from "../screens/Savings/TravlInfo";
 import { TravlTarget } from "../screens/Savings/TravlTarget";
 import { EducationInfo } from "../screens/Savings/EducationInfo";
 import { OthersInfo } from "../screens/Savings/OthersInfo";
@@ -82,6 +81,7 @@ import { FixedMenu } from "../screens/Savings/FixedMenu";
 import { FixedTarget } from "../screens/Savings/FixedTarget";
 import { SpendRetainInfo } from "../screens/Savings/SpendRetainInfo";
 import { SpendRetain } from "../screens/Savings/SpendRetain";
+import { TravelInfo } from "../screens/Savings/TravlInfo";
 // import { Treasury } from "../screens/Savings/Treasury";
 
 const Stack = createNativeStackNavigator();
@@ -191,7 +191,7 @@ export function StackNavigator() {
             <Stack.Screen name='BusinessTargetInfo' component={BusinessTargetInfo} />
             <Stack.Screen name='TargetDate' component={TargetDate} />
             <Stack.Screen name='EmergencyInfo' component={EmergencyInfo} />
-            <Stack.Screen name='TravlInfo' component={TravlInfo} />
+            <Stack.Screen name='TravelInfo' component={TravelInfo} />
             <Stack.Screen name='TravlTarget' component={TravlTarget} />
             <Stack.Screen name='EducationInfo' component={EducationInfo} />
             <Stack.Screen name='OthersInfo' component={OthersInfo} />

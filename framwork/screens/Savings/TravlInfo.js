@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 
 
-export function TravlInfo({ navigation }) {
+export function TravelInfo({ navigation }) {
     
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>

@@ -20,8 +20,9 @@ import { handleError } from "../../components/HandleRequestError";
 import { formatMoney } from "../../components/FormatMoney";
 
 
-export function Targets({ navigation }) {
-    const { userInfo, token, setPreloader, docID } = useContext(AppContext);
+export function Targets({ navigation, route }) {
+    const { info = {} } = route.params;
+    const { userInfo, token, setPreloader, targetName } = useContext(AppContext);
     const [balance, setBalance] = useState(0);
     const [targetHistory, setTargetHistory] = useState([]);
     const [fixedInfo, setFixedInfo] = useState({ current_balance: 0 });
@@ -60,43 +61,9 @@ export function Targets({ navigation }) {
     }
 
     useEffect(() => {
-        // let amt = 0
-        // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
-        // setBalance(amt)
-        getTagetInfo();
         getTrasctoins();
     }, []);
 
-
-    function getTagetInfo() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${token}`
-            },
-            redirect: 'follow'
-        };
-        fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                setPreloader(false)
-                if (status == "success") {
-                    const rinfo = data.find(all => all.name == "business")
-                    // console.log(rinfo);
-                    setFixedInfo(rinfo)
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log(error);
-                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else Alert.alert("Error!", error.message)
-
-            });
-    }
     function getTrasctoins() {
         setPreloader(true)
         const requestOptions = {
@@ -106,7 +73,7 @@ export function Targets({ navigation }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/savings/5/transactions`, requestOptions)
+        fetch(`${baseURL}/api/savings/${info.id}/transactions`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -121,6 +88,7 @@ export function Targets({ navigation }) {
                 setPreloader(false)
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
                 else Alert.alert("Error!", error.message)
 
             });
@@ -161,7 +129,7 @@ export function Targets({ navigation }) {
                 <StatusBar style="light" />
                 <View style={styles.body}>
                     <View style={{ alignItems: 'center', margin: 15 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', textTransform: "capitalize" }}>{docID} Target Plan</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', textTransform: "capitalize" }}>{targetName} Target Plan</Text>
                     </View>
                     <View style={styles.vault}>
                         <View style={styles.balance}>
@@ -200,7 +168,7 @@ export function Targets({ navigation }) {
                                             activeOpacity={0.6}
                                             style={{ margin: 10, padding: 10, backgroundColor: 'white', borderRadius: 8 }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Text numberOfLines={1} style={{ color: 'black', fontWeight: 'bold',flex:1 }}>{item.narration}</Text>
+                                                <Text numberOfLines={1} style={{ color: 'black', fontWeight: 'bold', flex: 1 }}>{item.narration}</Text>
                                                 <View style={{
                                                     backgroundColor: '#8b77f0', padding: 5, borderTopLeftRadius: 100, borderBottomLeftRadius: 100, width: 70,
                                                     borderTopRightRadius: 100, alignItems: 'center', height: 30, justifyContent: 'center'
@@ -218,8 +186,8 @@ export function Targets({ navigation }) {
                                                 </View>
                                                 <Text style={{ color: 'white', width: 1, backgroundColor: '#787A8D', marginLeft: 5, height: 40 }}></Text>
                                                 <View style={{ alignItems: 'center' }}>
-                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14 ,textTransform:"capitalize"}}>{item.type}</Text>
-                                                    <Text style={{ fontSize: 17, color: '#757577',textTransform:"capitalize" }}>{item.status}</Text>
+                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14, textTransform: "capitalize" }}>{item.type}</Text>
+                                                    <Text style={{ fontSize: 17, color: '#757577', textTransform: "capitalize" }}>{item.status}</Text>
                                                 </View>
                                             </View>
                                             <View
@@ -279,7 +247,7 @@ export function Targets({ navigation }) {
                                 />
                             </View>
                             <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>{docID} Target Plan</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>{targetName} Target Plan</Text>
                                 <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>You can finance the expansion of your firm by saving and earning.</Text>
                             </View>
                             <View style={{ padding: 15 }}>
@@ -333,7 +301,7 @@ export function Targets({ navigation }) {
                                 />
                             </View>
                             <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>Withdraw {docID} Target Plan</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>Withdraw {targetName} Target Plan</Text>
                                 <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>You can finance the expansion of your firm by saving and earning.</Text>
                             </View>
                             <View style={{ padding: 15 }}>

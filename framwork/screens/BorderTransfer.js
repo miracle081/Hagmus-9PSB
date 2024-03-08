@@ -53,7 +53,8 @@ export function BorderTransfer({ navigation }) {
       .catch(error => {
         setPreloader(false)
         console.log('error', error)
-        Alert.alert("Error!", error.message)
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
       });
   }
   useEffect(() => {
@@ -96,7 +97,8 @@ export function BorderTransfer({ navigation }) {
       .catch(error => {
         setPreloader(false)
         console.log('error', error)
-        Alert.alert("Error!", error.message)
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
       });
   }
 
@@ -145,7 +147,8 @@ export function BorderTransfer({ navigation }) {
       .catch(error => {
         setPreloader(false)
         console.log('error', error)
-        Alert.alert("Error!", error.message)
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
       });
 
   }
