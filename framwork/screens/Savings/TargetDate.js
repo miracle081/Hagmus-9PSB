@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/businesstargetinfo";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { Checkbox } from "react-native-paper";
@@ -9,66 +9,137 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import { AppContext } from "../../../globals/AppContext";
 import { useContext } from "react";
-import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt, faCheckCircle, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { baseURL } from "../../../config";
+import { handleError } from "../../components/HandleRequestError";
 
 
-// const options = [
-//     { days: 60, label: '2 months', pa: 10 },
-//     { days: 90, label: '3 months', pa: 11 },
-//     { days: 120, label: '4 months', pa: 12 },
-//     { days: 150, label: '5 months', pa: 13 },
-//     { days: 180, label: '6 months', pa: 14 },
-//     { days: 210, label: '7 months', pa: 15 },
-//     { days: 240, label: '8 months', pa: 16 },
-//     { days: 270, label: '9 months', pa: 17 },
-//     { days: 300, label: '10 months', pa: 18 },
-//     { days: 330, label: '11 months', pa: 19 },
-//     { days: 365, label: '12 months', pa: 20 },
-// ];
+const options = [
+    { days: 60, label: '2 months', pa: 10 },
+    { days: 90, label: '3 months', pa: 11 },
+    { days: 120, label: '4 months', pa: 12 },
+    { days: 150, label: '5 months', pa: 13 },
+    { days: 180, label: '6 months', pa: 14 },
+    { days: 210, label: '7 months', pa: 15 },
+    { days: 240, label: '8 months', pa: 16 },
+    { days: 270, label: '9 months', pa: 17 },
+    { days: 300, label: '10 months', pa: 18 },
+    { days: 330, label: '11 months', pa: 19 },
+    { days: 365, label: '12 months', pa: 20 },
+];
+
+const frequencyOption = ["daily", "weekly", "monthly"]
 
 export function TargetDate({ navigation }) {
-    const { userUID, setPreloader, docID, targetRates, vaultInfo } = useContext(AppContext);
+    const { userUID, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
     const [days, setDays] = useState(0);
     const [pa, setPa] = useState(0);
+    const [color, setColor] = useState('gray');
+    const [message2, setMessage2] = useState('');
+    const [amount, setAmount] = useState(0);
+    const [targetAmount, setTargetAmount] = useState(0);
+    const [description, setDescription] = useState("");
+    const [interest, setInterest] = useState(0);
+    const [frequency, setFrequency] = useState("");
 
-    const [selectedOption, setSelectedOption] = useState(null);
+    // setPreloader(false)
 
-    // const handleOptionPress = (optionIndex, d, pa) => {
-    //     setSelectedOption(optionIndex);
-    //     setDays(d);
-    //     setPa(pa);
-    // };
+    const [modalVisibility, setModalVisibility] = useState(false);
+    const closeModal = () => setModalVisibility(!modalVisibility);
+
+    const [frequencyVisibility, setFrequencyVisibility] = useState(false);
+    const closeFrequency = () => setFrequencyVisibility(!frequencyVisibility);
+
+    const [modalVisibility2, setModalVisibility2] = useState(false);
+    const closeModal2 = () => setModalVisibility2(!modalVisibility2);
+
+    function validation(inp) {
+        if (inp >= 1000) {
+            if (inp <= accountInfo.account_balance) {
+                setAmount(Number(inp))
+                setMessage2('Amount Ok');
+                setColor('#14a301ff');
+            } else {
+                setMessage2(`Insufficient funds on NGN(Bal: ${accountInfo.account_balance})`);
+                setColor('#ce0a0ae5')
+                setAmount(0)
+            }
+        }
+        else {
+            setMessage2(`Minimum Amount ₦1000`);
+            setColor('#ce0a0ae5')
+            setAmount(0)
+        }
+    }
 
     function dateConverter() {
         const timeS = getFutureTimestamp(days)
         let rDate = new Date(timeS)
         rDate = rDate.toLocaleDateString()
-        return moment(timeS).format('DD/MM/YYYY')
+        return days != 0 ? moment(timeS).format('MMMM Do YYYY') : "Select date"
+    }
+
+
+    function btnVal() {
+        if (amount <= 0 || days === 0 || frequency === "" || targetAmount === 0) {
+            return (
+                <View style={[styles.getStarted, { backgroundColor: "#7b61ff94" }]}>
+                    <Text style={{ fontSize: 16, }}>Next</Text>
+                </View>
+            )
+        } else {
+            return (
+                <TouchableOpacity onPress={() => { createTarget(); closeModal2() }} style={styles.getStarted}>
+                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Continue</Text>
+                </TouchableOpacity>
+            )
+        }
     }
 
     function createTarget() {
         setPreloader(true)
-        updateDoc(doc(db, "vault", userUID), {
-            [docID]: {
-                dateCreated: new Date().getTime(),
-                days,
-                deposites: [],
-                dueDate: getFutureTimestamp(days),
-                pa,
-            }
-        })
-            .then(() => {
+        const formdata = {
+            name: "business",
+            description,
+            amount,
+            type: "target",
+            tenure: days,
+            target: targetAmount,
+            frequency,
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formdata),
+            redirect: 'follow'
+        };
+
+        fetch(baseURL + "/api/savings/create", requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
                 setPreloader(false)
-                navigation.navigate('Targets')
+                // console.log(response);
+                if (status == "success") {
+                    navigation.navigate('Targets')
+                    Alert.alert(
+                        'Success',
+                        message,
+                    )
+                }
+                handleError(status, message);
             })
-            .catch(() => {
+            .catch(error => {
                 setPreloader(false)
-                ToastApp('Something went wrong, please try again', "LONG");
-            })
+                console.log('error', error)
+            });
     }
 
-    
+
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
             <View style={styles.container}>
@@ -78,52 +149,184 @@ export function TargetDate({ navigation }) {
                     </View>
                     <View style={styles.vault}>
 
-                        <View style={{ marginTop: 20, padding: 5 }}>
-                            <View>
-                                <View style={{ alignItems: 'center' }}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === 'ios' ? 'padding' : null}
+                        >
+                            <ScrollView>
+                                <View style={{ alignItems: 'center', marginBottom: 15 }}>
                                     <Text style={{ color: '#787A8D' }}>Easily accomplish your financial goal</Text>
                                 </View>
-                                <ScrollView>
-                                    
-                                        <TouchableOpacity 
-                                            style={{ alignItems: 'center', flexDirection: 'row', padding: 5, paddingBottom: 2, justifyContent: "space-between" }}
-                                        >
-                                            <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                                {/* <Checkbox
-                                                    // status={selectedOption === index ? 'checked' : 'unchecked'}
-                                                    onPress={() => handleOptionPress(index, option.days, option.pa)}
-                                                    color='#7B61FF'
-                                                /> */}
-                                                <Text style={{ fontSize: 13, color: '#46464d' }}>End in days -  months</Text>
-                                            </View>
-                                            <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold" }}>10% p.a</Text>
-                                        </TouchableOpacity>
-                                 
-                                </ScrollView>
-                            </View>
 
-                           
-                                < View style={{ padding: 15, marginTop: 10, flexDirection: "row", alignItems: "center" }}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, }}> Target has been Created </Text>
-                                    <FontAwesomeIcon icon={faCheckCircle} color="#7B61FF" />
-                                </View>
-                                
-                                
-                                    <>
-                                        <Text style={{ marginTop: 10, marginStart: 20, }}>Due Date: </Text>
-                                        < View style={{ padding: 15, marginTop: 10 }}>
-                                            <TouchableOpacity onPress={()=>navigation.navigate('Targets')}
-                                                style={styles.getStarted}>
-                                                <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Create Target</Text>
+                                <View>
+                                    <View style={{ padding: 20, }}>
+                                        <Text style={styles.signupText}>Initail Funding Amount</Text>
+                                        <TextInput
+                                            style={[styles.inputStyle, { marginBottom: 0 }]}
+                                            keyboardType='numeric'
+                                            placeholder='0'
+                                            selectionColor={'#7B61FF'}
+                                            mode='outlined'
+                                            placeholderTextColor="#787A8D"
+                                            onChangeText={inp => validation(Number(inp.trim()))}
+                                        />
+                                        {message2 != "" ? <Text style={{ marginBottom: 0, color: color }}>{message2}</Text> : null}
+
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Target Amount</Text>
+                                        <TextInput
+                                            style={[styles.inputStyle, { marginBottom: 0 }]}
+                                            keyboardType='numeric'
+                                            placeholder='0'
+                                            selectionColor={'#7B61FF'}
+                                            mode='outlined'
+                                            placeholderTextColor="#787A8D"
+                                            onChangeText={inp => setTargetAmount(Number(inp.trim()))}
+                                        />
+
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Payback Date</Text>
+                                        <View style={{ position: "relative" }}>
+                                            <Pressable>
+                                                <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
+                                            </Pressable>
+                                            <TouchableOpacity
+                                                onPress={closeModal}
+                                                style={styles.calenderIcon}>
+                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
                                             </TouchableOpacity>
                                         </View>
-                                    </>
-                                    
-                                    
-                            
-                        </View>
+
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
+                                        <View style={{ position: "relative" }}>
+                                            <Pressable>
+                                                <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
+                                            </Pressable>
+                                            <TouchableOpacity
+                                                onPress={closeFrequency}
+                                                style={styles.calenderIcon}>
+                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{ marginTop: 10 }}>
+                                            <Text style={styles.signupText}>Description</Text>
+                                            <TextInput
+                                                style={[styles.inputStyle, { marginBottom: 20 }]}
+                                                keyboardType='default'
+                                                selectionColor={'#7B61FF'}
+                                                mode='outlined'
+                                                placeholderTextColor="#787A8D"
+                                                onChangeText={inp => setDescription(inp.trim())}
+                                            />
+                                        </View>
+                                    </View>
+
+                                    <View style={{ padding: 15, marginTop: 10, }}>
+                                        {btnVal()}
+                                    </View>
+                                </View>
+                            </ScrollView>
+                        </KeyboardAvoidingView>
                     </View>
                 </View>
+
+                {/* ===================== Days Modal =============== */}
+                <Modal
+                    visible={modalVisibility}
+                    animationType="slide"
+                    transparent={true}
+                >
+                    <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+                        <Pressable style={{ flex: 1 }} onPress={closeModal} >
+                        </Pressable>
+                        <View style={{ backgroundColor: "#ebe8eb", height: 420, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
+                            <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
+                                <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
+                                    <FontAwesomeIcon
+                                        icon={faXmark}
+                                        size={20}
+                                        color='#fff'
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ alignItems: 'center', marginBottom: 5 }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d' }}>Select end date</Text>
+                            </View>
+                            <View style={{ marginTop: 10, padding: 5, flex: 1 }}>
+                                <View style={{ flex: 1 }}>
+                                    <FlatList style={{ flex: 1 }}
+                                        data={options} renderItem={({ item }) => {
+                                            // console.log(item);
+                                            return (
+                                                <TouchableOpacity onPress={() => setDays(item.days)}>
+                                                    <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
+                                                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                                            <Checkbox
+                                                                status={days == item.days ? 'checked' : 'unchecked'}
+                                                                color='#7B61FF'
+                                                            />
+                                                            <Text style={{ fontSize: 13, color: '#46464d' }}>End in {item.days} days - ({item.label})</Text>
+                                                        </View>
+                                                        <Text style={{ fontSize: 15, color: '#7B61FF', fontWeight: "bold", marginRight: 12 }}>{item.pa} % P.a</Text>
+                                                    </View>
+                                                    <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
+                                                </TouchableOpacity>
+                                            )
+                                        }} key={({ item }) => { item.id }} />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                {/* ===================== frequency Modal =============== */}
+                <Modal
+                    visible={frequencyVisibility}
+                    animationType="slide"
+                    transparent={true}
+                >
+                    <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+                        <Pressable style={{ flex: 1 }} onPress={closeFrequency} >
+                        </Pressable>
+                        <View style={{ backgroundColor: "#ebe8eb", height: 420, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
+                            <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
+                                <TouchableOpacity onPress={closeFrequency} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
+                                    <FontAwesomeIcon
+                                        icon={faXmark}
+                                        size={20}
+                                        color='#fff'
+                                    />
+                                </TouchableOpacity>
+                            </View>
+
+                            <View style={{ alignItems: 'center', marginBottom: 5 }}>
+                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d' }}>Select frequency for target savings</Text>
+                            </View>
+                            <View style={{ marginTop: 10, padding: 5, flex: 1 }}>
+                                <View style={{ flex: 1 }}>
+                                    <FlatList style={{ flex: 1 }}
+                                        data={frequencyOption} renderItem={({ item }) => {
+                                            // console.log(item);
+                                            return (
+                                                <TouchableOpacity onPress={() => setFrequency(item)}>
+                                                    <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
+                                                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                                                            <Checkbox
+                                                                status={frequency == item ? 'checked' : 'unchecked'}
+                                                                color='#7B61FF'
+                                                            />
+                                                            <Text style={{ fontSize: 13, color: '#46464d', textTransform: "capitalize" }}>{item}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={{ borderBottomColor: '#d2d3da', borderBottomWidth: StyleSheet.hairlineWidth, marginLeft: 15, marginRight: 15 }} />
+                                                </TouchableOpacity>
+                                            )
+                                        }} key={({ item }) => { item.id }} />
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
             </View>
         </AppSafeAreaView>
     )

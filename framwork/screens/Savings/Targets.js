@@ -1,4 +1,4 @@
-import { FlatList, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/targets";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowUpFromBracket, faBullseye, faBusinessTime, faCirclePlus, faEye, faEyeSlash, faFaceSmile, faHandHoldingDollar, faLock, faSackDollar, faWallet, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -15,11 +15,16 @@ import { ToastApp } from "../../components/Toast";
 import { dateTime } from "../../components/DateTime";
 import { AppContext } from "../../../globals/AppContext";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { baseURL } from "../../../config";
+import { handleError } from "../../components/HandleRequestError";
+import { formatMoney } from "../../components/FormatMoney";
 
 
 export function Targets({ navigation }) {
-    const { userUID, setPreloader, userInfo, docID } = useContext(AppContext);
+    const { userInfo, token, setPreloader, docID } = useContext(AppContext);
     const [balance, setBalance] = useState(0);
+    const [targetHistory, setTargetHistory] = useState([]);
+    const [fixedInfo, setFixedInfo] = useState({ current_balance: 0 });
     const [target, setTarget] = useState({ dateCreated: 0, days: 0, deposites: [], dueDate: 0, pa: 0 });
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
@@ -35,132 +40,120 @@ export function Targets({ navigation }) {
         setModalVisibility2(!modalVisibility2);
     };
 
-    // function validation(inp) {
-    //     if (inp > 0) {
-    //         if (inp <= userInfo.ngn) {
-    //             setAmount(Number(inp))
-    //             setMessage2('Amount Ok');
-    //             setColor('#14a301ff')
-    //         } else {
-    //             setMessage2(`Insufficient funds on NGN (Bal: ${userInfo.ngn})`);
-    //             setColor('#ce0a0ae5')
-    //             setAmount(0)
-    //         }
-    //     }
-    //     else {
-    //         setMessage2('Amount must not be empty');
-    //         setColor('#ce0a0ae5')
-    //         setAmount(0)
-    //     }
-    // }
+    function validation(inp) {
+        if (inp > 0) {
+            if (inp <= userInfo.ngn) {
+                setAmount(Number(inp))
+                setMessage2('Amount Ok');
+                setColor('#14a301ff')
+            } else {
+                setMessage2(`Insufficient funds on NGN (Bal: ${userInfo.ngn})`);
+                setColor('#ce0a0ae5')
+                setAmount(0)
+            }
+        }
+        else {
+            setMessage2('Amount must not be empty');
+            setColor('#ce0a0ae5')
+            setAmount(0)
+        }
+    }
 
-    // useEffect(() => {
-    //     onSnapshot(doc(db, "vault", userUID), (doc) => {
-    //         const info = doc.data()[docID]
-    //         if (JSON.stringify(info) != '{}') {
-    //             setTarget(info);
-    //             let amt = 0
-    //             info.deposites.map(d => amt += d.amount + d.interest)
-    //             setBalance(amt)
-    //         } else {
-    //             setBalance(0)
-    //             setTarget({ dateCreated: 0, days: 0, deposites: [], dueDate: 0, pa: 0 });
-    //         }
-    //     });
-    // }, []);
+    useEffect(() => {
+        // let amt = 0
+        // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
+        // setBalance(amt)
+        getTagetInfo();
+        getTrasctoins();
+    }, []);
 
-    // function dateConverter(date) {
-    //     let rDate = new Date(date)
-    //     rDate = rDate.toLocaleDateString()
-    //     return moment(date).format('DD/MM/YYYY')
-    // }
 
-    // async function fundTarget() {
-    //     setPreloader(true)
-    //     try {
-    //         await runTransaction(db, (transaction) => {
-    //             transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) - Number(amount) },)
-    //             return Promise.resolve();
-    //         })
-    //             .then(() => {
-    //                 updateDoc(doc(db, "vault", userUID), {
-    //                     [docID]: {
-    //                         ...target, deposites: [
-    //                             ...target.deposites, {
-    //                                 amount,
-    //                                 interest,
-    //                                 data: new Date()
-    //                             }
-    //                         ],
-    //                     }
-    //                 })
-    //                     .then(() => {
-    //                         ToastApp(`Deposit of ${amount} was successful`, "LONG");
-    //                         setPreloader(false)
-    //                         setAmount(0)
-    //                     })
-    //                     .catch(() => {
-    //                         setPreloader(false)
-    //                         ToastApp('Something went wrong, please try again', "LONG");
-    //                     })
-    //             })
-    //             .catch(() => {
-    //                 setPreloader(false);
-    //                 ToastApp('Something went wrong, please try again', "LONG");
-    //             })
+    function getTagetInfo() {
+        setPreloader(true)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                authorization: `bearer ${token}`
+            },
+            redirect: 'follow'
+        };
+        fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                setPreloader(false)
+                if (status == "success") {
+                    const rinfo = data.find(all => all.name == "business")
+                    // console.log(rinfo);
+                    setFixedInfo(rinfo)
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log(error);
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
 
-    //     } catch {
-    //         setPreloader(false)
-    //     }
-    // }
+            });
+    }
+    function getTrasctoins() {
+        setPreloader(true)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                authorization: `bearer ${token}`
+            },
+            redirect: 'follow'
+        };
+        fetch(`${baseURL}/api/savings/5/transactions`, requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                console.log(data);
+                setPreloader(false)
+                if (status == "success") {
+                    setTargetHistory(data)
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log(error);
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
 
-    
-    // async function withdrawTarget() {
-    //     setPreloader(true)
-    //     try {
-    //         await runTransaction(db, (transaction) => {
-    //             transaction.update(doc(db, 'users', userUID), { ngn: Number(userInfo.ngn) + Number(balance) },)
-    //             return Promise.resolve();
-    //         })
-    //             .then(() => {
-    //                 updateDoc(doc(db, "vault", userUID), {
-    //                     [docID]: {}
-    //                 })
-    //                     .then(() => {
-    //                         ToastApp(`Withdrawal of ${amount} was successful`, "LONG");
-    //                         setPreloader(false)
-    //                         navigation.goBack();
-    //                     })
-    //                     .catch((e) => {
-    //                         console.log(e);
-    //                         setPreloader(false)
-    //                         ToastApp('Something went wrong 2, please try again', "LONG");
-    //                     })
-    //             })
-    //             .catch(() => {
-    //                 setPreloader(false);
-    //                 ToastApp('Something went wrong, please try again', "LONG");
-    //             })
+            });
+    }
 
-    //     } catch {
-    //         setPreloader(false)
-    //     }
-    // }
+    function dateConverter(date) {
+        let rDate = new Date(date)
+        rDate = rDate.toLocaleDateString()
+        return moment(date).format('DD/MM/YYYY')
+    }
 
-    // function daysRemaining() {
-    //     const currentTime = Date.now();
-    //     const timeDifference = target.dueDate - currentTime;
-    //     const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-    //     return daysRemaining
-    // }
+    async function fundTarget() {
 
-    // function getInterest(amount) {
-    //     const month = daysRemaining() / 30
-    //     const percent = target.pa / 100
-    //     let int = percent / 12 * month * amount;
-    //     int = Math.floor(int * 100) / 100;
-    //     setInterest(int)
-    // }
+    }
+
+    function daysRemaining() {
+        const currentTime = Date.now();
+        const timeDifference = target.dueDate - currentTime;
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+        return daysRemaining
+    }
+
+    function getInterest(amount) {
+        const month = daysRemaining() / 30
+        const percent = target.pa / 100
+        let int = percent / 12 * month * amount;
+        int = Math.floor(int * 100) / 100;
+        setInterest(int)
+    }
+
+    function withdrawTarget() {
+
+    }
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -175,41 +168,39 @@ export function Targets({ navigation }) {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <View style={{ alignItems: 'center' }}>
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
-                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>0.00</Text>
+                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(fixedInfo.current_balance)}</Text>
                                     </Text>
                                     <Text style={{ marginStart: 20, }}>Due Date: </Text>
                                 </View>
-                              
-                                   <View>
-                                   
-                                    
+
+                                <View>
                                     <TouchableOpacity onPress={closeModal} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
                                         <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Fund Target</Text>
                                         <FontAwesomeIcon icon={faCirclePlus} color="white" />
                                     </TouchableOpacity>
-                                   </View>
-                                   
-                                
+                                </View>
+
+
                             </View>
                             <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
-                                        <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
-                                        <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
-                                    </TouchableOpacity>
+                                <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
+                                <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ alignItems: 'center', marginTop: 10, marginBottom: 15 }}>
                             <Text style={{ fontSize: 20 }}>Targets ( Up to {target.pa}% p.a )</Text>
                             <Text style={{ fontSize: 11, marginTop: 5, color: '#787A8D' }}>Disciplined savings toward a defined goal.</Text>
                         </View>
-                        {target.deposites.length > 0 ?
+                        {targetHistory.length > 0 ?
                             <FlatList style={{ flex: 1 }}
-                                data={target.deposites} renderItem={({ item }) => {
+                                data={targetHistory} renderItem={({ item }) => {
                                     return (
                                         <TouchableOpacity
                                             activeOpacity={0.6}
                                             style={{ margin: 10, padding: 10, backgroundColor: 'white', borderRadius: 8 }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <Text style={{ color: 'black', fontWeight: 'bold' }}>Rent</Text>
+                                                <Text numberOfLines={1} style={{ color: 'black', fontWeight: 'bold',flex:1 }}>{item.narration}</Text>
                                                 <View style={{
                                                     backgroundColor: '#8b77f0', padding: 5, borderTopLeftRadius: 100, borderBottomLeftRadius: 100, width: 70,
                                                     borderTopRightRadius: 100, alignItems: 'center', height: 30, justifyContent: 'center'
@@ -227,8 +218,8 @@ export function Targets({ navigation }) {
                                                 </View>
                                                 <Text style={{ color: 'white', width: 1, backgroundColor: '#787A8D', marginLeft: 5, height: 40 }}></Text>
                                                 <View style={{ alignItems: 'center' }}>
-                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14 }}>Total % p.a</Text>
-                                                    <Text style={{ fontSize: 17, color: '#757577' }}>{item.interest}</Text>
+                                                    <Text style={{ marginBottom: 5, color: '#787A8D', fontSize: 14 ,textTransform:"capitalize"}}>{item.type}</Text>
+                                                    <Text style={{ fontSize: 17, color: '#757577',textTransform:"capitalize" }}>{item.status}</Text>
                                                 </View>
                                             </View>
                                             <View
@@ -241,7 +232,7 @@ export function Targets({ navigation }) {
                                             />
                                             <View>
                                                 <Text style={{ fontSize: 12, color: '#7B61FF' }}>Deposit date
-                                                    <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}>    {dateTime(item.date)}</Text></Text>
+                                                    <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}>    {dateTime(item.created_at)}</Text></Text>
                                             </View>
                                         </TouchableOpacity>
                                     )

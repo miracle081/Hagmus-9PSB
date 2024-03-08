@@ -28,7 +28,7 @@ export function TargetMenu({ navigation }) {
             <ScrollView>
               <View>
                 <TouchableOpacity 
-                onPress={()=>navigation.navigate('BusinessTargetInfo')}
+                onPress={()=>navigation.navigate('Targets')}
                   activeOpacity={0.7}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>

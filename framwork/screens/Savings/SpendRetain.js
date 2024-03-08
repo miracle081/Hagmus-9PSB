@@ -12,7 +12,7 @@ import { Checkbox } from "react-native-paper";
 import { baseURL } from "../../../config";
 import { handleError } from "../../components/HandleRequestError";
 import { symbol } from "../../components/currencySymbols";
-
+import { formatMoney } from "../../components/FormatMoney";
 
 export function SpendRetain({ navigation }) {
     const { userUID, getAccountInfo, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
@@ -240,7 +240,7 @@ export function SpendRetain({ navigation }) {
 
                         <View style={{ alignItems: 'center', margin: 10 }}>
                             <Text style={{ fontSize: 20 }}>Target (Up to 14% p.a)</Text>
-                            <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{Number(saysInfo.balance).toFixed(2)}</Text>
+                            <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(saysInfo.balance)}</Text>
                         </View>
 
 

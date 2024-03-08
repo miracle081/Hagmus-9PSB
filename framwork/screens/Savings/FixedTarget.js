@@ -58,7 +58,8 @@ export function FixedTarget() {
                 // console.log(data);
                 setPreloader(false)
                 if (status == "success") {
-                    setVaultInfo(data)
+                    const rData = data.filter(all => all.type == "fixed")
+                    setVaultInfo(rData)
                 }
                 handleError(status, message);
             })

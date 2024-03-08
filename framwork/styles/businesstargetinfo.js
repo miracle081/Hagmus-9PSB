@@ -23,9 +23,31 @@ export const styles = StyleSheet.create({
         margin: 5,
         padding: 10
     },
-  
-      
-      getStarted: {
+
+    inputStyle: {
+        padding: 10,
+        marginBottom: 0,
+        borderRadius: 7,
+        borderWidth: 1,
+        borderColor: '#7B61FF',
+        color: '#292828',
+        fontSize: 16
+    },
+    calenderIcon: {
+        backgroundColor: '#7B61FF',
+        position: "absolute",
+        padding: 8,
+        top: 11,
+        right: 9,
+        borderRadius: 90
+      },
+    signupText: {
+        color: '#787A8D',
+        marginBottom: 3,
+        fontSize: 15
+    },
+
+    getStarted: {
         backgroundColor: '#7B61FF',
         padding: 13,
         marginTop: 15,
