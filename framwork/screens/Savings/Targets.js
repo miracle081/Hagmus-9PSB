@@ -18,14 +18,14 @@ import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 import { baseURL } from "../../../config";
 import { handleError } from "../../components/HandleRequestError";
 import { formatMoney } from "../../components/FormatMoney";
+import { symbol } from "../../components/currencySymbols";
 
 
 export function Targets({ navigation, route }) {
     const { info = {} } = route.params;
-    const { userInfo, token, setPreloader, targetName } = useContext(AppContext);
+    const { userInfo, token, setPreloader, targetName, getSavings } = useContext(AppContext);
     const [balance, setBalance] = useState(0);
     const [targetHistory, setTargetHistory] = useState([]);
-    const [fixedInfo, setFixedInfo] = useState({ current_balance: 0 });
     const [target, setTarget] = useState({ dateCreated: 0, days: 0, deposites: [], dueDate: 0, pa: 0 });
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
@@ -77,7 +77,7 @@ export function Targets({ navigation, route }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                console.log(data);
+                // console.log(data);
                 setPreloader(false)
                 if (status == "success") {
                     setTargetHistory(data)
@@ -100,10 +100,6 @@ export function Targets({ navigation, route }) {
         return moment(date).format('DD/MM/YYYY')
     }
 
-    async function fundTarget() {
-
-    }
-
     function daysRemaining() {
         const currentTime = Date.now();
         const timeDifference = target.dueDate - currentTime;
@@ -120,7 +116,82 @@ export function Targets({ navigation, route }) {
     }
 
     function withdrawTarget() {
+        setPreloader(true)
+        const formdata = {
+            saving_id: info.id,
+            amount:info.current_balance,
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formdata),
+            redirect: 'follow'
+        };
 
+        fetch(baseURL + "/api/savings/withdraw", requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                setPreloader(false)
+                console.log(response);
+                if (status == "success") {
+                    getSavings();
+                    getTrasctoins();
+                    navigation.navigate("TradeSuccessful", {
+                        name: "",
+                        amount: symbol("ngn") + info.current_balance,
+                        message: `${symbol("ngn")}${info.current_balance} withdrawal successfully`,
+                        screen: "Targets"
+                    })
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+            });
+    }
+    function fundTarget() {
+        setPreloader(true)
+        const formdata = {
+            saving_id: info.id,
+            amount,
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formdata),
+            redirect: 'follow'
+        };
+
+        fetch(baseURL + "/api/savings/fund", requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                setPreloader(false)
+                // console.log(response);
+                if (status == "success") {
+                    getSavings();
+                    getTrasctoins();
+                    navigation.navigate("TradeSuccessful", {
+                        name: "",
+                        amount: symbol("ngn") + amount,
+                        message: `${symbol("ngn")}${amount} funded successfully`,
+                        screen: "Targets"
+                    })
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+            });
     }
 
     return (
@@ -136,7 +207,7 @@ export function Targets({ navigation, route }) {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <View style={{ alignItems: 'center' }}>
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
-                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(fixedInfo.current_balance)}</Text>
+                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(info.current_balance)}</Text>
                                     </Text>
                                     <Text style={{ marginStart: 20, }}>Due Date: </Text>
                                 </View>
@@ -259,7 +330,7 @@ export function Targets({ navigation, route }) {
                                     selectionColor={'#7B61FF'}
                                     mode='outlined'
                                     placeholderTextColor="#787A8D"
-                                    onChangeText={inp => { getInterest(inp); validation(Number(inp.trim())) }}
+                                    onChangeText={inp => { setAmount(Number(inp.trim())) }}
                                 />
                                 {message2 != "" ? <Text style={{ marginBottom: 25, color: color }}>{message2}</Text> : null}
                                 <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>Interest on Deposit  {interest}</Text>

@@ -16,7 +16,7 @@ export function TargetMenu({ navigation }) {
     // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
     // setBalance(amt)
     // getSavings();
-    console.log(savingsInfo);
+    // console.log(savingsInfo);
   }, []);
 
 
