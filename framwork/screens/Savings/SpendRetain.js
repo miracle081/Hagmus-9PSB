@@ -15,7 +15,7 @@ import { symbol } from "../../components/currencySymbols";
 import { formatMoney } from "../../components/FormatMoney";
 
 export function SpendRetain({ navigation }) {
-    const { userUID, getAccountInfo, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
+    const { userUID, getAccountInfo, setPreloader, token, getMySAYS, saysInfo, } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [balance, setBalance] = useState(0);
@@ -23,7 +23,6 @@ export function SpendRetain({ navigation }) {
     const [checkedD, setCheckedD] = useState(false);
     const [count, setCount] = useState(10);
     const [amount, setAmount] = useState(0);
-    const [saysInfo, setSaysInfo] = useState({ balance: 0 });
     const [histories, setHistories] = useState([]);
 
     const closeModal = () => {
@@ -45,51 +44,12 @@ export function SpendRetain({ navigation }) {
         }
     };
 
-    function createSavings() {
-        setPreloader(true)
-        const formdata = {
-            name: "New saving plan",
-            amount: count,
-            type: "percentage",
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(formdata),
-            redirect: 'follow'
-        };
-
-        fetch(baseURL + "/api/says/create", requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                setPreloader(false)
-                console.log(response);
-                if (status == "success") {
-                    // closeModal();
-                    Alert.alert(
-                        'Success',
-                        message,
-                    )
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log('error', error)
-            });
-    }
 
     function updateSavings() {
         setPreloader(true)
         const formdata = {
-            name: "New saving plan",
             amount,
             type: "percentage",
-            description: "Save more money"
         }
         const requestOptions = {
             method: 'POST',
@@ -162,36 +122,6 @@ export function SpendRetain({ navigation }) {
             });
     }
 
-    function getMySAYS() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${token}`
-            },
-            redirect: 'follow'
-        };
-        fetch(`${baseURL}/api/says/my-says`, requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                // console.log(data);
-                setPreloader(false)
-                if (status == "success") {
-                    setSaysInfo(data[0])
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log(error);
-                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
-
-            });
-    }
-
     function getTrasctoins() {
         setPreloader(true)
         const requestOptions = {
@@ -205,7 +135,7 @@ export function SpendRetain({ navigation }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                console.log(data);
+                // console.log(data);
                 setPreloader(false)
                 if (status == "success") {
                     setHistories(data)
@@ -217,19 +147,15 @@ export function SpendRetain({ navigation }) {
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
                 else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                else Alert.alert("Error!", error.message)
 
             });
     }
 
     useEffect(() => {
-        getMySAYS();
-        // getTrasctoins()
+        getTrasctoins();
     }, []);
 
-    useEffect(() => {
-        // getTrasctoins()
-    }, [saysInfo]);
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -492,7 +418,7 @@ export function SpendRetain({ navigation }) {
                                         <Text style={{ color: '#69628d', fontSize: 15 }}>100%</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity onPress={() => { closeModal2(); createSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
+                                <TouchableOpacity onPress={() => { closeModal2(); updateSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
                                     <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Save</Text>
                                 </TouchableOpacity>
                             </View>
