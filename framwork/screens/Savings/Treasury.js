@@ -152,14 +152,14 @@ export function Treasury({ navigation }) {
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faLock}
+                      icon={faWallet}
                       color="#a09d01ff"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Coin Lock</Text>
-                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>BTC, ETH ...</Text>
+                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Flexible Save</Text>
+                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦100,000</Text>
                   </View>
                 </View>
               </TouchableOpacity>
