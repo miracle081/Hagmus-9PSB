@@ -15,6 +15,7 @@ import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 import { baseURL } from "../../../config";
 import { handleError } from "../../components/HandleRequestError";
 import { dateTime, getFutureTimestamp } from "../../components/DateTime";
+import { formatMoney } from "../../components/FormatMoney";
 
 
 export function FixedTarget() {
@@ -25,9 +26,7 @@ export function FixedTarget() {
     const [modalVisibility, setModalVisibility] = useState(false);
 
     useEffect(() => {
-        // let amt = 0
-        // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
-        // setBalance(amt)
+        // console.log(fixedInfo);
         getTrasctoins();
     }, []);
 
@@ -35,11 +34,12 @@ export function FixedTarget() {
         setModalVisibility(!modalVisibility);
     };
 
-    function dateConverter(days) {
-        const timeS = getFutureTimestamp(days)
+    function dateConverter(days, startDate) {
+        const timeS = getFutureTimestamp(days, startDate)
         let rDate = new Date(timeS)
         rDate = rDate.toLocaleDateString()
-        return moment(timeS).format('DD/MM/YYYY, h:mm:ss a');
+        // return moment(timeS).format('DD/MM/YYYY, h:mm:ss a');
+        return moment(timeS).format('DD/MM/YYYY');
     }
 
     function getTrasctoins() {
@@ -59,6 +59,11 @@ export function FixedTarget() {
                 setPreloader(false)
                 if (status == "success") {
                     const rData = data.filter(all => all.type == "fixed")
+                    let amt = 0
+                    rData.forEach(d => {
+                        amt += Number(d.amount) + Number(d.total_interest)
+                    })
+                    setBalance(amt);
                     setVaultInfo(rData)
                 }
                 handleError(status, message);
@@ -67,12 +72,50 @@ export function FixedTarget() {
                 setPreloader(false)
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                else Alert.alert("Error!", error.message)
 
             });
     }
 
+    function withdraw(id, amount) {
+        setPreloader(true)
+        const formdata = {
+            saving_id: id,
+            amount,
+        }
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(formdata),
+            redirect: 'follow'
+        };
+
+        fetch(baseURL + "/api/savings/withdraw", requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                setPreloader(false)
+                // console.log(response);
+                if (status == "success") {
+                    getSavings();
+                    getTrasctoins();
+                    navigation.navigate("TradeSuccessful", {
+                        name: "",
+                        amount: symbol("ngn") + amount,
+                        message: `${symbol("ngn")}${amount} withdrawal successfully`,
+                        screen: "Targets"
+                    })
+                }
+                handleError(status, message);
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+            });
+    }
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -87,7 +130,7 @@ export function FixedTarget() {
                             <View style={{ alignItems: 'center' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
-                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{balance.toFixed(2)}</Text>
+                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(balance)}</Text>
                                     </Text>
                                 </View>
                             </View>
@@ -119,7 +162,7 @@ export function FixedTarget() {
                                             </View>
                                             <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginTop: 3, }} />
                                             <Text style={{ fontSize: 12, color: '#7B61FF' }}>Due date:
-                                                <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}> {dateConverter(item.tenure)}</Text>
+                                                <Text style={{ fontWeight: 'bold', color: '#7B61FF' }}> {dateConverter(item.tenure, item.start_date)}</Text>
                                             </Text>
                                         </TouchableOpacity>
                                     )
@@ -196,16 +239,16 @@ export function FixedTarget() {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 20 }}>
                                     <Text>Due Date</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ marginRight: 5 }}>{dateConverter(fixedInfo.tenure)}</Text>
+                                        <Text style={{ marginRight: 5 }}>{dateConverter(fixedInfo.tenure, fixedInfo.start_date)}</Text>
                                     </View>
                                 </View>
                                 <View style={{ borderBottomColor: '#787A8D', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 10, marginRight: 20, marginLeft: 20 }} />
                             </View>
 
                             <View style={{ padding: 15 }}>
-                                {new Date().getTime() > fixedInfo.endDate ?
-                                    <TouchableOpacity onPress={() => { closeModal(); redeemCoin(fixedInfo.date, fixedInfo.amount, fixedInfo.interest) }} style={styles.getStarted}>
-                                        <Text style={{ fontFamily: 'Inter_400Regular', color: "white", fontSize: 16, }}>Redeem</Text>
+                                {new Date().getTime() > getFutureTimestamp(fixedInfo.tenure, fixedInfo.start_date) ?
+                                    <TouchableOpacity onPress={() => { closeModal(); withdraw(fixedInfo.id, fixedInfo.amount) }} style={styles.getStarted}>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', color: "white", fontSize: 16, }}>Withdraw</Text>
                                     </TouchableOpacity> :
                                     <View style={[styles.getStarted, { backgroundColor: '#49416e', flexDirection: "row" }]}>
                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: "white" }}>Fixed </Text>

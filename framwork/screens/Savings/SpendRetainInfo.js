@@ -15,23 +15,16 @@ import { symbol } from "../../components/currencySymbols";
 
 
 export function SpendRetainInfo({ navigation }) {
-    const { userUID, getAccountInfo, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
+    const { setPreloader, token, } = useContext(AppContext);
     const [modalVisibility2, setModalVisibility2] = useState(false);
-    const [balance, setBalance] = useState(0);
     const [checked, setChecked] = useState(true);
     const [checkedD, setCheckedD] = useState(false);
     const [count, setCount] = useState(10);
-    const [amount, setAmount] = useState(0);
-    const [saysInfo, setSaysInfo] = useState({ balance: 0 });
-    const [histories, setHistories] = useState([]);
 
-   
+
     const closeModal2 = () => {
         setModalVisibility2(!modalVisibility2);
     };
-
-    //increase and decrease count
-
     const handleIncrement = () => {
         setCount(count + 1);
     };
@@ -80,154 +73,6 @@ export function SpendRetainInfo({ navigation }) {
             });
     }
 
-    function updateSavings() {
-        setPreloader(true)
-        const formdata = {
-            name: "New saving plan",
-            amount,
-            type: "percentage",
-            description: "Save more money"
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(formdata),
-            redirect: 'follow'
-        };
-
-        fetch(baseURL + "/api/savings/create", requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                setPreloader(false)
-                // console.log(response);
-                if (status == "success") {
-                    // closeModal();
-                    Alert.alert(
-                        'Success',
-                        message,
-                    )
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log('error', error)
-            });
-    }
-
-    function withdrawSavings() {
-        setPreloader(true)
-        const formdata = {
-            says_id: saysInfo.id,
-            amount,
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(formdata),
-            redirect: 'follow'
-        };
-
-        fetch(baseURL + "/api/says/withdraw", requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                setPreloader(false)
-                // console.log(response);
-                if (status == "success") {
-                    getAccountInfo();
-                    getMySAYS();
-                    navigation.navigate("Successful", {
-                        name: "",
-                        amount: `${symbol("ngn")}${amount}`,
-                        message: `₦${amount} Withdrawal successfully`,
-                        screen: "SpendRetain"
-                    })
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log('error', error)
-            });
-    }
-
-    function getMySAYS() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${token}`
-            },
-            redirect: 'follow'
-        };
-        fetch(`${baseURL}/api/says/my-says`, requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                // console.log(data);
-                setPreloader(false)
-                if (status == "success") {
-                    setSaysInfo(data[0])
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log(error);
-                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
-
-            });
-    }
-
-    function getTrasctoins() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${token}`
-            },
-            redirect: 'follow'
-        };
-        fetch(`${baseURL}/api/says/${saysInfo.id}/transactions`, requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                console.log(data);
-                setPreloader(false)
-                if (status == "success") {
-                    setHistories(data)
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log(error);
-                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
-
-            });
-    }
-
-    useEffect(() => {
-        getMySAYS();
-        // getTrasctoins()
-    }, []);
-
-    useEffect(() => {
-        // getTrasctoins()
-    }, [saysInfo]);
-
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
             <View style={styles.container}>
@@ -254,7 +99,7 @@ export function SpendRetainInfo({ navigation }) {
 
                                             <View
                                                 style={{ backgroundColor: '#c8bdffa5', padding: 8, borderRadius: 8, }}>
-                                                <Text style={{ color: 'white', fontSize: 15,color:'#7B61FF' }}>Save as you Spend </Text>
+                                                <Text style={{ color: 'white', fontSize: 15, color: '#7B61FF' }}>Save as you Spend </Text>
                                             </View>
                                         </View>
                                         <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 8, marginTop: 20 }}>
@@ -298,13 +143,13 @@ export function SpendRetainInfo({ navigation }) {
                         </TouchableOpacity>
 
                         <View style={{ alignItems: 'center', margin: 30 }}>
-                                <Image source={require('../../../assets/business.png')} style={{ width: 200, height: 200 }} />
-                            </View>
+                            <Image source={require('../../../assets/business.png')} style={{ width: 200, height: 200 }} />
+                        </View>
 
                     </View>
                 </View>
 
-                
+
 
                 <Modal
                     visible={modalVisibility2}

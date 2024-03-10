@@ -18,6 +18,7 @@ import { baseURL } from "../../../config";
 
 
 const options = [
+    { days: 1, label: '1 day', pa: 1 },
     { days: 30, label: '1 month', pa: 5 },
     { days: 60, label: '2 months', pa: 5 },
     { days: 90, label: '3 months', pa: 5 },
@@ -134,7 +135,7 @@ export function FixedCreate({ navigation }) {
         const timeS = getFutureTimestamp(days)
         let rDate = new Date(timeS)
         rDate = rDate.toLocaleDateString()
-        return days != 0 ? moment(timeS).format('DD/MM/YYYY') : "Select date"
+        return days != 0 ? moment(timeS).format('MMMM Do YYYY, h:mm:ss a') : "Select date"
     }
 
     const handleOptionPress = (optionIndex, d, pa) => {

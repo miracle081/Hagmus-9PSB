@@ -30,6 +30,7 @@ function AppProvider({ children }) {
      const [pin, setPin] = useState("");
      const [cardId, setCardId] = useState("");
      const [account, setAccount] = useState({ email: "", password: "", });
+     const [saysInfo, setSaysInfo] = useState({});
      const [accountInfo, setAccountInfo] = useState({ account_balance: 0, account_name: "", account_number: "" });
      const [expoPushToken, setExpoPushToken] = useState('');
 
@@ -77,6 +78,7 @@ function AppProvider({ children }) {
                     const { data, status, message } = result
                     // console.log(result);
                     if (status == "success") {
+                         getMySAYS()
                          setAccountInfo(data)
                          setPreloader(false)
                     }
@@ -155,8 +157,6 @@ function AppProvider({ children }) {
                     const { data, status, message } = response;
                     setPreloader(false)
                     if (status == "success") {
-                         // const rinfo = data.find(all => all.name == "business")
-                         // console.log(rinfo);
                          setSavingsInfo(data)
                     }
                     handleError(status, message);
@@ -170,6 +170,35 @@ function AppProvider({ children }) {
                });
      }
 
+     function getMySAYS() {
+          // setPreloader(true)
+          const requestOptions = {
+               method: 'GET',
+               headers: {
+                    authorization: `bearer ${token}`
+               },
+               redirect: 'follow'
+          };
+          fetch(`${baseURL}/api/says/my-says`, requestOptions)
+               .then(response => response.json())
+               .then(response => {
+                    const { data, status, message } = response;
+                    // console.log(data);
+                    setPreloader(false)
+                    if (status == "success") {
+                         setSaysInfo(data[0])
+                    }
+                    handleError(status, message);
+               })
+               .catch(error => {
+                    setPreloader(false)
+                    console.log(error);
+                    if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                    else Alert.alert("Error!", error.message)
+
+               });
+     }
+
      return (
           <AppContext.Provider value={{
                ID, setID,
@@ -179,6 +208,7 @@ function AppProvider({ children }) {
                cardId, setCardId,
                account, setAccount,
                userUID, setUserUID,
+               saysInfo, setSaysInfo,
                userInfo, setUserInfo,
                userCards, setUserCards,
                preloader, setPreloader,
@@ -194,7 +224,7 @@ function AppProvider({ children }) {
                expoPushToken, setExpoPushToken,
                getUserInfo, getAccountInfo, getUserCards,
                sendNotification,
-               getSavings
+               getSavings, getMySAYS
           }}>
                {children}
           </AppContext.Provider>

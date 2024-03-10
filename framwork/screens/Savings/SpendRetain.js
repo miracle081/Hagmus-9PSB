@@ -1,7 +1,7 @@
-import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/targetmenu";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faChevronRight, faMinus, faMinusCircle, faPlus, faPlusCircle, faSquareArrowUpRight, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faFaceSmile, faMinus, faMinusCircle, faPlus, faPlusCircle, faSquareArrowUpRight, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { AppContext } from "../../../globals/AppContext";
@@ -13,9 +13,10 @@ import { baseURL } from "../../../config";
 import { handleError } from "../../components/HandleRequestError";
 import { symbol } from "../../components/currencySymbols";
 import { formatMoney } from "../../components/FormatMoney";
+import { dateTime } from "../../components/DateTime";
 
 export function SpendRetain({ navigation }) {
-    const { userUID, getAccountInfo, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
+    const { userUID, getAccountInfo, setPreloader, token, getMySAYS, saysInfo, } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [balance, setBalance] = useState(0);
@@ -23,7 +24,6 @@ export function SpendRetain({ navigation }) {
     const [checkedD, setCheckedD] = useState(false);
     const [count, setCount] = useState(10);
     const [amount, setAmount] = useState(0);
-    const [saysInfo, setSaysInfo] = useState({ balance: 0 });
     const [histories, setHistories] = useState([]);
 
     const closeModal = () => {
@@ -45,51 +45,13 @@ export function SpendRetain({ navigation }) {
         }
     };
 
-    function createSavings() {
-        setPreloader(true)
-        const formdata = {
-            name: "New saving plan",
-            amount: count,
-            type: "percentage",
-        }
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-                authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(formdata),
-            redirect: 'follow'
-        };
-
-        fetch(baseURL + "/api/says/create", requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                setPreloader(false)
-                console.log(response);
-                if (status == "success") {
-                    // closeModal();
-                    Alert.alert(
-                        'Success',
-                        message,
-                    )
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log('error', error)
-            });
-    }
 
     function updateSavings() {
+        console.log(count);
         setPreloader(true)
         const formdata = {
-            name: "New saving plan",
-            amount,
+            amount: count.toString(),
             type: "percentage",
-            description: "Save more money"
         }
         const requestOptions = {
             method: 'POST',
@@ -101,7 +63,7 @@ export function SpendRetain({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/savings/create", requestOptions)
+        fetch(baseURL + "/api/says/my-says/" + saysInfo.id + "/update", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -162,36 +124,6 @@ export function SpendRetain({ navigation }) {
             });
     }
 
-    function getMySAYS() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            headers: {
-                authorization: `bearer ${token}`
-            },
-            redirect: 'follow'
-        };
-        fetch(`${baseURL}/api/says/my-says`, requestOptions)
-            .then(response => response.json())
-            .then(response => {
-                const { data, status, message } = response;
-                // console.log(data);
-                setPreloader(false)
-                if (status == "success") {
-                    setSaysInfo(data[0])
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log(error);
-                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
-
-            });
-    }
-
     function getTrasctoins() {
         setPreloader(true)
         const requestOptions = {
@@ -205,10 +137,10 @@ export function SpendRetain({ navigation }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                console.log(data);
+                // console.log(data);
                 setPreloader(false)
                 if (status == "success") {
-                    setHistories(data)
+                    setHistories(data.sort((a, b) => b.id - a.id))
                 }
                 handleError(status, message);
             })
@@ -217,19 +149,16 @@ export function SpendRetain({ navigation }) {
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
                 else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                else Alert.alert("Error!", error.message)
 
             });
     }
 
     useEffect(() => {
-        getMySAYS();
-        // getTrasctoins()
+        getTrasctoins();
+        setCount(saysInfo.amount);
     }, []);
 
-    useEffect(() => {
-        // getTrasctoins()
-    }, [saysInfo]);
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -302,75 +231,34 @@ export function SpendRetain({ navigation }) {
                             <FontAwesomeIcon icon={faChevronRight} color="#7B61FF" />
                         </TouchableOpacity>
 
-                        <ScrollView style={{ padding: 10, marginTop: 10, backgroundColor: 'white', marginHorizontal: 8, borderRadius: 5 }} >
-                            <View style={{}}>
+                        <View style={{ flex: 1, padding: 10, marginTop: 10, backgroundColor: 'white', marginHorizontal: 8, borderRadius: 5 }} >
+                            <View style={{ flex: 1 }}>
                                 <View style={{ marginBottom: 10 }}>
                                     <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Recent activities</Text>
                                 </View>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Text style={{ color: '#474749', marginBottom: 5 }}>Spend and Retain from Airtime</Text>
-                                        <Text style={{ color: 'green' }}>+ ₦100</Text>
+                                {histories.length > 0 ?
+                                    <FlatList style={{ flex: 1 }}
+                                        data={histories} renderItem={({ item }) => {
+                                            return (
+                                                <>
+                                                    <View>
+                                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                            <Text style={{ color: '#474749', marginBottom: 5 }}>{item.narration}</Text>
+                                                            <Text style={{ color: item.type == "credit" ? 'green' : "red" }}>{item.type == "credit" ? '+' : "-"} ₦{item.amount}</Text>
+                                                        </View>
+                                                        <Text style={{ color: '#6e6a7f', fontSize: 12 }}>{dateTime(item.created_at)}</Text>
+                                                    </View>
+                                                    <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
+                                                </>
+                                            )
+                                        }} key={({ item }) => { item.id }} /> :
+                                    <View style={{ flex: 1, justifyContent: "center", alignItems: 'center', opacity: 0.5, zIndex: -1, }}>
+                                        <FontAwesomeIcon icon={faFaceSmile} color="gray" size={120} />
+                                        <Text style={{ fontSize: 16, marginTop: 20, color: 'gray' }}>No histories yet</Text>
                                     </View>
-                                    <Text style={{ color: '#6e6a7f', fontSize: 12 }}>Mar 08 2024 20:05:15</Text>
-                                </View>
-
-                                <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
-
-                                <View style={{ marginBottom: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Recent activities</Text>
-                                </View>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Text style={{ color: '#474749', marginBottom: 5 }}>Spend and Retain from Airtime</Text>
-                                        <Text style={{ color: 'green' }}>+ ₦100</Text>
-                                    </View>
-                                    <Text style={{ color: '#6e6a7f', fontSize: 12 }}>Mar 08 2024 20:05:15</Text>
-                                </View>
-
-                                <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
-
-                                <View style={{ marginBottom: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Recent activities</Text>
-                                </View>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Text style={{ color: '#474749', marginBottom: 5 }}>Spend and Retain from Airtime</Text>
-                                        <Text style={{ color: 'green' }}>+ ₦100</Text>
-                                    </View>
-                                    <Text style={{ color: '#6e6a7f', fontSize: 12 }}>Mar 08 2024 20:05:15</Text>
-                                </View>
-
-                                <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
-
-                                <View style={{ marginBottom: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Recent activities</Text>
-                                </View>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Text style={{ color: '#474749', marginBottom: 5 }}>Spend and Retain from Airtime</Text>
-                                        <Text style={{ color: 'green' }}>+ ₦100</Text>
-                                    </View>
-                                    <Text style={{ color: '#6e6a7f', fontSize: 12 }}>Mar 08 2024 20:05:15</Text>
-                                </View>
-
-                                <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
-
-                                <View style={{ marginBottom: 10 }}>
-                                    <Text style={{ fontWeight: 'bold', fontSize: 15 }}>Recent activities</Text>
-                                </View>
-                                <View>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Text style={{ color: '#474749', marginBottom: 5 }}>Spend and Retain from Airtime</Text>
-                                        <Text style={{ color: 'green' }}>+ ₦100</Text>
-                                    </View>
-                                    <Text style={{ color: '#6e6a7f', fontSize: 12 }}>Mar 08 2024 20:05:15</Text>
-                                </View>
-
-                                <View style={{ borderBottomColor: '#c5b9ff', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15, marginTop: 15 }} />
-
+                                }
                             </View>
-                        </ScrollView>
+                        </View>
 
                     </View>
                 </View>
@@ -383,41 +271,45 @@ export function SpendRetain({ navigation }) {
                     <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
                         <Pressable style={{ flex: 1 }} onPress={closeModal} >
                         </Pressable>
-                        <View style={{ backgroundColor: "#ebe8eb", height: 350, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
-                            <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
-                                <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
-                                    <FontAwesomeIcon
-                                        icon={faXmark}
-                                        size={20}
-                                        color='#fff'
-                                    />
-                                </TouchableOpacity>
-                            </View>
-
-                            <View style={{ margin: 15, padding: 8 }}>
-                                <View style={{ alignItems: 'center' }}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 18, fontWeight: 'bold' }}>Make Withdrawal (₦)</Text>
-
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === 'ios' ? 'padding' : null}
+                        >
+                            <View style={{ backgroundColor: "#ebe8eb", height: 350, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
+                                <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
+                                    <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
+                                        <FontAwesomeIcon
+                                            icon={faXmark}
+                                            size={20}
+                                            color='#fff'
+                                        />
+                                    </TouchableOpacity>
                                 </View>
 
-                                <View>
-                                    <TextInput
-                                        style={{
-                                            borderWidth: 1, padding: 10, marginTop: 15, marginBottom: 20,
-                                            borderRadius: 6, borderColor: '#7B61FF'
-                                        }}
-                                        keyboardType='default'
-                                        placeholder='₦ Enter amount'
-                                        selectionColor={'#7B61FF'}
-                                        onChangeText={inp => setAmount(Number(inp))}
-                                    />
-                                </View>
-                                <TouchableOpacity onPress={() => { closeModal(); withdrawSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Withdraw</Text>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={{ margin: 15, padding: 8 }}>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 18, fontWeight: 'bold' }}>Make Withdrawal (₦)</Text>
 
-                        </View>
+                                    </View>
+
+                                    <View>
+                                        <TextInput
+                                            style={{
+                                                borderWidth: 1, padding: 10, marginTop: 15, marginBottom: 20,
+                                                borderRadius: 6, borderColor: '#7B61FF'
+                                            }}
+                                            keyboardType='default'
+                                            placeholder='₦ Enter amount'
+                                            selectionColor={'#7B61FF'}
+                                            onChangeText={inp => setAmount(Number(inp))}
+                                        />
+                                    </View>
+                                    <TouchableOpacity onPress={() => { closeModal(); withdrawSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Withdraw</Text>
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
+                        </KeyboardAvoidingView>
                     </View>
                 </Modal >
 
@@ -467,7 +359,7 @@ export function SpendRetain({ navigation }) {
                                     </TouchableOpacity>
 
                                     <View style={{ padding: 8, width: 80, alignItems: 'center' }}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}> {count}%</Text>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}> {Number(count)}%</Text>
                                     </View>
 
                                     <TouchableOpacity title="Increment" onPress={handleIncrement}
@@ -492,7 +384,7 @@ export function SpendRetain({ navigation }) {
                                         <Text style={{ color: '#69628d', fontSize: 15 }}>100%</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity onPress={() => { closeModal2(); createSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
+                                <TouchableOpacity onPress={() => { closeModal2(); updateSavings(); }} style={{ padding: 15, backgroundColor: '#7B61FF', borderRadius: 8, alignItems: 'center', marginTop: 20 }}>
                                     <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Save</Text>
                                 </TouchableOpacity>
                             </View>

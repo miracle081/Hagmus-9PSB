@@ -62,6 +62,7 @@ function HomeScreen({ navigation }) {
 
 
   useEffect(() => {
+    // setPreloader(false)
     // getCoinsFromAPI();
     onSnapshot(doc(db, "admin", "zlICMjBKgTSOknW1TsMk"), (doc) => {
       const info = doc.data()
