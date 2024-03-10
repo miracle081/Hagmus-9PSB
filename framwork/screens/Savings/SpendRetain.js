@@ -23,8 +23,17 @@ export function SpendRetain({ navigation }) {
     const [checked, setChecked] = useState(true);
     const [checkedD, setCheckedD] = useState(false);
     const [count, setCount] = useState(10);
+    const [status, setStatus] = useState(saysInfo.status);
     const [amount, setAmount] = useState(0);
     const [histories, setHistories] = useState([]);
+
+    function updateStatus() {
+        if (status != "active") {
+            setCheckedD(true)
+            setChecked(false)
+            setCount(0)
+        }
+    }
 
     const closeModal = () => {
         setModalVisibility(!modalVisibility);
@@ -47,11 +56,11 @@ export function SpendRetain({ navigation }) {
 
 
     function updateSavings() {
-        console.log(count);
         setPreloader(true)
         const formdata = {
             amount: count.toString(),
             type: "percentage",
+            status: status,
         }
         const requestOptions = {
             method: 'POST',
@@ -81,6 +90,8 @@ export function SpendRetain({ navigation }) {
             .catch(error => {
                 setPreloader(false)
                 console.log('error', error)
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
             });
     }
 
@@ -121,6 +132,8 @@ export function SpendRetain({ navigation }) {
             .catch(error => {
                 setPreloader(false)
                 console.log('error', error)
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
             });
     }
 
@@ -148,7 +161,6 @@ export function SpendRetain({ navigation }) {
                 setPreloader(false)
                 console.log(error);
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                else if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
                 else Alert.alert("Error!", error.message)
 
             });
@@ -157,6 +169,8 @@ export function SpendRetain({ navigation }) {
     useEffect(() => {
         getTrasctoins();
         setCount(saysInfo.amount);
+        // console.log(saysInfo);
+        updateStatus()
     }, []);
 
 
@@ -193,12 +207,12 @@ export function SpendRetain({ navigation }) {
                                         </View>
                                         <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 8, marginTop: 20 }}>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Spend and Retain percent 10%</Text>
+                                                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Spend and Retain percent {Number(saysInfo.amount)}%</Text>
                                                 <View style={{
-                                                    backgroundColor: '#d6f6e1ff', borderRadius: 8,
+                                                    backgroundColor: saysInfo.status == "active" ? '#d6f6e1ff' : '#f6d6d6ff', borderRadius: 8,
                                                     width: 55, alignItems: 'center', padding: 3
                                                 }}>
-                                                    <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#1b8741ff' }}>Active</Text>
+                                                    <Text style={{ fontSize: 12, fontWeight: 'bold', color: saysInfo.status == "active" ? '#1b8741ff' : '#871f1bff' }}>{saysInfo.status}</Text>
                                                 </View>
                                             </View>
 
@@ -334,11 +348,11 @@ export function SpendRetain({ navigation }) {
 
                             <View style={{ margin: 15, padding: 8 }}>
                                 <View style={{ flexDirection: "row", gap: 10 }}>
-                                    <TouchableOpacity onPress={() => { setChecked(true); setCheckedD(false); setCount(10) }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#cac2f1', padding: 5, borderRadius: 8 }}>
+                                    <TouchableOpacity onPress={() => { setChecked(true); setCheckedD(false); setCount(10); setStatus("active") }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#cac2f1', padding: 5, borderRadius: 8 }}>
                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, fontWeight: 'bold' }}>Activate</Text>
                                         <Checkbox status={checked ? 'checked' : 'unchecked'} color='#7B61FF' uncheckedColor='gray' />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setCheckedD(true); setChecked(false); setCount(0) }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#f1c2c2', padding: 5, borderRadius: 8 }}>
+                                    <TouchableOpacity onPress={() => { setCheckedD(true); setChecked(false); setCount(0); setStatus("terminated") }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#f1c2c2', padding: 5, borderRadius: 8 }}>
                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, fontWeight: 'bold' }}>Deactivate</Text>
                                         <Checkbox status={checkedD ? 'checked' : 'unchecked'} color='#c80926' uncheckedColor='gray' />
                                     </TouchableOpacity>
