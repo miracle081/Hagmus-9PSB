@@ -9,6 +9,7 @@ import { useContext } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { formatMoney } from "../../components/FormatMoney";
 
 const targetmenu = ["business", "education", "emergency", "travel", "others"]
 
@@ -25,6 +26,10 @@ export function Treasury({ navigation }) {
     // let amt = 0
     // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
     // setBalance(amt)
+    // console.log(savingsInfo);
+    const totalAmount = savingsInfo.reduce((a, c) => a + parseFloat(c.amount), 0);
+    setBalance(totalAmount);
+    console.log(totalAmount);
     getSavings();
     getMySAYS();
   }, []);
@@ -79,7 +84,7 @@ export function Treasury({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{balance.toFixed(2)}</Text></Text>
+              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(balance)}</Text></Text>
               {/* <Text style={{ color: 'green' }}>₦ <Text style={{ marginTop: 5, fontSize: 20, color: 'green', }}>{vaultInfo.vaultBalance.toFixed(2)}</Text></Text> */}
             </View>
           </View>

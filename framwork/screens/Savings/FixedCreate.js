@@ -29,7 +29,7 @@ const options = [
 ];
 
 export function FixedCreate({ navigation }) {
-    const { userUID, setPreloader, token, vaultInfo, accountInfo } = useContext(AppContext);
+    const { userUID, setPreloader, token, vaultInfo, accountInfo, getSavings } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [checked, setChecked] = useState(false);
@@ -67,41 +67,6 @@ export function FixedCreate({ navigation }) {
             setMessage2(`Minimum Amount ₦1000`);
             setColor('#ce0a0ae5')
             setAmount(0)
-        }
-    }
-
-    async function fundAccount() {
-        setPreloader(true)
-        try {
-            await runTransaction(db, (transaction) => {
-                transaction.update(doc(db, 'users', userUID), { ngn: Number(accountInfo.account_balance) - Number(amount) },)
-                return Promise.resolve();
-            })
-                .then(() => {
-                    updateDoc(doc(db, "vault", userUID), {
-                        fixed: [...vaultInfo.fixed,
-                        { amount, date: new Date().getTime(), dueDate: getFutureTimestamp(days), days, name, interest, pa }
-                        ]
-                    })
-                        .then(() => {
-                            ToastApp(`Deposit of ${amount} was successful, "LONG"`);
-                            setPreloader(false)
-                            setAmount(0)
-                            setDays(0)
-                            navigation.navigate("FixedTarget")
-                        })
-                        .catch(() => {
-                            setPreloader(false)
-                            ToastApp('Something went wrong, please try again', "LONG");
-                        })
-                })
-                .catch(() => {
-                    setPreloader(false);
-                    ToastApp('Something went wrong, please try again', "LONG");
-                })
-
-        } catch {
-            setPreloader(false)
         }
     }
 
@@ -177,7 +142,7 @@ export function FixedCreate({ navigation }) {
                 setPreloader(false)
                 // console.log(response);
                 if (status == "success") {
-                    // closeModal();
+                    getSavings();
                     Alert.alert(
                         'Success',
                         message,
