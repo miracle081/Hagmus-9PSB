@@ -19,7 +19,7 @@ import { formatMoney } from "../../components/FormatMoney";
 
 
 export function FixedTarget() {
-    const { userInfo, token, setPreloader } = useContext(AppContext);
+    const { userInfo, token, setPreloader, getSavings } = useContext(AppContext);
     const [vaultInfo, setVaultInfo] = useState([]);
     const [balance, setBalance] = useState(0);
     const [fixedInfo, setFixedInfo] = useState({});

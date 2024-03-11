@@ -67,7 +67,6 @@ import { UserAddress } from "../screens/UserAddress";
 import { Treasury } from "../screens/Savings/Treasury";
 import { FixedCreate } from "../screens/Savings/FixedCreate";
 import { Vault } from "../screens/Savings/Vault";
-import { CreatePlan } from "../screens/Savings/CreatePlan";
 import { Targets } from "../screens/Savings/Targets";
 import { TargetMenu } from "../screens/Savings/TargetMenu";
 import { BusinessTargetInfo } from "../screens/Savings/BusinessTargetInfo";
@@ -185,7 +184,6 @@ export function StackNavigator() {
 
             <Stack.Screen name='Treasury' component={Treasury} />
             <Stack.Screen name='Vault' component={Vault} />
-            <Stack.Screen name='CreatePlan' component={CreatePlan} />
             <Stack.Screen name='Targets' component={Targets} />
             <Stack.Screen name='TargetMenu' component={TargetMenu} />
             <Stack.Screen name='BusinessTargetInfo' component={BusinessTargetInfo} />

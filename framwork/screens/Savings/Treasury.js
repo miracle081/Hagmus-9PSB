@@ -16,9 +16,6 @@ const targetmenu = ["business", "education", "emergency", "travel", "others"]
 export function Treasury({ navigation }) {
   const { userUID, setPreloader, carouselLinks, getSavings, savingsInfo, getMySAYS, saysInfo, } = useContext(AppContext);
   const [showBalance, setShowBalance] = useState('');
-  const [balance, setBalance] = useState(0);
-  const [fixedBalance, setFixedBalance] = useState(0);
-  const [targetBalance, setTargetBalance] = useState(0);
   const screenWidth = Dimensions.get('screen').width;
 
 
@@ -27,13 +24,17 @@ export function Treasury({ navigation }) {
     // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
     // setBalance(amt)
     // console.log(savingsInfo);
-    const totalAmount = savingsInfo.reduce((a, c) => a + parseFloat(c.amount), 0);
-    setBalance(totalAmount);
-    console.log(totalAmount);
     getSavings();
     getMySAYS();
   }, []);
 
+  const balance = () => {
+    const total = savingsInfo.reduce((a, c) => a + parseFloat(c.current_balance), 0)
+    return total + Number(saysInfo.balance)
+  }
+
+  const fixedBalance = () => savingsInfo.filter(all => all.type == "fixed").reduce((a, c) => a + Number(c.current_balance) + Number(c.total_interest), 0)
+  const targetBalance = () => savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
 
   // function getTargetBalance() {
   //   let amt = 0;
@@ -84,7 +85,7 @@ export function Treasury({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(balance)}</Text></Text>
+              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(balance())}</Text></Text>
               {/* <Text style={{ color: 'green' }}>₦ <Text style={{ marginTop: 5, fontSize: 20, color: 'green', }}>{vaultInfo.vaultBalance.toFixed(2)}</Text></Text> */}
             </View>
           </View>
@@ -106,7 +107,7 @@ export function Treasury({ navigation }) {
                   <View style={{ marginTop: 10, alignItems: "center" }}>
                     <Text style={{ color: '#6040fc', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Fixed Savings</Text>
                     <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
-                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {fixedBalance.toFixed(2)}</Text></Text>
+                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(fixedBalance())}</Text></Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -124,7 +125,8 @@ export function Treasury({ navigation }) {
                   <View style={{ marginTop: 10, alignItems: "center" }}>
                     <Text style={{ color: '#2abb06ff', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Targets</Text>
                     <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
-                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {targetBalance.toFixed(2)}</Text></Text>
+                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(targetBalance())}</Text>
+                    </Text>
                   </View>
                 </View>
               </TouchableOpacity>
@@ -146,7 +148,9 @@ export function Treasury({ navigation }) {
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
                     <Text style={{ color: '#019db8ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Spend & Retain</Text>
-                    <Text style={{ fontSize: 11, color: '#5f5f5f', }}>Coming soon</Text>
+                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
+                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(saysInfo.balance)}</Text>
+                    </Text>
                   </View>
                 </View>
               </TouchableOpacity>

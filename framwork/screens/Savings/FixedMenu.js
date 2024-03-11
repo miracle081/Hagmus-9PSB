@@ -7,11 +7,14 @@ import { useContext } from "react";
 import { AppContext } from "../../../globals/AppContext";
 import { useState } from "react";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { formatMoney } from "../../components/FormatMoney";
 
 
 export function FixedMenu({ navigation }) {
-    const { vaultInfo } = useContext(AppContext);
-    const [balance, setBalance] = useState(0);
+    const { savingsInfo } = useContext(AppContext);
+
+    const fixedBalance = () => savingsInfo.filter(all => all.type == "fixed").reduce((a, c) => a + Number(c.amount) + Number(c.total_interest), 0)
+
 
     return (
         <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -24,7 +27,7 @@ export function FixedMenu({ navigation }) {
 
                         <View style={{ alignItems: 'center', margin: 10 }}>
                             <Text style={{ fontSize: 20 }}>Target (Up to 20% p.a)</Text>
-                            <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{balance.toFixed(2)}</Text>
+                            <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(fixedBalance())}</Text>
                         </View>
 
                         <View style={{ flex: 1 }}>

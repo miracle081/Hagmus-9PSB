@@ -15,9 +15,6 @@ function AppProvider({ children }) {
      const [ID, setID] = useState('');
      const [notification, setNotification] = useState([]);
      const [carouselLinks, setCarouselLinks] = useState([
-          // { uri: "https://wenethub.com/imageslink/bonus.png" },
-          // { uri: "https://wenethub.com/imageslink/refer.png" },
-          // { uri: "https://wenethub.com/imageslink/bills.png" },
           { uri: "https://wenethub.com/imageslink/referralB.png" },
           { uri: "https://wenethub.com/imageslink/NewCashB.png" },
      ]);
@@ -78,7 +75,6 @@ function AppProvider({ children }) {
                     const { data, status, message } = result
                     // console.log(result);
                     if (status == "success") {
-                         getMySAYS()
                          setAccountInfo(data)
                          setPreloader(false)
                     }
@@ -157,6 +153,8 @@ function AppProvider({ children }) {
                     const { data, status, message } = response;
                     setPreloader(false)
                     if (status == "success") {
+                         // const rinfo = data.find(all => all.name == "business")
+                         // console.log(rinfo);
                          setSavingsInfo(data)
                     }
                     handleError(status, message);
@@ -171,7 +169,7 @@ function AppProvider({ children }) {
      }
 
      function getMySAYS() {
-          // setPreloader(true)
+          setPreloader(true)
           const requestOptions = {
                method: 'GET',
                headers: {

@@ -5,20 +5,14 @@ import { faMinus, faSquareArrowUpRight, faXmark } from "@fortawesome/free-solid-
 import { AppContext } from "../../../globals/AppContext";
 import { useContext, useEffect, useState } from "react";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
+import { formatMoney } from "../../components/FormatMoney";
 
 
 export function TargetMenu({ navigation }) {
   const { setDocID, getSavings, savingsInfo, setTargetName } = useContext(AppContext);
   const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    // let amt = 0
-    // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
-    // setBalance(amt)
-    // getSavings();
-    // console.log(savingsInfo);
-  }, []);
-
+  const targetBalance = () => savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
 
   return (
     <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -30,7 +24,7 @@ export function TargetMenu({ navigation }) {
 
             <View style={{ alignItems: 'center', margin: 10 }}>
               <Text style={{ fontSize: 20 }}>Target (Up to 15% p.a)</Text>
-              <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦0.00</Text>
+              <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(targetBalance())}</Text>
             </View>
             <ScrollView>
               <View>
