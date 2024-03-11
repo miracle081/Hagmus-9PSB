@@ -204,27 +204,33 @@ export function Targets({ navigation, route }) {
                     </View>
                     <View style={styles.vault}>
                         <View style={styles.balance}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ alignItems: 'center' }}>
+                            <View style={{ alignItems:'center', marginBottom:20 }}>
+                               
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
                                         <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(info.current_balance)}</Text>
                                     </Text>
                                     <Text style={{ marginStart: 20, }}>Due Date: </Text>
-                                </View>
+                               
 
-                                <View>
-                                    <TouchableOpacity onPress={closeModal} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
-                                        <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Fund Target</Text>
-                                        <FontAwesomeIcon icon={faCirclePlus} color="white" />
-                                    </TouchableOpacity>
-                                </View>
+                               
 
 
                             </View>
-                            <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', padding: 10, borderRadius: 4, height: 40 }}>
-                                <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
+                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
+                            <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', 
+                            justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF',
+                             padding: 10, borderRadius: 4, height: 40,width:150 }}>
                                 <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
+                                <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
                             </TouchableOpacity>
+
+                            <TouchableOpacity onPress={closeModal} style={{ flexDirection: 'row', 
+                            justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', 
+                            padding: 10, borderRadius: 4, height: 40,width:150 }}>
+                                        <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Add Money</Text>
+                                        <FontAwesomeIcon icon={faCirclePlus} color="white" />
+                                    </TouchableOpacity>
+                            </View>
                         </View>
 
                         <View style={{ alignItems: 'center', marginTop: 10, marginBottom: 15 }}>
