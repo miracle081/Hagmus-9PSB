@@ -152,22 +152,22 @@ export function Treasury({ navigation }) {
               </TouchableOpacity>
 
 
-              <TouchableOpacity onPress={() => navigation.navigate('Coinlock')}
+              <View onPress={() => navigation.navigate('Coinlock')}
                 style={[styles.boxStyle, { backgroundColor: '#a6b10944', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faLock}
+                      icon={faWallet}
                       color="#a09d01ff"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Coin Lock</Text>
-                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>BTC, ETH ...</Text>
+                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Flexible Save</Text>
+                    <Text style={{ fontSize: 13, color: '#5f5f5f', }}>Coming soon...</Text>
                   </View>
                 </View>
-              </TouchableOpacity>
+              </View>
 
 
             </View>

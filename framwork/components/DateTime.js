@@ -1,5 +1,5 @@
 export function dateTime(timestamp) {
-    const now = new Date(timestamp ||new Date().getTime());
+    const now = new Date(timestamp || new Date().getTime());
     let hr = now.getHours();
     let min = now.getMinutes();
     let day = now.getDate();
@@ -30,7 +30,7 @@ export function generateRef(length) {
     return alphaNumeric;
 }
 
-export function getFutureTimestamp(days) {
-    const nextTimestamp = Date.now() + (days * 24 * 60 * 60 * 1000);
+export function getFutureTimestamp(days, startDate) {
+    const nextTimestamp = new Date(startDate || new Date().getTime()).getTime() + (days * 24 * 60 * 60 * 1000);
     return nextTimestamp;
 }
