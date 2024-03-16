@@ -86,7 +86,6 @@ export function ForgotPassword({ navigation }) {
               placeholder='Enter your email address'
               selectionColor={'grey'}
               onChangeText={text => setEmail(text)}
-              secureTextEntry={true}
               mode='outlined'
             />
 
