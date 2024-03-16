@@ -9,10 +9,14 @@ import { formatMoney } from "../../components/FormatMoney";
 
 
 export function TargetHistory({ navigation }) {
-  const { setDocID, getSavings, savingsInfo, setTargetName } = useContext(AppContext);
-  const [balance, setBalance] = useState(0);
+  const { savingsInfo, setTargetName } = useContext(AppContext);
 
   const targetBalance = () => savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
+
+  function handleNavigation(plan) {
+    setTargetName(plan)
+    navigation.navigate('TargetHistoryView')
+  }
 
   return (
     <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -28,7 +32,7 @@ export function TargetHistory({ navigation }) {
             <ScrollView>
               <View>
                 <TouchableOpacity
-                 onPress={()=>navigation.navigate('TargetHistoryView')}
+                  onPress={() => handleNavigation("business")}
                   activeOpacity={0.7}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -44,6 +48,7 @@ export function TargetHistory({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                 onPress={() => handleNavigation("emergency")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -59,6 +64,7 @@ export function TargetHistory({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                 onPress={() => handleNavigation("travel")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -74,6 +80,7 @@ export function TargetHistory({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                 onPress={() => handleNavigation("education")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -89,6 +96,7 @@ export function TargetHistory({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
+                 onPress={() => handleNavigation("others")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>

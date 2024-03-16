@@ -13,6 +13,19 @@ export function TargetMenu({ navigation }) {
   const [balance, setBalance] = useState(0);
 
   const targetBalance = () => savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
+  // console.log(savingsInfo.filter(all => all.type == "target" && all.name == "business").slice(-1)[0]);
+
+  function handleNavigation(plan) {
+    setTargetName(plan)
+    let rData = savingsInfo.filter(all => all.type == "target" && all.name == plan).slice(-1)[0];
+    if (!rData) rData = { current_balance: 0 }
+    if (plan == "business") Number(rData.current_balance) > 0 ? navigation.navigate("Targets", { info: rData }) : navigation.navigate("BusinessTargetInfo")
+    if (plan == "emergency") Number(rData.current_balance) > 0 ? navigation.navigate("Targets", { info: rData }) : navigation.navigate("EmergencyInfo")
+    if (plan == "travel") Number(rData.current_balance) > 0 ? navigation.navigate("Targets", { info: rData }) : navigation.navigate("TravelInfo")
+    if (plan == "education") Number(rData.current_balance) > 0 ? navigation.navigate("Targets", { info: rData }) : navigation.navigate("EducationInfo")
+    if (plan == "others") Number(rData.current_balance) > 0 ? navigation.navigate("Targets", { info: rData }) : navigation.navigate("OthersInfo")
+    else null
+  }
 
   return (
     <AppSafeAreaView backgroundColor={"#7B61FF"}>
@@ -26,20 +39,16 @@ export function TargetMenu({ navigation }) {
               <Text style={{ fontSize: 20 }}>Target (Up to 15% p.a)</Text>
               <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(targetBalance())}</Text>
             </View>
-            <TouchableOpacity 
-            onPress={()=>navigation.navigate('TargetHistory')}
-            style={{flexDirection:'row',alignItems:'center',justifyContent:'flex-end',margin:10}}>
-              <FontAwesomeIcon icon={faFileInvoice} color="#7B61FF"/>
-              <Text style={{color:'#7B61FF',marginLeft:5}}>Targets History</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TargetHistory')}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', margin: 10 }}>
+              <FontAwesomeIcon icon={faFileInvoice} color="#7B61FF" />
+              <Text style={{ color: '#7B61FF', marginLeft: 5 }}>Targets History</Text>
             </TouchableOpacity>
             <ScrollView>
               <View>
                 <TouchableOpacity
-                  onPress={() => {
-                    setTargetName("business")
-                    const rDate = savingsInfo.find(all => all.name == "business")
-                    rDate ? navigation.navigate("Targets", { info: rDate }) : navigation.navigate("businesstargetinfo")
-                  }}
+                  onPress={() => handleNavigation("business")}
                   activeOpacity={0.7}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -56,11 +65,7 @@ export function TargetMenu({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => {
-                    setTargetName("emergency")
-                    const rDate = savingsInfo.find(all => all.name == "emergency")
-                    rDate ? navigation.navigate("Targets", { info: rDate }) : navigation.navigate("EmergencyInfo")
-                  }}
+                  onPress={() => handleNavigation("emergency")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -77,11 +82,7 @@ export function TargetMenu({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => {
-                    setTargetName("travel")
-                    const rDate = savingsInfo.find(all => all.name == "travel")
-                    rDate ? navigation.navigate("Targets", { info: rDate }) : navigation.navigate("TravelInfo")
-                  }}
+                  onPress={() => handleNavigation("travel")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -98,11 +99,7 @@ export function TargetMenu({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => {
-                    setTargetName("education")
-                    const rDate = savingsInfo.find(all => all.name == "education")
-                    rDate ? navigation.navigate("Targets", { info: rDate }) : navigation.navigate("EducationInfo")
-                  }}
+                  onPress={() => handleNavigation("education")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -119,11 +116,7 @@ export function TargetMenu({ navigation }) {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => {
-                    setTargetName("business")
-                    const rDate = savingsInfo.find(all => all.name == "business")
-                    rDate ? navigation.navigate("Targets", { info: rDate }) : navigation.navigate("EducationInfo")
-                  }}
+                  onPress={() => handleNavigation("others")}
                   activeOpacity={1}>
                   <View style={{ marginTop: 58, position: 'absolute', top: -40, right: "40%", }}><View style={{ backgroundColor: "#c6c2dd", padding: 35, borderTopLeftRadius: 48, borderTopRightRadius: 48, }}></View></View>
                   <View style={{ backgroundColor: '#c6c2dd', borderRadius: 20, marginTop: 30, marginLeft: 10, marginRight: 10, padding: 20, }}>
@@ -144,6 +137,6 @@ export function TargetMenu({ navigation }) {
           </View >
         </View >
       </View >
-    </AppSafeAreaView>
+    </AppSafeAreaView >
   )
 }
