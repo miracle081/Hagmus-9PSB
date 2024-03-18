@@ -73,7 +73,7 @@ export function TargetMenu({ navigation }) {
                   </View>
                 </TouchableOpacity>
 
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', justifyContent:'space-evenly',alignItems:'center' }}>
                   <TouchableOpacity
                     onPress={() => handleNavigation("emergency")}
                     activeOpacity={1}>
@@ -116,7 +116,7 @@ export function TargetMenu({ navigation }) {
                   </TouchableOpacity>
                 </View>
 
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row',justifyContent:'space-evenly',alignItems:'center' }}>
 
                   <TouchableOpacity
                     onPress={() => handleNavigation("others")}
@@ -162,7 +162,7 @@ export function TargetMenu({ navigation }) {
 
                 <Image
                   source={{ uri: 'https://wenethub.com/imageslink/spn2.png' }}
-                  style={{ width:'100%', height: 110, marginTop:5}}
+                  style={{ width:'100%', height: 115, marginTop:10}}
                 />
 
               </View>

@@ -112,7 +112,7 @@ function HomeScreen({ navigation }) {
       });
   };
 
-  const handleRefresh = () => {
+  const handleRefresh = () => { 
     getUserCards()
     getAccountInfo();
     getUserInfo();
