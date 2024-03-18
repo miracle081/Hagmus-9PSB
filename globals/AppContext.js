@@ -184,7 +184,7 @@ function AppProvider({ children }) {
                     // console.log(data);
                     setPreloader(false)
                     if (status == "success") {
-                         setSaysInfo(data[0])
+                         data.length > 0 ? setSaysInfo(data[0]) : setSaysInfo({})
                     }
                     handleError(status, message);
                })

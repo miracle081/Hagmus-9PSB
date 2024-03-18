@@ -23,7 +23,7 @@ export function SpendRetain({ navigation }) {
     const [checked, setChecked] = useState(true);
     const [checkedD, setCheckedD] = useState(false);
     const [count, setCount] = useState(10);
-    const [status, setStatus] = useState(saysInfo.status);
+    const [status, setStatus] = useState(JSON.stringify(saysInfo) != '{}' ? saysInfo.status : "inactive");
     const [amount, setAmount] = useState(0);
     const [histories, setHistories] = useState([]);
 
@@ -184,7 +184,7 @@ export function SpendRetain({ navigation }) {
                     <View style={styles.vault}>
 
                         <View style={{ alignItems: 'center', margin: 10 }}>
-                            <Text style={{ fontSize: 20 }}>Target (Up to 14% p.a)</Text>
+                            {/* <Text style={{ fontSize: 20 }}>Target (Up to 14% p.a)</Text> */}
                             <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(saysInfo.balance)}</Text>
                         </View>
 
@@ -352,7 +352,7 @@ export function SpendRetain({ navigation }) {
                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, fontWeight: 'bold' }}>Activate</Text>
                                         <Checkbox status={checked ? 'checked' : 'unchecked'} color='#7B61FF' uncheckedColor='gray' />
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => { setCheckedD(true); setChecked(false); setCount(0); setStatus("terminated") }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#f1c2c2', padding: 5, borderRadius: 8 }}>
+                                    <TouchableOpacity onPress={() => { setCheckedD(true); setChecked(false); setCount(0); setStatus("inactive") }} style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', backgroundColor: '#f1c2c2', padding: 5, borderRadius: 8 }}>
                                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, fontWeight: 'bold' }}>Deactivate</Text>
                                         <Checkbox status={checkedD ? 'checked' : 'unchecked'} color='#c80926' uncheckedColor='gray' />
                                     </TouchableOpacity>

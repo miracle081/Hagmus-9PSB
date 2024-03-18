@@ -42,7 +42,7 @@ function HomeScreen({ navigation }) {
   const {
     userUID, setWelcomeModal, welcomeModal, getAccountInfo, carouselLinks,
     setReferralBonus, profileImage, setProfileImage, token, getUserInfo, accountInfo,
-    setPreloader, userInfo, notification, setNotification, getUserCards
+    setPreloader, userInfo, notification, getMySAYS, getUserCards
   } = useContext(AppContext);
 
   const [showBalance, setShowBalance] = useState('');
@@ -63,7 +63,7 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     // setPreloader(false)
-    // getCoinsFromAPI();
+    // getMySAYS();
     onSnapshot(doc(db, "admin", "zlICMjBKgTSOknW1TsMk"), (doc) => {
       const info = doc.data()
       setAppVersion(info.appVersion);
@@ -106,6 +106,7 @@ function HomeScreen({ navigation }) {
 
     // Linking.openURL(`market://details?id=${packageName}`)
     Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
+    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -332,7 +333,7 @@ function HomeScreen({ navigation }) {
                     onPress={() => navigation.navigate("Data")}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
-                      width: 100, borderRadius: 8
+                      width: 103, borderRadius: 8
                     }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
                       <FontAwesomeIcon icon={faMobileScreenButton} size={25} color='#7B61FF' />
@@ -369,7 +370,7 @@ function HomeScreen({ navigation }) {
                     onPress={() => navigation.navigate("Electricity")}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
-                      width: 100, borderRadius: 8
+                      width: 103, borderRadius: 8
                     }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
                       <FontAwesomeIcon icon={faLightbulb} size={25} color='#7B61FF' />
@@ -397,13 +398,13 @@ function HomeScreen({ navigation }) {
                 </View>
               </View>
 
-              <View style={{
+              <TouchableOpacity onPress={() => navigation.navigate("Portfolio")} style={{
                 borderWidth: 2, borderColor: '#d7d1f4', borderRadius: 8, padding: 8,
                 marginTop: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
               }}>
                 <Text>Portfolio Tracker</Text>
                 <FontAwesomeIcon icon={faChartPie} size={20} color='#7B61FF' />
-              </View>
+              </TouchableOpacity>
 
               {/* ============== carousel zone ============== */}
               <View style={{ flex: 1, marginVertical: 10, }}>
@@ -541,7 +542,9 @@ function HomeScreen({ navigation }) {
                 <View style={{ alignItems: "center", marginBottom: 20 }}>
                   <Image source={require("../../assets/icon.png")} style={{ width: 80, height: 80, }} />
                   <Text style={{ fontSize: 18, fontWeight: 'bold', }}>New Update Available!</Text>
+                  <View style={{alignItems:'center'}}>
                   <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus app is outdated {"\n"}upgrade to the latest version.</Text>
+                  </View>
                   <TouchableOpacity onPress={() => { openPlayStore('Kyc'), updateModal() }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'white' }}>Update now</Text>
                   </TouchableOpacity>

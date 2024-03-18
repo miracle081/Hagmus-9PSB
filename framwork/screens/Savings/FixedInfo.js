@@ -11,7 +11,7 @@ export function FixedInfo({ navigation }) {
             <View style={styles.container}>
                 <View style={styles.body}>
                     <View style={{ alignItems: 'center', margin: 15 }}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white' }}>Fixed Savings Target</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white' }}>Secure Lock</Text>
                     </View>
                     <View style={styles.vault}>
 
@@ -21,9 +21,8 @@ export function FixedInfo({ navigation }) {
                             </View>
 
                             <View style={{ alignItems: 'center', marginTop: 30, }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 25, color: '#7B61FF', }}>Create a Fixed Savings plan</Text>
-                                <Text style={{ fontSize: 12, color: '#606169', marginTop: 5 }}>Crafting an emergency plan is vital for readiness in unforeseen </Text>
-                                <Text style={{ fontSize: 12, color: '#606169', marginTop: 0 }}>circumstances.</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 25, color: '#7B61FF', }}>Create a Secure Lock plan</Text>
+                                <Text style={{ fontSize: 12, color: '#606169', marginTop: 5 }}>Minimize  spending by tapping to create a Secure Lock.</Text>
                             </View>
 
                             < View style={{ padding: 15, marginTop: 20, }}>

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, Alert, } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Pressable, RefreshControl, Alert, StyleSheet, } from "react-native";
 import { styles } from "../styles/history";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft, faBank, faCancel, faCheckCircle, faFaceSmile, faLightbulb, faXmark, } from "@fortawesome/free-solid-svg-icons";
@@ -138,7 +138,7 @@ export function History({ navigation }) {
         <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
           <Pressable style={{ flex: 1 }} onPress={closeModal} >
           </Pressable>
-          <View style={{ backgroundColor: "#fcfbff", height: 550, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+          <View style={{ backgroundColor: "#fcfbff", height: 750, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
             <View style={{ alignItems: 'flex-end', margin: 10 }}>
               <TouchableOpacity onPress={closeModal}>
                 <FontAwesomeIcon
@@ -151,16 +151,16 @@ export function History({ navigation }) {
 
             <View style={{ margin: 20, }}>
               <View style={{ alignItems: 'center' }}>
+                <View style={{alignItems:'center',marginBottom:15}}>
+                <Text style={{fontSize:16,color:'#17076b',fontWeight:'bold'}}>Transaction Details</Text>
+                </View>
                 <View style={{ backgroundColor: transaction.background, borderRadius: 100, padding: 10 }}>
                   <FontAwesomeIcon icon={transaction.icon} color={transaction.color} size={25} style={{ transform: [{ rotate: transaction.rotate + 'deg' }] }} />
                 </View>
 
                 <Text style={{ marginTop: 8, fontSize: 18, textTransform: "capitalize" }}>{transaction.category}</Text>
                 <Text style={{ marginTop: 8, fontSize: 30, fontWeight: 'bold' }}>{transaction.type == "credit" ? "+" : "-"}₦{transaction.amount}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
-                  <FontAwesomeIcon icon={transaction.status == "Completed" ? faCheckCircle : faCancel} color="#169544" />
-                  <Text style={{ marginLeft: 5, color: transaction.status == "Completed" ? '#00C566' : '#FF403B', }}>{transaction.status}</Text>
-                </View>
+                
               </View>
 
               <View style={{
@@ -173,16 +173,29 @@ export function History({ navigation }) {
               </View>
 
               <View>
-                <Text>Transaction Details</Text>
-                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
-                  <Text style={{ color: 'grey' }}>Narration</Text>
-                  <Text style={{ fontSize: 15 }}>{transaction.narration}</Text>
+                <View style={{ borderRadius: 8, padding: 10,  }}>
+                  <Text style={{ color: 'grey',marginBottom:5 }}>Narration</Text>
+                  <Text style={{ fontSize: 15, fontWeight:'bold' }}>{transaction.narration}</Text>
                 </View>
-                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
-                  <Text style={{ color: 'grey' }}>Reference ID</Text>
-                  <Text style={{ fontSize: 15 }}>{transaction.reference}</Text>
+                <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />
+
+                <View style={{ borderRadius: 8, padding: 10, }}>
+                  <Text style={{ color: 'grey',marginBottom:5 }}>Reference ID</Text>
+                  <Text style={{ fontSize: 15, fontWeight:'bold' }}>{transaction.reference}</Text>
                 </View>
-                <View style={{ borderRadius: 8, padding: 10, flexDirection: 'row', justifyContent: 'space-between', }}>
+                <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />
+
+
+                <View  style={{padding: 10, }}>
+                  <Text style={{ color: 'grey',marginBottom:5 }}>Status</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8 }}>
+                  <FontAwesomeIcon icon={transaction.status == "Completed" ? faCheckCircle : faCancel} color="#169544" />
+                  <Text style={{ marginLeft: 5, color: transaction.status == "Completed" ? '#00C566' : '#FF403B', }}>{transaction.status}</Text>
+                </View>
+                </View>
+                <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />
+
+                <View style={{ borderRadius: 8, padding: 10,  }}>
                   <Text style={{ color: 'grey' }}>Date</Text>
                   <Text style={{ fontSize: 15 }}>{dateTime(transaction.created_at)}</Text>
                 </View>

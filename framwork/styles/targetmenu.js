@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
 
     vault: {
         flex:1,
-        backgroundColor: "#ebe8eb",
+        backgroundColor: "#ffffff",
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         // height: '100%',

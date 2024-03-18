@@ -83,6 +83,7 @@ import { SpendRetain } from "../screens/Savings/SpendRetain";
 import { TravelInfo } from "../screens/Savings/TravlInfo";
 import { TargetHistory } from "../screens/Savings/TargetHistory";
 import { TargetHistoryView } from "../screens/Savings/TargetHistoryView";
+import { Portfolio } from "../screens/Portfolio";
 // import { Treasury } from "../screens/Savings/Treasury";
 
 const Stack = createNativeStackNavigator();
@@ -203,6 +204,7 @@ export function StackNavigator() {
             <Stack.Screen name='SpendRetain' component={SpendRetain} />
             <Stack.Screen name='TargetHistory' component={TargetHistory} />
             <Stack.Screen name='TargetHistoryView' component={TargetHistoryView} />
+            <Stack.Screen name='Portfolio' component={Portfolio} />
         </Stack.Navigator>
     )
 }

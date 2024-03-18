@@ -18,15 +18,14 @@ import { baseURL } from "../../../config";
 
 
 const options = [
-    { days: 1, label: '1 day', pa: 1 },
-    { days: 30, label: '1 month', pa: 5 },
-    { days: 60, label: '2 months', pa: 5 },
+    { days: 30, label: '1 month', pa: 1.7 },
+    { days: 60, label: '2 months', pa: 3 },
     { days: 90, label: '3 months', pa: 5 },
-    { days: 180, label: '6 months', pa: 5 },
-    { days: 210, label: '7 months', pa: 10 },
-    { days: 240, label: '8 months', pa: 10 },
-    { days: 270, label: '9 months', pa: 10 },
-    { days: 365, label: '12 months', pa: 10 },
+    { days: 180, label: '6 months', pa: 10 },
+    { days: 210, label: '7 months', pa: 12 },
+    // { days: 240, label: '8 months', pa: 14 },
+    { days: 270, label: '9 months', pa: 15 },
+    { days: 365, label: '12 months', pa: 20 },
 ];
 
 export function FixedCreate({ navigation }) {
@@ -166,7 +165,7 @@ export function FixedCreate({ navigation }) {
                     >
                         <ScrollView>
                             <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 23, color: '#7B61FF' }}>Create a New Fixed Account</Text>
+                                <Text style={{ fontWeight: 'bold', fontSize: 23, color: '#7B61FF' }}>Create a New Secure lock</Text>
                                 <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>Lock funds and unlock on a due date</Text>
                             </View>
 

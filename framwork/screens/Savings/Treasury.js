@@ -24,28 +24,26 @@ export function Treasury({ navigation }) {
     // vaultInfo.fixed.map(d => amt += d.amount + d.interest)
     // setBalance(amt)
     // console.log(savingsInfo);
+
+    console.log(saysInfo);
+
     getSavings();
     getMySAYS();
   }, []);
 
-  const balance = () => {
+  const totalBalance = () => {
     const total = savingsInfo.reduce((a, c) => a + parseFloat(c.current_balance), 0)
-    return total + Number(saysInfo.balance)
+    return total + Number(JSON.stringify(saysInfo) != '{}' ? saysInfo.balance : 0)
   }
 
-  const fixedBalance = () => savingsInfo.filter(all => all.type == "fixed").reduce((a, c) => a + Number(c.current_balance) + Number(c.total_interest), 0)
-  const targetBalance = () => savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
-
-  // function getTargetBalance() {
-  //   let amt = 0;
-  //   JSON.stringify(vaultInfo.business) != '{}' ? vaultInfo.business.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.education) != '{}' ? vaultInfo.education.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.emergency) != '{}' ? vaultInfo.emergency.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.travel) != '{}' ? vaultInfo.travel.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   JSON.stringify(vaultInfo.others) != '{}' ? vaultInfo.others.deposites.map(d => amt += d.amount + d.interest) : null;
-  //   setTargetBalance(amt)
-  //   setBalance(balance + amt);
-  // }
+  const fixedBalance = () => {
+    const total = savingsInfo.filter(all => all.type == "fixed").reduce((a, c) => a + Number(c.current_balance) + Number(c.total_interest), 0)
+    return total || 0
+  }
+  const targetBalance = () => {
+    const total = savingsInfo.filter(all => all.type == "target").reduce((a, c) => a + parseFloat(c.current_balance), 0)
+    return total || 0
+  }
 
   // function getFixedBalance() {
   //   let amt = 0
@@ -71,7 +69,7 @@ export function Treasury({ navigation }) {
           <View style={styles.balance}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ color: '#787A8D', }}>Vault Balance</Text>
+                <Text style={{ color: '#787A8D', }}> Total Balance</Text>
               </View>
 
               <TouchableOpacity>
@@ -85,7 +83,7 @@ export function Treasury({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(balance())}</Text></Text>
+              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(totalBalance())}</Text></Text>
               {/* <Text style={{ color: 'green' }}>₦ <Text style={{ marginTop: 5, fontSize: 20, color: 'green', }}>{vaultInfo.vaultBalance.toFixed(2)}</Text></Text> */}
             </View>
           </View>
@@ -95,36 +93,36 @@ export function Treasury({ navigation }) {
 
               <TouchableOpacity
                 onPress={() => savingsInfo.filter(all => all.type == "fixed").length > 0 ? navigation.navigate('FixedMenu') : navigation.navigate('FixedInfo')}
-                style={[styles.boxStyle, { backgroundColor: '#7b61ff5e', }]}>
+                style={[styles.boxStyle, { backgroundColor: '#dcd5fb5e', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
-                      icon={faWallet}
+                      icon={faLock}
                       color="#6245f5"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#6040fc', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Fixed Savings</Text>
-                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
+                    <Text style={{ color: '#0a0523', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Secure Lock</Text>
+                    <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>₦
                       <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(fixedBalance())}</Text></Text>
                   </View>
                 </View>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate('TargetMenu')}
-                style={[styles.boxStyle, { backgroundColor: '#8bfc6f5e', }]}>
+                style={[styles.boxStyle, { backgroundColor: '#fee6f888', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
                       icon={faBullseye}
-                      color="#2abb06ff"
+                      color="#ad0380"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#2abb06ff', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Targets</Text>
-                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
+                    <Text style={{ color: '#091e04ff', marginBottom: 8, fontWeight: 'bold', fontSize: 17 }}>Targets</Text>
+                    <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>₦
                       <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(targetBalance())}</Text>
                     </Text>
                   </View>
@@ -137,19 +135,19 @@ export function Treasury({ navigation }) {
             <View style={styles.boxView}>
               <TouchableOpacity
                 onPress={() => JSON.stringify(saysInfo) != '{}' ? navigation.navigate('SpendRetain') : navigation.navigate('SpendRetainInfo')}
-                style={[styles.boxStyle, { backgroundColor: '#5cbeff5e', }]}>
+                style={[styles.boxStyle, { backgroundColor: '#eafdff82', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
                       icon={faNairaSign}
-                      color="#019db8ff"
+                      color="#027d88"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#019db8ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Spend & Retain</Text>
-                    <Text style={{ color: '#5f5f5f', marginLeft: 8, fontSize: 10 }}>₦
-                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(saysInfo.balance)}</Text>
+                    <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Spend & Retain</Text>
+                    <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>₦
+                      <Text style={{ fontSize: 13, color: '#5f5f5f', }}> {formatMoney(JSON.stringify(saysInfo) != '{}' ? saysInfo.balance : 0)}</Text>
                     </Text>
                   </View>
                 </View>
@@ -157,17 +155,17 @@ export function Treasury({ navigation }) {
 
 
               <View onPress={() => navigation.navigate('Coinlock')}
-                style={[styles.boxStyle, { backgroundColor: '#a6b10944', }]}>
+                style={[styles.boxStyle, { backgroundColor: '#f9e3feff', }]}>
                 <View style={{ alignItems: 'center' }}>
                   <View style={{ padding: 5, alignItems: "center" }}>
                     <FontAwesomeIcon
                       icon={faWallet}
-                      color="#a09d01ff"
+                      color="#7d01a0ff"
                       size={30}
                     />
                   </View>
                   <View style={{ marginTop: 10, alignItems: "center" }}>
-                    <Text style={{ color: '#a09d01ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Flexible Save</Text>
+                    <Text style={{ color: '#222204ff', marginBottom: 8, fontSize: 15, fontWeight: 'bold' }}>Flexible Save</Text>
                     <Text style={{ fontSize: 13, color: '#5f5f5f', }}>Coming soon...</Text>
                   </View>
                 </View>
@@ -180,7 +178,7 @@ export function Treasury({ navigation }) {
 
           <View style={{
             flexDirection: 'row', justifyContent: 'space-between',
-            backgroundColor: '#7b61ff5e', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center'
+            backgroundColor: '#d6cefe5e', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center'
           }}>
             <View style={{ padding: 5, justifyContent: "center", alignItems: "center" }}>
               <FontAwesomeIcon

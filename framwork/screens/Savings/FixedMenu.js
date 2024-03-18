@@ -26,7 +26,7 @@ export function FixedMenu({ navigation }) {
                     <View style={styles.vault}>
 
                         <View style={{ alignItems: 'center', margin: 10 }}>
-                            <Text style={{ fontSize: 20 }}>Target (Up to 20% p.a)</Text>
+                            <Text style={{ fontSize: 20 }}>Get (Up to 20% p.a)</Text>
                             <Text style={{ fontSize: 28, fontWeight: 'bold', margin: 5, color: '#7B61FF' }}>₦{formatMoney(fixedBalance())}</Text>
                         </View>
 
@@ -47,8 +47,8 @@ export function FixedMenu({ navigation }) {
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
 
                                                 <View style={{ flex: 1 }}>
-                                                    <Text style={{ fontSize: 19, color: '#7B61FF', fontWeight: 'bold' }}>My Fixed Account</Text>
-                                                    <Text style={{ color: '#5f5f5f' }}>Emergency target savings ensure financial security during unforeseen circumstances.</Text>
+                                                    <Text style={{ fontSize: 19, color: '#7B61FF', fontWeight: 'bold' }}>My Secure Account</Text>
+                                                    <Text style={{ color: '#5f5f5f' }}>Click to review your secure locks at a glance.</Text>
                                                 </View>
                                                 <TouchableOpacity
                                                     onPress={() => navigation.navigate('FixedTarget')}
@@ -81,7 +81,7 @@ export function FixedMenu({ navigation }) {
 
                                                 <View style={{ flex: 1 }}>
                                                     <Text style={{ fontSize: 19, color: '#7B61FF', fontWeight: 'bold' }}>Create New Account</Text>
-                                                    <Text style={{ color: '#5f5f5f' }}>Emergency target savings ensure financial security during unforeseen circumstances.</Text>
+                                                    <Text style={{ color: '#5f5f5f' }}>Set up your secure account now avoid over spending.</Text>
                                                 </View>
                                                 <TouchableOpacity
                                                     onPress={() => navigation.navigate('FixedCreate')}

@@ -191,7 +191,8 @@ export function Login({ navigation }) {
 
                   <View style={styles.login}>
                     <TouchableOpacity
-                      onPress={() => sendNotification('ForgotPassword', "You are going to Forgot Password screen")}
+                      // onPress={() => sendNotification('ForgotPassword', "You are going to Forgot Password screen")}
+                      onPress={() => navigation.navigate("ForgotPassword")}
                     >
                       <Text style={{ color: '#7B61FF', fontWeight: 'bold' }}>Forgot Password</Text>
                     </TouchableOpacity>

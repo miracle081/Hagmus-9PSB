@@ -242,7 +242,7 @@ export function BvnVerify({ navigation }) {
                                                         <View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦0.00</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦50,000</Text>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>

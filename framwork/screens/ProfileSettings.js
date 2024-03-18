@@ -180,6 +180,7 @@ export function ProfileSettings({ navigation }) {
                 autoCapitalize='words'
                 mode='outlined'
                 value={userInfo.first_name}
+                editable={false}
               />
 
               <Text style={styles.signupText}>Last Name</Text>

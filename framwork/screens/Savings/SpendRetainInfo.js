@@ -15,7 +15,7 @@ import { symbol } from "../../components/currencySymbols";
 
 
 export function SpendRetainInfo({ navigation }) {
-    const { setPreloader, token, } = useContext(AppContext);
+    const { setPreloader, token, getMySAYS } = useContext(AppContext);
     const [modalVisibility2, setModalVisibility2] = useState(false);
     const [checked, setChecked] = useState(true);
     const [checkedD, setCheckedD] = useState(false);
@@ -57,9 +57,9 @@ export function SpendRetainInfo({ navigation }) {
             .then(response => {
                 const { data, status, message } = response;
                 setPreloader(false)
-                console.log(response);
+                // console.log(response);
                 if (status == "success") {
-                    // closeModal();
+                    getMySAYS();
                     Alert.alert(
                         'Success',
                         message,
@@ -83,7 +83,7 @@ export function SpendRetainInfo({ navigation }) {
                     <View style={styles.vault}>
 
                         <View style={{ alignItems: 'center', margin: 10 }}>
-                            <Text style={{ fontSize: 20 }}>Target (Up to 14% p.a)</Text>
+                            {/* <Text style={{ fontSize: 20 }}>Target (Up to 14% p.a)</Text> */}
                         </View>
 
 
@@ -104,7 +104,7 @@ export function SpendRetainInfo({ navigation }) {
                                         </View>
                                         <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 8, marginTop: 20 }}>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Spend and Retain percent 10%</Text>
+                                                <Text style={{ fontSize: 12, fontWeight: 'bold' }}>Spend and Retain percent</Text>
                                                 <View style={{
                                                     backgroundColor: '#d6f6e1ff', borderRadius: 8,
                                                     width: 55, alignItems: 'center', padding: 3
