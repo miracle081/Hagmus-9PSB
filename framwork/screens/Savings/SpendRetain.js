@@ -79,7 +79,7 @@ export function SpendRetain({ navigation }) {
                 setPreloader(false)
                 // console.log(response);
                 if (status == "success") {
-                    // closeModal();
+                    getMySAYS();
                     Alert.alert(
                         'Success',
                         message,

@@ -25,14 +25,14 @@ export function Treasury({ navigation }) {
     // setBalance(amt)
     // console.log(savingsInfo);
 
-    console.log(saysInfo);
+    // console.log(saysInfo);
 
     getSavings();
     getMySAYS();
   }, []);
 
   const totalBalance = () => {
-    const total = savingsInfo.reduce((a, c) => a + parseFloat(c.current_balance), 0)
+    const total = savingsInfo.reduce((a, c) => a + parseFloat(c.current_balance)+ parseFloat(c.total_interest), 0)
     return total + Number(JSON.stringify(saysInfo) != '{}' ? saysInfo.balance : 0)
   }
 
