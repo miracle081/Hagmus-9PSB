@@ -66,7 +66,7 @@ export function Username({ navigation }) {
             <View style={styles.stepIndicator}>
               <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]}></View>
               <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]}></View>
-              <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]} ></View>
+              <View style={[styles.indicator, { backgroundColor: "#7B61FF" }]}></View>
               <View style={styles.indicator}></View>
             </View>
             <Text style={styles.text1}>Step 3/4</Text>

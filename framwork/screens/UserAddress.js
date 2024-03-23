@@ -15,7 +15,7 @@ import { handleError } from '../components/HandleRequestError';
 
 export function UserAddress({ navigation }) {
     const { setPreloader, setToken, setUserInfo, account } = useContext(AppContext);
-    const [countries, setCountries] = useState([{ country: "", flag: "", currency: "" }]);
+    const [countries, setCountries] = useState([{ country: "Nigeria", flag: require("../../assets/ngnflag.png"), currency: "ngn" }]);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [selectedCountry, setSelectedCountry] = useState({ country: "", currency: "", flag: "" });
     const [state, setState] = useState('');
@@ -23,16 +23,16 @@ export function UserAddress({ navigation }) {
     const [postal_code, setPostal_code] = useState('');
     const [address, setAddress] = useState('');
 
-    useFocusEffect(
-        useCallback(() => {
-            setPreloader(true)
-            getDoc(doc(db, "admin", "countryAPI")).then(rDocs => {
-                const info = rDocs.data().countries
-                setCountries(info);
-                setPreloader(false)
-            })
-        }, [])
-    );
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         setPreloader(true)
+    //         getDoc(doc(db, "admin", "countryAPI")).then(rDocs => {
+    //             const info = rDocs.data().countries
+    //             setCountries(info);
+    //             setPreloader(false)
+    //         })
+    //     }, [])
+    // );
 
     const closeModal = () => setModalVisibility(!modalVisibility);
 
@@ -176,14 +176,14 @@ export function UserAddress({ navigation }) {
                                 <TouchableOpacity activeOpacity={0.5} onPress={closeModal} >
                                     <View style={styles.country}>
                                         {
-                                            selectedCountry.flag == "" && selectedCountry.country == "" ?
+                                            selectedCountry.country == "" ?
                                                 <>
                                                     <Image source={require('../../assets/globe.png')}
                                                         style={{ width: 25, height: 25, marginRight: 10, borderRadius: 100 }} />
                                                     <Text style={{ color: '#787A8D' }}>Select your country</Text>
                                                 </> :
                                                 <>
-                                                    <Image source={{ uri: selectedCountry.flag }}
+                                                    <Image source={selectedCountry.flag}
                                                         style={{ width: 25, height: 25, marginRight: 10, borderRadius: 100 }} />
                                                     <Text style={{ color: '#141125' }}>{selectedCountry.country}</Text>
                                                 </>
@@ -240,7 +240,7 @@ export function UserAddress({ navigation }) {
                                         <>
                                             <TouchableOpacity onPress={() => { setSelectedCountry({ country: item.country, currency: item.currency, flag: item.flag }), closeModal() }}>
                                                 <View style={{ margin: 10, padding: 5, flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Image source={{ uri: item.flag || null }} style={{ width: 35, height: 35, borderRadius: 100, marginRight: 5 }} />
+                                                    <Image source={item.flag} style={{ width: 35, height: 35, borderRadius: 100, marginRight: 5 }} />
                                                     <View>
                                                         <Text style={{ color: '#141125', fontSize: 15, fontWeight: 'bold', marginLeft: 5 }}>{item.country}</Text>
                                                         <Text style={{ fontSize: 12, color: '#141125', marginLeft: 5 }}>{item.currency.toUpperCase()}</Text>

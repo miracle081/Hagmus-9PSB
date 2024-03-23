@@ -21,6 +21,23 @@ const networkList = [
     // { name: "Spectranet", id: "spectranet", image: "https://wenethub.com/imageslink/SPREC.png" },
 ]
 
+const quickTap = {
+    MTN: [
+        { name: "100MB", days: "24 Hours", variation_amount: "100.00", variation_code: "mtn-10mb-100" },
+        { name: "200MB", days: "3 days", variation_amount: "200.00", variation_code: "mtn-50mb-200" },
+        { name: "1GB", days: "1 days", variation_amount: "350.00", variation_code: "mtn-1gb-350" },
+        { name: "1GB", days: "7 days", variation_amount: "600.00", variation_code: "mtn-1gb-600" },
+        { name: "1.2GB", days: "30 days", variation_amount: "1000.00", variation_code: "mtn-1200mb-1000" },
+        { name: "2.5GB", days: "2 days", variation_amount: "600.00", variation_code: "mtn-2-5gb-600" },
+        { name: "3GB", days: "30 days", variation_amount: "1600.00", variation_code: "mtn-3gb-1600" },
+        { name: "4GB", days: "30 days", variation_amount: "2000.00", variation_code: "mtn-4gb-2000" },
+        { name: "5GB", days: "7 days", variation_amount: "1500.00", variation_code: "mtn-5gb-1500" },
+        { name: "10GB", days: "30 days", variation_amount: "3500.00", variation_code: "mtn-data-3500" },
+        { name: "12GB", days: "30 days", variation_amount: "4000.00", variation_code: "mtn-12gb-4000" },
+        { name: "20GB", days: "30 days", variation_amount: "5500.00", variation_code: "mtn-20gb-5500" },
+    ]
+}
+
 export function Data({ navigation }) {
     const { setPreloader, token, pin, setPin, userInfo, getAccountInfo, } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
@@ -43,9 +60,9 @@ export function Data({ navigation }) {
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
-                // console.log(response);
                 setPreloader(false)
                 if (status == "success") {
+                    // console.log(data);
                     setVariation(data)
                 }
                 handleError(status, message);
@@ -103,7 +120,7 @@ export function Data({ navigation }) {
                 setPreloader(false)
                 console.log('error', error)
                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                else Alert.alert("Error!", error.message)
             });
     }
 
@@ -117,6 +134,11 @@ export function Data({ navigation }) {
     const [pinModalVisibility, setPinMetModalVisibility] = useState(false);
     const pinModal = () => {
         setPinMetModalVisibility(!pinModalVisibility);
+    };
+
+    const [viewAll, setViewAll] = useState(false);
+    const ViewAllModal = () => {
+        setViewAll(!viewAll);
     };
 
     return (
@@ -162,22 +184,26 @@ export function Data({ navigation }) {
                         </View>
                     </View>
 
-
                     {/* Top Up */}
-                    <View style={{ backgroundColor: '#f1f1f5', padding: 18, borderRadius: 8, marginTop: 18, flex: 1 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 5, marginBottom: 15 }}>
+                    <View style={{ backgroundColor: '#f1f1f5', padding: 0, borderRadius: 8, marginTop: 18, flex: 1 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10, marginBottom: 15 }}>
                             <TouchableOpacity style={{ borderBottomWidth: 6, borderColor: '#5541b7', borderRadius: 8 }}>
                                 <Text style={{ color: '#282244', fontWeight: 'bold', fontSize: 15 }}>Hot</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity onPress={ViewAllModal} style={{ flexDirection: 'row', alignItems: "center", gap: 5, borderWidth: 1, borderColor: '#5541b7', borderRadius: 8, paddingHorizontal: 10 }}>
+                                <Text style={{ color: '#5541b7', fontSize: 14 }}>View All</Text>
+                            </TouchableOpacity>
                         </View>
-                        <FlatList data={variation}
+
+                        {/* <FlatList data={variation}
                             initialNumToRender={10}
                             style={{ flex: 1 }}
                             renderItem={({ item }) => {
                                 const cashBack = formatDecimal(Number(item.variation_amount) * 2 / 100, 2);
-                                const amount = network.name == "Airtel" ? Number(item.variation_amount) + 1 : item.variation_amount
+                                const amount = item.variation_amount
+                                // console.log(item);
                                 return (
-                                    <TouchableOpacity onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name }); closeModal2() }}
+                                    <TouchableOpacity onPress={() => console.log(item)}
                                         style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", backgroundColor: '#dcdcdc7e', padding: 15, borderRadius: 8, marginTop: 5, paddingVertical: 10, flex: 1, }}>
                                         <View style={{ flex: 1 }}>
                                             <Text style={{ fontSize: 14, color: '#343434', fontWeight: "bold" }}>{item.name}</Text>
@@ -189,6 +215,30 @@ export function Data({ navigation }) {
                                             style={[styles.getStarted, { borderRadius: 50, padding: 5, paddingHorizontal: 15, marginTop: 0 }]}>
                                             <Text style={{ fontSize: 12, color: "white" }}>Buy</Text>
                                         </TouchableOpacity>
+                                    </TouchableOpacity>
+                                )
+                            }} key={({ item }) => { item.id }} /> */}
+
+                        <FlatList data={quickTap[network.name]}
+                            initialNumToRender={10}
+                            style={{ flex: 1 }}
+                            numColumns={3}
+                            renderItem={({ item }) => {
+                                const cashBack = formatDecimal(Number(item.variation_amount) * 2 / 100, 2);
+                                const amount = item.variation_amount
+                                return (
+                                    <TouchableOpacity onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name + " - " + item.days }); closeModal2() }}
+                                        style={{ backgroundColor: '#dcdcdc7e', padding: 15, borderRadius: 8, marginTop: 5, paddingVertical: 5, flex: 1, marginHorizontal: 2 }}>
+                                        <View style={{ flex: 1, alignItems: "center", marginBottom: 5 }}>
+                                            <Text style={{ fontSize: 16, color: '#343434', fontWeight: "bold" }}>{item.name}</Text>
+                                            <Text style={{ fontSize: 13, color: '#1f8805', marginTop: 5 }}>{symbol("ngn")}{amount}</Text>
+                                            <Text style={{ fontSize: 11, marginBottom: 2, color: '#5541b7' }}>+₦{cashBack} bonus</Text>
+                                        </View>
+                                        <View
+                                            // onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name }); closeModal2() }}
+                                            style={[styles.getStarted, { borderRadius: 50, padding: 5, paddingHorizontal: 15, marginTop: 0 }]}>
+                                            <Text style={{ fontSize: 12, color: "white" }}>{item.days}</Text>
+                                        </View>
                                     </TouchableOpacity>
                                 )
                             }} key={({ item }) => { item.id }} />
@@ -294,8 +344,56 @@ export function Data({ navigation }) {
                     </View>
                 </Modal>
 
-                <PinTransactionModal visibility={pinModalVisibility} onClose={pinModal} onVerify={() => { pinModal(); buyData() }} />
+                {/* ============== View All Data modal ============== */}
+                <Modal
+                    visible={viewAll}
+                    animationType="slide"
+                    transparent={true}
+                >
+                    <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+                        <Pressable style={{ flex: 1 }} onPress={ViewAllModal} >
+                        </Pressable>
+                        <View style={{ backgroundColor: "#eeeff4", height: 650, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                            <View style={{ alignItems: 'flex-end', margin: 10 }}>
+                                <TouchableOpacity onPress={ViewAllModal}>
+                                    <FontAwesomeIcon
+                                        icon={faXmark}
+                                        size={24}
+                                        color='#7B61FF'
+                                    />
+                                </TouchableOpacity>
+                            </View>
 
+                            <View style={{ padding: 10, flex: 1 }}>
+                                <FlatList data={variation}
+                                    initialNumToRender={10}
+                                    style={{ flex: 1 }}
+                                    renderItem={({ item }) => {
+                                        const cashBack = formatDecimal(Number(item.variation_amount) * 2 / 100, 2);
+                                        const amount = item.variation_amount
+                                        // console.log(item);
+                                        return (
+                                            <TouchableOpacity onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name }); ViewAllModal(); closeModal2() }}
+                                                style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", backgroundColor: '#dcdcdc7e', padding: 15, borderRadius: 8, marginTop: 5, paddingVertical: 10, flex: 1, }}>
+                                                <View style={{ flex: 1 }}>
+                                                    <Text style={{ fontSize: 14, color: '#343434', fontWeight: "bold" }}>{item.name}</Text>
+                                                    <Text style={{ fontSize: 13, color: '#1f8805', marginTop: 5 }}>{symbol("ngn")}{amount}</Text>
+                                                    <Text style={{ fontSize: 11, marginBottom: 2, color: '#5541b7' }}>+₦{cashBack} bonus</Text>
+                                                </View>
+                                                <TouchableOpacity
+                                                    onPress={() => { setService({ amount: Number(amount), variation_code: item.variation_code, cashBack, data: item.name }); ViewAllModal(); closeModal2() }}
+                                                    style={[styles.getStarted, { borderRadius: 50, padding: 5, paddingHorizontal: 15, marginTop: 0 }]}>
+                                                    <Text style={{ fontSize: 12, color: "white" }}>Buy</Text>
+                                                </TouchableOpacity>
+                                            </TouchableOpacity>
+                                        )
+                                    }} key={({ item }) => { item.id }} />
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                <PinTransactionModal visibility={pinModalVisibility} onClose={pinModal} onVerify={() => { pinModal(); buyData() }} />
             </View>
         </AppSafeAreaView>
     )
