@@ -1,4 +1,4 @@
-import { Alert, Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
+import { Alert, Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../globals/AppContext';
 import { baseURL } from '../../config';
@@ -9,12 +9,34 @@ import { PieChart } from 'react-native-chart-kit';
 import { formatMoney } from '../components/FormatMoney';
 import { symbol } from '../components/currencySymbols';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMoneyBill, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faMoneyBill, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import MonthPicker from 'react-native-month-year-picker';
+import moment from 'moment';
+import { ToastApp } from '../components/Toast';
 
 export function Portfolio() {
     const { setPreloader, token } = useContext(AppContext);
     const [histories, setHistories] = useState([]);
+    const [transactions, setTransactions] = useState([]);
+    const [date, setDate] = useState(new Date());
+
+    function filterTransactionsByMonth(transactions, targetMonth) {
+        const returned = transactions.filter(transaction => {
+            const transactionDate = new Date(transaction.created_at);
+            const transactionMonth = transactionDate.getMonth();
+            const transactionYear = transactionDate.getFullYear();
+
+            const targetDate = new Date(targetMonth);
+            const targetMonthIndex = targetDate.getMonth();
+            const targetYear = targetDate.getFullYear();
+
+            return transactionMonth === targetMonthIndex && transactionYear === targetYear;
+        });
+        // console.log(returned);
+        setHistories(returned)
+    }
 
     async function fetchVariation() {
         setPreloader(true)
@@ -32,7 +54,9 @@ export function Portfolio() {
                 // console.log(data);
                 setPreloader(false)
                 if (status == "success") {
-                    setHistories(data)
+                    // console.log(data);
+                    filterTransactionsByMonth(data, new Date().getTime())
+                    setTransactions(data)
                 }
                 handleError(status, message);
             })
@@ -46,7 +70,8 @@ export function Portfolio() {
 
     useEffect(() => {
         setPreloader(true)
-        fetchVariation()
+        fetchVariation();
+        console.log(baseURL);
     }, [])
 
     function moneyIn() {
@@ -76,7 +101,6 @@ export function Portfolio() {
             name: "Electricity",
             transactions: histories.filter(all => all.category == "electricity").reduce((a, c) => a + parseFloat(c.amount), 0),
             color: "#c68e01",
-            
         },
         {
             name: "TV",
@@ -90,33 +114,67 @@ export function Portfolio() {
         backgroundGradientFromOpacity: 0,
         backgroundGradientTo: "#08130D",
         backgroundGradientToOpacity: 0.5,
-        color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+        color: (opacity = 0) => `rgba(26, 255, 146, ${opacity})`,
         strokeWidth: 2, // optional, default 3
         barPercentage: 0.5,
         useShadowColorFromDataset: false // optional
     };
 
+    const [dateVisibility, setDateVisibility] = useState(false);
+    const onChange = (currentDate) => {
+        setDateVisibility(false);
+        const { timestamp } = currentDate.nativeEvent
+        let rDate = new Date(timestamp)
+        if (rDate.getTime() < new Date().getTime()) {
+            setDate(new Date(timestamp));
+            filterTransactionsByMonth(transactions, timestamp);
+        } else {
+            ToastApp("You cannot choose a date in the future.","LONG")
+        }
+    };
+
     return (
         <SafeAreaView>
             <View style={{ padding: 20 }}>
-            <View style={{alignItems:'center',marginBottom:10}}>
-                <Text style={{ fontSize: 20 }}>Portfolio</Text>
-            </View>
-               <View style={{borderWidth:2,padding:3,borderRadius:8,flexDirection:'row',alignItems:'center',
-               justifyContent:'space-between',borderColor:'#d7d1f4',marginBottom:15}}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                <FontAwesomeIcon icon={faWallet} color='#7B61FF'/>
-               <Text style={{ fontSize: 16, marginLeft:5 }}>money In: </Text>
+                <View style={{ alignItems: 'center', marginBottom: 10 }}>
+                    <Text style={{ fontSize: 20 }}>Portfolio</Text>
                 </View>
-               <Text style={{ fontSize: 16, color:'#040111' }}>{symbol("ngn")}{formatMoney(moneyIn())}</Text>
-               </View>
-                <View style={{borderWidth:2,padding:3,borderRadius:8,flexDirection:'row',alignItems:'center',
-               justifyContent:'space-between',borderColor:'#d7d1f4'}}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                <FontAwesomeIcon icon={faPaperPlane} color='#7B61FF'/>
-               <Text style={{ fontSize: 16, marginLeft:5 }}>money Out: </Text>
+
+                {dateVisibility ?
+                    <DateTimePicker
+                        mode={'date'}
+                        value={date}
+                        onChange={d => onChange(d)}
+                    />
+                    : null}
+
+                <View style={{ alignItems: "flex-end",marginBottom:10 }}>
+                    <TouchableOpacity onPress={() => setDateVisibility(true)}
+                        style={{ borderColor: "#7B61FF", borderWidth: 1, padding: 5,paddingHorizontal:10, borderRadius: 10,flexDirection:"row",gap:8,alignItems:"center" }}>
+                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, color: "#7B61FF" }}>{moment(date).format('MMMM, YYYY')}</Text>
+                        <FontAwesomeIcon icon={faAngleDown} size={15} color='#7B61FF' />
+                    </TouchableOpacity>
                 </View>
-                <Text style={{ fontSize: 16, color:'#040111' }}>{symbol("ngn")}{formatMoney(moneyOut())}</Text>
+
+                <View style={{
+                    borderWidth: 1, padding: 5, borderRadius: 8, flexDirection: 'row', alignItems: 'center',
+                    justifyContent: 'space-between', borderColor: '#d7d1f4', marginBottom: 15
+                }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <FontAwesomeIcon icon={faWallet} color='#7B61FF' />
+                        <Text style={{ fontSize: 16, marginLeft: 5 }}>Money In: </Text>
+                    </View>
+                    <Text style={{ fontSize: 16, color: '#040111' }}>{symbol("ngn")}{formatMoney(moneyIn())}</Text>
+                </View>
+                <View style={{
+                    borderWidth: 1, padding: 5, borderRadius: 8, flexDirection: 'row', alignItems: 'center',
+                    justifyContent: 'space-between', borderColor: '#d7d1f4'
+                }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <FontAwesomeIcon icon={faPaperPlane} color='#7B61FF' />
+                        <Text style={{ fontSize: 16, marginLeft: 5 }}>Money Out: </Text>
+                    </View>
+                    <Text style={{ fontSize: 16, color: '#040111' }}>{symbol("ngn")}{formatMoney(moneyOut())}</Text>
                 </View>
                 <View style={{ alignItems: "center" }}>
                     <PieChart
@@ -130,7 +188,6 @@ export function Portfolio() {
                         center={[90, 0]}
                         absolute={false}
                         hasLegend={false}
-                    // style={{ alignItems: "center",  }}
                     />
                 </View>
                 <FlatList
