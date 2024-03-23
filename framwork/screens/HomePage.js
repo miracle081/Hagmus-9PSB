@@ -61,6 +61,30 @@ function HomeScreen({ navigation }) {
 
 
 
+  function getSavings() {
+    setPreloader(true)
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        authorization: `bearer ${token}`
+      },
+      redirect: 'follow'
+    };
+    fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+      .then(response => response.json())
+      .then(response => {
+        const { data, status, message } = response;
+        console.log();
+        // if (status == "success") {
+        //   setAppVersion(data)
+        // }
+        // handleError(status, message);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
   useEffect(() => {
     // setPreloader(false)
     // getMySAYS();
@@ -68,8 +92,10 @@ function HomeScreen({ navigation }) {
       const info = doc.data()
       setAppVersion(info.appVersion);
     });
+
     getAccountInfo()
     getUserCards();
+    getSavings();
   }, []);
 
   useEffect(() => {
@@ -106,13 +132,13 @@ function HomeScreen({ navigation }) {
 
     // Linking.openURL(`market://details?id=${packageName}`)
     Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+      // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
   };
 
-  const handleRefresh = () => { 
+  const handleRefresh = () => {
     getUserCards()
     getAccountInfo();
     getUserInfo();
@@ -542,8 +568,8 @@ function HomeScreen({ navigation }) {
                 <View style={{ alignItems: "center", marginBottom: 20 }}>
                   <Image source={require("../../assets/icon.png")} style={{ width: 80, height: 80, }} />
                   <Text style={{ fontSize: 18, fontWeight: 'bold', }}>New Update Available!</Text>
-                  <View style={{alignItems:'center'}}>
-                  <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus app is outdated {"\n"}upgrade to the latest version.</Text>
+                  <View style={{ alignItems: 'center' }}>
+                    <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus app is outdated {"\n"}upgrade to the latest version.</Text>
                   </View>
                   <TouchableOpacity onPress={() => { openPlayStore('Kyc'), updateModal() }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'white' }}>Update now</Text>
