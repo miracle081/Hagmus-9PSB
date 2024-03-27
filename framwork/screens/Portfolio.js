@@ -15,6 +15,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
 import { ToastApp } from '../components/Toast';
+import { YearMonthPicker } from '../components/YearMonthPicker';
 
 export function Portfolio() {
     const { setPreloader, token } = useContext(AppContext);
@@ -71,7 +72,6 @@ export function Portfolio() {
     useEffect(() => {
         setPreloader(true)
         fetchVariation();
-        console.log(baseURL);
     }, [])
 
     function moneyIn() {
@@ -121,16 +121,11 @@ export function Portfolio() {
     };
 
     const [dateVisibility, setDateVisibility] = useState(false);
-    const onChange = (currentDate) => {
+    const onChange = (year, month) => {
+        filterTransactionsByMonth(transactions, new Date(year, month).getTime())
+        setDate(new Date(year, month));
+        // console.log(new Date(year, month).getTime());
         setDateVisibility(false);
-        const { timestamp } = currentDate.nativeEvent
-        let rDate = new Date(timestamp)
-        if (rDate.getTime() < new Date().getTime()) {
-            setDate(new Date(timestamp));
-            filterTransactionsByMonth(transactions, timestamp);
-        } else {
-            ToastApp("You cannot choose a date in the future.","LONG")
-        }
     };
 
     return (
@@ -141,16 +136,16 @@ export function Portfolio() {
                 </View>
 
                 {dateVisibility ?
-                    <DateTimePicker
-                        mode={'date'}
-                        value={date}
-                        onChange={d => onChange(d)}
+                    <YearMonthPicker
+                        visible={dateVisibility}
+                        onChange={onChange}
+                        onClose={() => setDateVisibility(false)}
                     />
                     : null}
 
-                <View style={{ alignItems: "flex-end",marginBottom:10 }}>
+                <View style={{ alignItems: "flex-end", marginBottom: 10 }}>
                     <TouchableOpacity onPress={() => setDateVisibility(true)}
-                        style={{ borderColor: "#7B61FF", borderWidth: 1, padding: 5,paddingHorizontal:10, borderRadius: 10,flexDirection:"row",gap:8,alignItems:"center" }}>
+                        style={{ borderColor: "#7B61FF", borderWidth: 1, padding: 5, paddingHorizontal: 10, borderRadius: 10, flexDirection: "row", gap: 8, alignItems: "center" }}>
                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 14, color: "#7B61FF" }}>{moment(date).format('MMMM, YYYY')}</Text>
                         <FontAwesomeIcon icon={faAngleDown} size={15} color='#7B61FF' />
                     </TouchableOpacity>
