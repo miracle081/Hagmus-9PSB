@@ -2,8 +2,26 @@ import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "rea
 import { styles } from "../styles/aboutus";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight, faArrowLeft, faBookOpenReader, faCircleQuestion, faEnvelope, faGlobe, faMessage } from "@fortawesome/free-solid-svg-icons";
-import { faFacebook, faLinkedin, faReadme, faTelegram, faTwitter, faWeebly } from "@fortawesome/free-brands-svg-icons";
+import { faFacebook, faLinkedin, faReadme, faTelegram, faTwitter, faWeebly, faWhatsapp, faWhatsappSquare } from "@fortawesome/free-brands-svg-icons";
 import { ModalAlert } from "../components/ModalAlert";
+import { Button, Linking } from 'react-native';
+
+// Send whatsapp support message
+
+        const openWhatsApp = () => {
+          // Replace 'YOUR_NUMBER' with your WhatsApp number including country code
+          // and 'YOUR_MESSAGE' with the message you want to pre-fill.
+          const phoneNumber = '+2348067548931';
+          const message = 'Good Day';
+      
+          // Constructing the WhatsApp URL
+          const whatsappUrl = `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+      
+          // Opening WhatsApp using Linking
+          Linking.openURL(whatsappUrl)
+            .then(() => console.log("WhatsApp opened successfully"))
+            .catch(err => console.error("An error occurred", err));
+        };
 
 export function HelpSupport({ navigation }) {
         return (
@@ -21,27 +39,29 @@ export function HelpSupport({ navigation }) {
                                 </TouchableOpacity>
                         </View>
                         <View style={styles.body}>
-
                                 <ScrollView>
                                         <View style={{ margin: 13, padding: 4 }}>
 
                                                 <TouchableOpacity
-                                                        // onPress={() => navigation.navigate('Web', { uri: "https://hagmus.com/#support" })}
+                                                        onPress={() => navigation.navigate('Web', { uri: "https://hagmus.com" })}
                                                         style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}
                                                 >
                                                         <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, alignItems: 'center' }}>
                                                                 <FontAwesomeIcon
                                                                         icon={faCircleQuestion}
                                                                         color='#7B61FF'
-                                                                        style={{ marginRight: 5 }}
+                                                                        style={{ marginRight: 8 }}
+                                                                        size={25}
                                                                 />
                                                                 <Text style={{ color: 'black', fontSize: 16 }}>FAQs</Text>
                                                         </View>
                                                         <FontAwesomeIcon
                                                                 icon={faAngleRight}
                                                                 color='grey'
+                                                                
                                                         />
                                                 </TouchableOpacity>
+
 
                                                 <TouchableOpacity
                                                         onPress={() => navigation.navigate('LeaveMsg')}
@@ -51,7 +71,8 @@ export function HelpSupport({ navigation }) {
                                                                 <FontAwesomeIcon
                                                                         icon={faEnvelope}
                                                                         color='#7B61FF'
-                                                                        style={{ marginRight: 5 }}
+                                                                        style={{ marginRight: 8 }}
+                                                                        size={25}
                                                                 />
                                                                 <Text style={{ color: 'black', fontSize: 16 }}>Leave a Message</Text>
                                                         </View>
@@ -61,6 +82,24 @@ export function HelpSupport({ navigation }) {
                                                         />
                                                 </TouchableOpacity>
 
+                                                <TouchableOpacity
+                                                 onPress={openWhatsApp}
+                                                        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', }}
+                                                >
+                                                        <View style={{ flexDirection: 'row', marginTop: 20, marginBottom: 20, alignItems: 'center' }}>
+                                                                <FontAwesomeIcon
+                                                                        icon={faWhatsappSquare}
+                                                                        color='#09681a'
+                                                                        style={{ marginRight: 5 }}
+                                                                        size={30}
+                                                                />
+                                                                <Text style={{ color: 'black', fontSize: 16 }}>Chat us on Whatsapp</Text>
+                                                        </View>
+                                                        <FontAwesomeIcon
+                                                                icon={faAngleRight}
+                                                                color='grey'
+                                                        />
+                                                </TouchableOpacity>
 
 
 

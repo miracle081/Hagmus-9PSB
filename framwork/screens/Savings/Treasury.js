@@ -83,7 +83,7 @@ export function Treasury({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦ <Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(totalBalance())}</Text></Text>
+              <Text style={{ color: '#7B61FF', fontSize: 17 }}>₦<Text style={{ marginTop: 5, fontSize: 30, color: '#7B61FF', }}>{formatMoney(totalBalance())}</Text></Text>
               {/* <Text style={{ color: 'green' }}>₦ <Text style={{ marginTop: 5, fontSize: 20, color: 'green', }}>{vaultInfo.vaultBalance.toFixed(2)}</Text></Text> */}
             </View>
           </View>

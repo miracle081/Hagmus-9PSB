@@ -209,7 +209,7 @@ export function Targets({ navigation, route }) {
                                     <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
                                         <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(info.current_balance)}</Text>
                                     </Text>
-                                    <Text style={{ marginStart: 20, }}>Due Date: </Text>
+                                    {/* <Text style={{ marginStart: 20, }}>Due Date: </Text> */}
                                
 
                                

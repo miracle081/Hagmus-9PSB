@@ -34,6 +34,7 @@ import { MyDollarCard } from './Dollarcard/MyDollarCard';
 import { formatMoney } from '../components/FormatMoney';
 import { Treasury } from './Savings/Treasury';
 import { Ionicons } from '@expo/vector-icons';
+import { faWhatsappSquare } from '@fortawesome/free-brands-svg-icons';
 
 
 const installedAppVersion = Constants.expoConfig.version
@@ -163,11 +164,18 @@ function HomeScreen({ navigation }) {
               </View>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => navigation.navigate("HelpSupport")}>
-                  <View style={{ alignItems: 'center', position: "relative", marginRight: 14 }}>
+                  <View style={{ alignItems: 'center', position: "relative", marginRight: 14, flexDirection:'row',
+                alignItems:'center' }}>
                     <FontAwesomeIcon
                       icon={faHeadset}
-                      color="black"
-                      size={20}
+                      color="#7b61ff"
+                      size={23}
+                      style={{marginRight:10}}
+                    />
+                    <FontAwesomeIcon
+                      icon={faWhatsappSquare}
+                      color="green"
+                      size={25}
                     />
                   </View>
                 </TouchableOpacity>

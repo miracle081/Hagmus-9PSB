@@ -16,16 +16,16 @@ import { handleError } from "../../components/HandleRequestError";
 
 
 const options = [
-    { days: 60, label: '2 months', pa: 10 },
-    { days: 90, label: '3 months', pa: 11 },
-    { days: 120, label: '4 months', pa: 12 },
-    { days: 150, label: '5 months', pa: 13 },
-    { days: 180, label: '6 months', pa: 14 },
-    { days: 210, label: '7 months', pa: 15 },
-    { days: 240, label: '8 months', pa: 16 },
-    { days: 270, label: '9 months', pa: 17 },
-    { days: 300, label: '10 months', pa: 18 },
-    { days: 330, label: '11 months', pa: 19 },
+    { days: 60, label: '2 months', pa: 3.3 },
+    { days: 90, label: '3 months', pa: 5 },
+    { days: 120, label: '4 months', pa: 6.6 },
+    { days: 150, label: '5 months', pa: 8 },
+    { days: 180, label: '6 months', pa: 10 },
+    { days: 210, label: '7 months', pa: 12 },
+    { days: 240, label: '8 months', pa: 13 },
+    { days: 270, label: '9 months', pa: 15 },
+    { days: 300, label: '10 months', pa: 17 },
+    { days: 330, label: '11 months', pa: 18.3 },
     { days: 365, label: '12 months', pa: 20 },
 ];
 
