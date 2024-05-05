@@ -18,7 +18,7 @@ import { baseURL } from "../../../config";
 
 
 const options = [
-    { days: 30, label: '1 month', pa: 1.7 },
+    // { days: 30, label: '1 month', pa: 1.7 },
     { days: 60, label: '2 months', pa: 3 },
     { days: 90, label: '3 months', pa: 5 },
     { days: 180, label: '6 months', pa: 10 },
@@ -352,7 +352,7 @@ export function FixedCreate({ navigation }) {
 
                             <View style={{ padding: 15 }}>
                                 <TouchableOpacity onPress={() => { closeModal2(); createFixed() }} disabled={!checked} style={[styles.getStarted, { backgroundColor: checked ? '#7B61FF' : '#574d8dff' }]}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, }}>Fund</Text>
+                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color:'white' }}>Fund</Text>
                                 </TouchableOpacity>
                             </View>
 

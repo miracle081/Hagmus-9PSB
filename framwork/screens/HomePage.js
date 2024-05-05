@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Earn } from './Earn';
 import { CardIntro } from './CardIntro';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -58,6 +58,7 @@ function HomeScreen({ navigation }) {
   const [modalVisibility2, setModalVisibility2] = useState(true);
   const [modalVisibility3, setModalVisibility3] = useState(false);
   const [modalVisibility4, setModalVisibility4] = useState(false)
+  const [modalVisibility5, setModalVisibility5] = useState(false)
 
 
 
@@ -107,6 +108,9 @@ function HomeScreen({ navigation }) {
   const closeModal4 = () => {
     setModalVisibility4(!modalVisibility4);
   };
+  const closeModal5 = () => {
+    setModalVisibility5(!modalVisibility5);
+  };
 
   const closeModal = () => {
     setModalVisibility(!modalVisibility);
@@ -126,7 +130,7 @@ function HomeScreen({ navigation }) {
 
     // Linking.openURL(`market://details?id=${packageName}`)
     Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-      // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -156,6 +160,9 @@ function HomeScreen({ navigation }) {
                   />
                 </Pressable>
                 <View>
+                  {/* <Text style={{ fontSize: 18, color: 'black', fontFamily: "EBGaramond_700Bold" }}>
+                    Hi, {userInfo.username}
+                  </Text> */}
                   <Text style={{ fontSize: 18, color: 'black', fontFamily: "EBGaramond_700Bold" }}>
                     Hi, {userInfo.username}
                   </Text>
@@ -164,13 +171,15 @@ function HomeScreen({ navigation }) {
               </View>
               <View style={{ flexDirection: "row" }}>
                 <TouchableOpacity onPress={() => navigation.navigate("HelpSupport")}>
-                  <View style={{ alignItems: 'center', position: "relative", marginRight: 14, flexDirection:'row',
-                alignItems:'center' }}>
+                  <View style={{
+                    alignItems: 'center', position: "relative", marginRight: 14, flexDirection: 'row',
+                    alignItems: 'center'
+                  }}>
                     <FontAwesomeIcon
                       icon={faHeadset}
                       color="#7b61ff"
                       size={23}
-                      style={{marginRight:10}}
+                      style={{ marginRight: 10 }}
                     />
                     <FontAwesomeIcon
                       icon={faWhatsappSquare}
@@ -413,10 +422,13 @@ function HomeScreen({ navigation }) {
                     <Text style={{ fontSize: 13, }}>Electricity</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={{
-                    alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
-                    width: 100, borderRadius: 8
-                  }}>
+                  <TouchableOpacity
+                  onPress={closeModal5}
+                    // onPress={()=> navigation.navigate ('FoodIntro')}
+                    style={{
+                      alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
+                      width: 100, borderRadius: 8
+                    }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
                       <FontAwesomeIcon icon={faTicket} size={25} color='#7B61FF' />
                     </View>
@@ -515,6 +527,40 @@ function HomeScreen({ navigation }) {
 
 
 
+            </View>
+
+          </View>
+        </View>
+      </Modal>
+
+
+
+      {/* ============== Ticket Coming soon Modal ============== */}
+      <Modal
+        visible={modalVisibility5}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+          <Pressable style={{ flex: 1 }} onPress={closeModal5} >
+          </Pressable>
+          <View style={{ backgroundColor: "#fcfbff", height: 400, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+            <View style={{ alignItems: 'flex-end', margin: 10 }}>
+              <TouchableOpacity onPress={closeModal5}>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  size={24}
+                  color='#7B61FF'
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View>
+
+              <View style={{alignItems:'center',}}>
+                <Image source={require('../../assets/comingsoon.png')} style={{ width: 300, height: 300 }} />
+
+              </View>
             </View>
 
           </View>

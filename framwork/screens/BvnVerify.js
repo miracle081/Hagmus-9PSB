@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput, image, Pressable, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput, image, Pressable, Alert, Platform, KeyboardAvoidingView } from "react-native";
 import { styles } from "../styles/aboutus";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight, faArrowLeft, faBookOpenReader, faChevronDown, faCircleQuestion, faCreditCard, faEnvelope, faGlobe, faHome, faIdCard, faMessage, faSquareCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -37,18 +37,36 @@ export function BvnVerify({ navigation }) {
                 setModalVisibility2(!modalVisibility2);
         };
 
+        const [modalVisibility3, setModalVisibility3] = useState(false)
+        const closeModal3 = () => {
+                setModalVisibility3(!modalVisibility3);
+        };
+
         useEffect(() => {
                 // setPreloader(false)
                 //   console.log(userInfo);
         }, [])
 
+        const handleDateChange = (text) => {
+                const cleaned = text.replace(/[^\d]/g, '');
+
+                let formatted = '';
+                if (cleaned.length > 6) {
+                        formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
+                } else if (cleaned.length > 4) {
+                        formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}`;
+                } else if (cleaned.length > 0) {
+                        formatted = `${cleaned.slice(0, 4)}`;
+                }
+                setDob(formatted);
+        };
 
 
         function verifyBVN() {
                 setPreloader(true)
                 const formdata = {
                         bvn: bvn,
-                        date_of_birth: userInfo.dob,
+                        date_of_birth: dob,
                         phone_number: userInfo.phone,
                         otp,
                         otp_id,
@@ -88,7 +106,8 @@ export function BvnVerify({ navigation }) {
         function sendBvnOtp() {
                 setPreloader(true)
                 const formdata = {
-                        phone_number: userInfo.phone,
+                        // phone_number: userInfo.phone,
+                        bvn: bvn,
                 }
                 const requestOptions = {
                         method: 'POST',
@@ -154,7 +173,7 @@ export function BvnVerify({ navigation }) {
                                 setPreloader(false)
                                 console.log('error', error)
                                 if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                                else Alert.alert("Error!", error.message)
                         });
         }
 
@@ -242,17 +261,17 @@ export function BvnVerify({ navigation }) {
                                                         <View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦50,000</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦0</Text>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦300,000</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦500,000</Text>
                                                                 </View>
 
                                                         </View>
                                                 </View>
 
-                                                <TouchableOpacity onPress={() => { sendBvnOtp() }} disabled={userInfo.kyc_level == "2"}
+                                                <TouchableOpacity onPress={() => { closeModal3() }} disabled={userInfo.kyc_level == "2"}
                                                         style={{ backgroundColor: userInfo.kyc_level == "2" ? "#6e51ff" : '#b8adf1', padding: 15, margin: 10, borderRadius: 8 }}>
                                                         <View style={{}}>
                                                                 <View style={{
@@ -266,7 +285,7 @@ export function BvnVerify({ navigation }) {
                                                                 <View>
                                                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                                 <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦300,000</Text>
+                                                                                <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦5,000,000</Text>
                                                                         </View>
                                                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                                 <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>
@@ -277,6 +296,8 @@ export function BvnVerify({ navigation }) {
 
                                                         </View>
                                                 </TouchableOpacity>
+
+
 
                                                 {/* <TouchableOpacity
                                                         onPress={closeModal2}
@@ -329,6 +350,58 @@ export function BvnVerify({ navigation }) {
                         {/* ============== BVN Modal ============== */}
 
                         <Modal
+                                visible={modalVisibility3}
+                                animationType="slide"
+                                transparent={true}
+                        >
+                                <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+                                        <Pressable style={{ flex: 1 }} onPress={closeModal3} >
+                                        </Pressable>
+                                        <View style={{ backgroundColor: "#fcfbff", height: 550, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                                                <View style={{ alignItems: 'flex-end', margin: 10 }}>
+                                                        <TouchableOpacity onPress={closeModal3}>
+                                                                <FontAwesomeIcon
+                                                                        icon={faXmark}
+                                                                        size={24}
+                                                                        color='#7B61FF'
+                                                                />
+                                                        </TouchableOpacity>
+                                                </View>
+
+                                                <View style={{ marginTop: 0, padding: 15 }}>
+                                                        <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                                                                <Text style={{ fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Tier 2 Upgrade</Text>
+                                                        </View>
+                                                        <KeyboardAvoidingView
+                                                                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                                                        >
+                                                                <ScrollView>
+
+                                                                        <TextInput
+                                                                                style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
+                                                                                keyboardType='numeric'
+                                                                                placeholder='Enter BVN'
+                                                                                selectionColor={'grey'}
+                                                                                mode='outlined'
+                                                                                placeholderTextColor='#787A8D'
+                                                                                onChangeText={inp => setBvn(inp.trim())}
+                                                                        />
+
+                                                                        <TouchableOpacity onPress={() => { sendBvnOtp(); closeModal3(); }} style={styles.getStarted}>
+                                                                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Get BVN OTP</Text>
+                                                                        </TouchableOpacity>
+
+                                                                </ScrollView>
+                                                        </KeyboardAvoidingView>
+                                                </View>
+
+                                        </View>
+                                </View>
+                        </Modal >
+
+                        {/* ============== BVN Modal ============== */}
+
+                        <Modal
                                 visible={modalVisibility}
                                 animationType="slide"
                                 transparent={true}
@@ -351,36 +424,32 @@ export function BvnVerify({ navigation }) {
                                                         <View style={{ alignItems: 'center', marginBottom: 20 }}>
                                                                 <Text style={{ fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Tier 2 Upgrade</Text>
                                                         </View>
-                                                        <ScrollView>
-                                                                <TextInput
-                                                                        style={[styles.inputStyle, { marginBottom: 20, color: "gray" }]}
-                                                                        keyboardType='numeric'
-                                                                        placeholder='OTP'
-                                                                        selectionColor={'grey'}
-                                                                        mode='outlined'
-                                                                        placeholderTextColor='#787A8D'
-                                                                        onChangeText={inp => setOtp(inp.trim())}
-                                                                />
-                                                                <TextInput
-                                                                        style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
-                                                                        keyboardType='numeric'
-                                                                        placeholder='Enter BVN'
-                                                                        selectionColor={'grey'}
-                                                                        mode='outlined'
-                                                                        placeholderTextColor='#787A8D'
-                                                                        onChangeText={inp => setBvn(inp.trim())}
-                                                                />
-                                                                <TextInput
-                                                                        style={[styles.inputStyle, { marginBottom: 20, color: "gray" }]}
-                                                                        keyboardType='default'
-                                                                        placeholder='Enter Date of Birth'
-                                                                        selectionColor={'grey'}
-                                                                        mode='outlined'
-                                                                        placeholderTextColor='#787A8D'
-                                                                        value={userInfo.dob}
-                                                                        editable={false}
-                                                                />
-                                                                {/* <TextInput
+                                                        <KeyboardAvoidingView
+                                                                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                                                        >
+                                                                <ScrollView>
+                                                                        <TextInput
+                                                                                style={[styles.inputStyle, { marginBottom: 20, color: "gray" }]}
+                                                                                keyboardType='numeric'
+                                                                                placeholder='OTP'
+                                                                                selectionColor={'grey'}
+                                                                                mode='outlined'
+                                                                                placeholderTextColor='#787A8D'
+                                                                                onChangeText={inp => setOtp(inp.trim())}
+                                                                        />
+
+                                                                        <Text style={styles.signupText}>Enter Date of birth on BVN (YYYY-MM-DD)</Text>
+                                                                        <TextInput
+                                                                                style={[styles.inputStyle, { marginBottom: 20 }]}
+                                                                                selectionColor={'grey'}
+                                                                                placeholder="YYYY-MM-DD"
+                                                                                mode='outlined'
+                                                                                placeholderTextColor='#787A8D'
+                                                                                onChangeText={handleDateChange}
+                                                                                keyboardType='numeric'
+                                                                                value={dob}
+                                                                        />
+                                                                        {/* <TextInput
                                                                         style={[styles.inputStyle, { marginBottom: 20, color: "gray" }]}
                                                                         keyboardType='numeric'
                                                                         placeholder='Date of Birth'
@@ -398,10 +467,12 @@ export function BvnVerify({ navigation }) {
                                                                         placeholderTextColor='#787A8D'
                                                                         onChangeText={inp => setBvn(inp.trim())}
                                                                 /> */}
-                                                        </ScrollView>
-                                                        <TouchableOpacity onPress={() => { closeModal(); verifyBVN() }} style={styles.getStarted}>
-                                                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Upgrade</Text>
-                                                        </TouchableOpacity>
+                                                                        <TouchableOpacity onPress={() => { closeModal(); verifyBVN() }} style={styles.getStarted}>
+                                                                                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Upgrade</Text>
+                                                                        </TouchableOpacity>
+
+                                                                </ScrollView>
+                                                        </KeyboardAvoidingView>
                                                 </View>
 
                                         </View>

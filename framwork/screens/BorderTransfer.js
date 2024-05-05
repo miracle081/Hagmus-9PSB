@@ -12,6 +12,8 @@ import { faAddressBook } from "@fortawesome/free-regular-svg-icons";
 import { handleError } from "../components/HandleRequestError";
 import { baseURL } from "../../config";
 import { PinTransactionModal } from "../components/PinModal";
+import { formatMoney } from "../components/FormatMoney";
+import { theme } from "../components/Theme";
 
 export function BorderTransfer({ navigation }) {
   const { token, setPreloader, userInfo, accountInfo, pin, setPin, getAccountInfo } = useContext(AppContext);
@@ -21,6 +23,7 @@ export function BorderTransfer({ navigation }) {
   const [pinModalVisibility, setPinMetModalVisibility] = useState(false);
   const [selectedBank, setSelectedBank] = useState({ bankCode: "", name: "", img: null, });
   const [amount, setAmount] = useState(0);
+  const [fAmount, setFAmount] = useState("");
   const [narration, setNarration] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [bankList, setBankList] = useState([]);
@@ -54,7 +57,7 @@ export function BorderTransfer({ navigation }) {
         setPreloader(false)
         console.log('error', error)
         if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+        else Alert.alert("Error!", error.message)
       });
   }
   useEffect(() => {
@@ -98,7 +101,7 @@ export function BorderTransfer({ navigation }) {
         setPreloader(false)
         console.log('error', error)
         if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+        else Alert.alert("Error!", error.message)
       });
   }
 
@@ -129,7 +132,7 @@ export function BorderTransfer({ navigation }) {
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
-        // console.log(response);
+        console.log(response);
         setPreloader(false)
         if (status == "success") {
           setAmount(0)
@@ -137,8 +140,8 @@ export function BorderTransfer({ navigation }) {
           getAccountInfo();
           navigation.navigate("Successful", {
             name: "",
-            amount: `${symbol("ngn")}${amount}`,
-            message: `${symbol("ngn")}${amount} has been transfered to ${actName.name} successfully`,
+            amount: `${symbol("ngn")}${formatMoney(amount)}`,
+            message: `${symbol("ngn")}${formatMoney(amount)} has been transfered to ${actName.name} successfully`,
             screen: "BorderTransfer"
           })
         }
@@ -148,7 +151,7 @@ export function BorderTransfer({ navigation }) {
         setPreloader(false)
         console.log('error', error)
         if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+        else Alert.alert("Error!", error.message)
       });
 
   }
@@ -186,6 +189,24 @@ export function BorderTransfer({ navigation }) {
     })
     setFilteredBanks(newData);
   }
+
+  const formatNumber = (text) => {
+    const cleanedValue = text.replace(/[^0-9.]/g, '');
+    const [integerPart, decimalPart] = cleanedValue.split('.');
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let formattedValue = formattedInteger;
+    if (decimalPart !== undefined) {
+      formattedValue += '.' + decimalPart;
+    }
+    return formattedValue;
+  };
+
+  const onChangeText = (text) => {
+    // console.log(text.replace(",", ""));
+    const formattedValue = formatNumber(text);
+    setAmount(Number(text.split(",").join("")));
+    setFAmount(formattedValue);
+  };
 
   return (
     <AppSafeAreaView style={styles.container}>
@@ -313,15 +334,16 @@ export function BorderTransfer({ navigation }) {
                   <Text style={{ fontSize: 15, color: actName.color }}>{actName.name}</Text> : null
                 }
 
-                <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
+                <Text style={[styles.signupText, { marginTop: 15, }]}>Amount</Text>
                 <TextInput
-                  style={styles.inputStyle}
+                  style={[styles.inputStyle,{fontSize:18}]}
                   keyboardType='numeric'
                   placeholder='0'
                   selectionColor={'#7B61FF'}
                   mode='outlined'
                   placeholderTextColor="#999aa5"
-                  onChangeText={inp => setAmount(Number(inp.trim()))}
+                  onChangeText={inp => onChangeText(inp.trim())}
+                  value={fAmount}
                 />
 
                 <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
@@ -477,11 +499,11 @@ export function BorderTransfer({ navigation }) {
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ color: '#0e0a20', fontSize: 14, }}>Amount</Text>
-                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{amount}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{formatMoney(amount)}</Text>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ color: '#0e0a20', fontSize: 14, }}>Fee</Text>
-                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{20}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{formatMoney(20)}</Text>
                   </View>
                   <TouchableOpacity onPress={() => { setModalVisibility2(false), pinModal() }}
                     style={styles.getStarted}>

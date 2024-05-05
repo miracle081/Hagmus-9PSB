@@ -13,7 +13,13 @@ import { formatMoney } from "../../components/FormatMoney";
 export function FixedMenu({ navigation }) {
     const { savingsInfo } = useContext(AppContext);
 
-    const fixedBalance = () => savingsInfo.filter(all => all.type == "fixed").reduce((a, c) => a + Number(c.amount) + Number(c.total_interest), 0)
+    const fixedBalance = () => {
+        let amt = 0
+        savingsInfo.filter(all => all.type == "fixed").forEach(d => {
+            amt += Number(d.current_balance) + (d.status == "completed" ? 0 : Number(d.total_interest))
+        })
+        return amt
+    }
 
 
     return (

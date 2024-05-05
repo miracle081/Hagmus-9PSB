@@ -14,12 +14,15 @@ import { faClock } from "@fortawesome/free-regular-svg-icons";
 import { PinTransactionModal } from "../components/PinModal";
 import { baseURL } from "../../config";
 import { handleError } from "../components/HandleRequestError";
+import { theme } from "../components/Theme";
+import { formatMoney } from "../components/FormatMoney";
 
 export function HagmusTransfer({ navigation }) {
   const { setPreloader, accountInfo, pin, getAccountInfo, setPin, token } = useContext(AppContext);
   const [modalVisibility2, setModalVisibility2] = useState(false);
   const [pinModalVisibility, setPinMetModalVisibility] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [fAmount, setFAmount] = useState("");
   const [narration, setNarration] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [actName, setActName] = useState({});
@@ -109,8 +112,8 @@ export function HagmusTransfer({ navigation }) {
           getAccountInfo();
           navigation.navigate("Successful", {
             name: "",
-            amount: `${symbol("ngn")}${amount}`,
-            message: `${symbol("ngn")}${amount} has been transfered to ${actName.name} successfully`,
+            amount: `${symbol("ngn")}${formatMoney(amount)}`,
+            message: `${symbol("ngn")}${formatMoney(amount)} has been transfered to ${actName.name} successfully`,
             screen: "HagmusTransfer"
           })
         }
@@ -129,7 +132,7 @@ export function HagmusTransfer({ navigation }) {
       return (
         <TouchableOpacity onPress={() => { closeModal2() }}
           style={styles.getStarted}>
-          <Text style={{ fontSize: 16, }}>Next</Text>
+          <Text style={{ fontSize: 16, color:'white'}}>Next</Text>
         </TouchableOpacity>
       )
     } else {
@@ -140,6 +143,24 @@ export function HagmusTransfer({ navigation }) {
       )
     }
   }
+
+  const formatNumber = (text) => {
+    const cleanedValue = text.replace(/[^0-9.]/g, '');
+    const [integerPart, decimalPart] = cleanedValue.split('.');
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let formattedValue = formattedInteger;
+    if (decimalPart !== undefined) {
+      formattedValue += '.' + decimalPart;
+    }
+    return formattedValue;
+  };
+
+  const onChangeText = (text) => {
+    // console.log(text.replace(",", ""));
+    const formattedValue = formatNumber(text);
+    setAmount(Number(text.split(",").join("")));
+    setFAmount(formattedValue);
+  };
 
   return (
     <AppSafeAreaView style={styles.container}>
@@ -192,13 +213,14 @@ export function HagmusTransfer({ navigation }) {
 
                 <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
                 <TextInput
-                  style={styles.inputStyle}
+                  style={[styles.inputStyle, {fontSize:18}]}
                   keyboardType='numeric'
                   placeholder='0'
                   selectionColor={'#7B61FF'}
                   mode='outlined'
                   placeholderTextColor="#999aa5"
-                  onChangeText={inp => setAmount(Number(inp.trim()))}
+                  onChangeText={inp => onChangeText(inp.trim())}
+                  value={fAmount}
                 />
 
                 <Text style={[styles.signupText, { marginTop: 15 }]}>Narration (Optional)</Text>
@@ -245,7 +267,7 @@ export function HagmusTransfer({ navigation }) {
           <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
             <Pressable style={{ flex: 1 }} onPress={closeModal2} >
             </Pressable>
-            <View style={{ backgroundColor: "#16171D", borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+            <View style={{ backgroundColor: "#e4e2eb", borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
               <View style={{ alignItems: 'flex-end', margin: 10, marginBottom: 0 }}>
                 <TouchableOpacity onPress={closeModal2}>
                   <FontAwesomeIcon
@@ -256,44 +278,46 @@ export function HagmusTransfer({ navigation }) {
                 </TouchableOpacity>
               </View>
               <Text style={{
-                color: 'white', fontWeight: 'bold', marginTop: 0,
+                color: '#1e1839', fontWeight: 'bold', marginTop: 0,
                 fontSize: 17, margin: 10, textAlign: "center"
               }}>Confirm Details</Text>
               <View>
-                <Text style={{ backgroundColor: '#21242D', marginHorizontal: 10, padding: 7, borderRadius: 10, color: "#ffffffab" }}>
-                  Confirm the transfer details are correct before you proceed to avoid mistakes. Successful transfers cannot be reversed.
-                </Text>
+              <View style={{ backgroundColor: '#dbd5fa', padding: 7, marginHorizontal: 10, borderRadius: 10, }}>
+                  <Text style={{ color: "#1e1839" }}>
+                    Confirm the transfer details are correct before you proceed to avoid mistakes. Successful transfers cannot be reversed.
+                  </Text>
+                </View>
 
                 <View style={{ marginVertical: 10 }}>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "center" }}>
                     <View style={{ alignItems: "center", justifyContent: "center" }}>
 
                       <Image source={require("../../assets/icon.png")} style={{ width: 40, height: 40, borderRadius: 100, }} />
-                      <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3 }}>HagmusPay</Text>
+                      <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3 }}>Hagmus</Text>
                     </View>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Account Number</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{accountNumber}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Account Number</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{accountNumber}</Text>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Account Name</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Account Name</Text>
                     <View style={{ alignItems: "flex-end", flex: 1 }}>
                       {/* <FontAwesomeIcon icon={faCheckCircle} color="#7B61FF" /> */}
-                      <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, flex: 1 }}> {actName.name}</Text>
+                      <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, flex: 1 }}> {actName.name}</Text>
                     </View>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Amount</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{amount}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Amount</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{formatMoney(amount)}</Text>
                   </View>
                   <View style={{ margin: 10, flexDirection: "row", justifyContent: "space-between" }}>
-                    <Text style={{ color: '#949597', fontSize: 14, }}>Fee</Text>
-                    <Text style={{ color: '#e0e0e1', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{0}</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, }}>Fee</Text>
+                    <Text style={{ color: '#0e0a20', fontSize: 14, marginStart: 3, fontWeight: "bold" }}>{symbol("ngn")}{formatMoney(0)}</Text>
                   </View>
                   <TouchableOpacity onPress={() => { closeModal2(), pinModal() }}
                     style={styles.getStarted}>
-                    <Text style={{ fontSize: 16, }}>Confirm</Text>
+                    <Text style={{ fontSize: 16, color:'white' }}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>

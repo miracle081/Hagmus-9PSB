@@ -16,6 +16,7 @@ import { handleError } from "../../components/HandleRequestError";
 
 
 const options = [
+    { days: 30, label: '1 month', pa: 1.7 },
     { days: 60, label: '2 months', pa: 3.3 },
     { days: 90, label: '3 months', pa: 5 },
     { days: 120, label: '4 months', pa: 6.6 },
@@ -42,6 +43,7 @@ export function TargetDate({ navigation }) {
     const [description, setDescription] = useState("");
     const [interest, setInterest] = useState(0);
     const [frequency, setFrequency] = useState("");
+    const [auto_deposit, setAuto_deposit] = useState(false);
 
     // setPreloader(false)
 
@@ -82,7 +84,7 @@ export function TargetDate({ navigation }) {
 
 
     function btnVal() {
-        if (amount <= 0 || days === 0 || frequency === "" || targetAmount === 0) {
+        if (amount <= 0 || frequency === "" || targetAmount === 0) {
             return (
                 <View style={[styles.getStarted, { backgroundColor: "#7b61ff94" }]}>
                     <Text style={{ fontSize: 16, }}>Next</Text>
@@ -104,9 +106,10 @@ export function TargetDate({ navigation }) {
             description,
             amount,
             type: "target",
-            tenure: days,
+            // tenure: days,
             target: targetAmount,
             frequency,
+            auto_deposit
         }
         const requestOptions = {
             method: 'POST',
@@ -183,7 +186,7 @@ export function TargetDate({ navigation }) {
                                             onChangeText={inp => setTargetAmount(Number(inp.trim()))}
                                         />
 
-                                        <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
+                                        {/* <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
                                         <View style={{ position: "relative" }}>
                                             <Pressable>
                                                 <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
@@ -193,11 +196,11 @@ export function TargetDate({ navigation }) {
                                                 style={styles.calenderIcon}>
                                                 <FontAwesomeIcon icon={faCalendarAlt} color="white" />
                                             </TouchableOpacity>
-                                        </View>
+                                        </View> */}
 
                                         <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
                                         <View style={{ position: "relative" }}>
-                                            <Pressable>
+                                            <Pressable onPress={closeFrequency}>
                                                 <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
                                             </Pressable>
                                             <TouchableOpacity
@@ -218,7 +221,16 @@ export function TargetDate({ navigation }) {
                                                 onChangeText={inp => setDescription(inp.trim())}
                                             />
                                         </View>
+
+                                        <TouchableOpacity style={styles.reasons} onPress={() => setAuto_deposit(!auto_deposit)}>
+                                            <Text style={{ fontSize: 18, }}>Auto Deposit</Text>
+                                            <View style={[styles.radio, { borderColor: auto_deposit ? "#7B61FF" : "gray", }]}>
+                                                <View style={[styles.radioInner, { backgroundColor: auto_deposit ? "#7B61FF" : "transparent" }]} />
+                                            </View>
+                                        </TouchableOpacity>
+
                                     </View>
+
 
                                     <View style={{ padding: 15, marginTop: 10, }}>
                                         {btnVal()}
@@ -308,7 +320,7 @@ export function TargetDate({ navigation }) {
                                         data={frequencyOption} renderItem={({ item }) => {
                                             // console.log(item);
                                             return (
-                                                <TouchableOpacity onPress={() => setFrequency(item)}>
+                                                <TouchableOpacity onPress={() => {setFrequency(item); closeFrequency();}}>
                                                     <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
                                                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                                             <Checkbox
