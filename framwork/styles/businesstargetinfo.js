@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
 
     body: {
         marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : null,
+        flex:1,
         // marginHorizontal:5,
     },
 

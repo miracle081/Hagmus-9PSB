@@ -84,7 +84,15 @@ import { TravelInfo } from "../screens/Savings/TravlInfo";
 import { TargetHistory } from "../screens/Savings/TargetHistory";
 import { TargetHistoryView } from "../screens/Savings/TargetHistoryView";
 import { Portfolio } from "../screens/Portfolio";
+
+import { NairaCard } from "../screens/Dollarcard/NairaCard";
 // import { Treasury } from "../screens/Savings/Treasury";
+///////// HFOOS//////////////////
+import { Landing } from "../screens/Hfood/Landing";
+import { Menu } from "../screens/Hfood/Menu";
+import { FoodMenu } from "../screens/Hfood/FoodMenu";
+import { ConfirmFood } from "../screens/Hfood/ConfirmFood";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -205,6 +213,16 @@ export function StackNavigator() {
             <Stack.Screen name='TargetHistory' component={TargetHistory} />
             <Stack.Screen name='TargetHistoryView' component={TargetHistoryView} />
             <Stack.Screen name='Portfolio' component={Portfolio} />
+            <Stack.Screen name='NairaCard' component={NairaCard} />
+
+
+            <Stack.Screen name='Landing' component={Landing} />
+            <Stack.Screen name='Menu' component={Menu} />
+            <Stack.Screen name='FoodMenu' component={FoodMenu} />
+            <Stack.Screen name='ConfirmFood' component={ConfirmFood} />
+            
+
+        
         </Stack.Navigator>
     )
 }

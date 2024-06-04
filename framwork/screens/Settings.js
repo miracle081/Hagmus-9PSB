@@ -145,10 +145,10 @@ export function Settings({ navigation }) {
                     <FontAwesomeIcon icon={faRightLeft} color="#776e9d" size={18} />
                   </View>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>HagmusPay Tag</Text>
+                    <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>Referral Tag</Text>
                   </View>
                 </View>
-                <Text style={{ fontSize: 16, }}>@{userInfo.username}</Text>
+                <Text style={{ fontSize: 16, }}>{userInfo.username}</Text>
               </View>
             </TouchableOpacity>
             <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />
@@ -178,7 +178,7 @@ export function Settings({ navigation }) {
                     <FontAwesomeIcon icon={faGift} color="#776e9d" size={18} />
                   </View>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>Referral</Text>
+                    <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>Bonus</Text>
                   </View>
                 </View>
                 <FontAwesomeIcon icon={faAngleRight} color="black" size={18} />

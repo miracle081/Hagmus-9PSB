@@ -3,19 +3,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../globals/AppContext';
 import { baseURL } from '../../config';
 import { handleError } from '../components/HandleRequestError';
-import { AppSafeAreaView } from '../components/AppSafeAreaView';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PieChart } from 'react-native-chart-kit';
 import { formatMoney } from '../components/FormatMoney';
 import { symbol } from '../components/currencySymbols';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faAngleDown, faMoneyBill, faWallet } from '@fortawesome/free-solid-svg-icons';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import MonthPicker from 'react-native-month-year-picker';
 import moment from 'moment';
-import { ToastApp } from '../components/Toast';
 import { YearMonthPicker } from '../components/YearMonthPicker';
+import { PieChart} from "react-native-gifted-charts";
 
 export function Portfolio() {
     const { setPreloader, token } = useContext(AppContext);
@@ -84,28 +80,33 @@ export function Portfolio() {
     const data = [
         {
             name: "Transfar",
-            transactions: histories.filter(all => all.category == "withdrawal").reduce((a, c) => a + parseFloat(c.amount), 0),
+            value: histories.filter(all => all.category == "withdrawal").reduce((a, c) => a + parseFloat(c.amount), 0),
             color: "#7B61FF",
+            gradientCenterColor: "#a290f8",
         },
         {
             name: "Airtime",
-            transactions: histories.filter(all => all.category == "airtime").reduce((a, c) => a + parseFloat(c.amount), 0),
-            color: "#bb0802",
+            value: histories.filter(all => all.category == "airtime").reduce((a, c) => a + parseFloat(c.amount), 0),
+            color: "#009FFF",
+            gradientCenterColor: "#006DFF",
         },
         {
             name: "Data",
-            transactions: histories.filter(all => all.category == "data").reduce((a, c) => a + parseFloat(c.amount), 0),
-            color: "#8b0187",
+            value: histories.filter(all => all.category == "data").reduce((a, c) => a + parseFloat(c.amount), 0),
+            color: "#93FCF8",
+            gradientCenterColor: "#3BE9DE",
         },
         {
             name: "Electricity",
-            transactions: histories.filter(all => all.category == "electricity").reduce((a, c) => a + parseFloat(c.amount), 0),
-            color: "#c68e01",
+            value: histories.filter(all => all.category == "electricity").reduce((a, c) => a + parseFloat(c.amount), 0),
+            color: "#BDB2FA",
+            gradientCenterColor: "#8F80F3",
         },
         {
             name: "TV",
-            transactions: histories.filter(all => all.category == "cable_tv").reduce((a, c) => a + parseFloat(c.amount), 0),
-            color: "#0024da",
+            value: histories.filter(all => all.category == "cable_tv").reduce((a, c) => a + parseFloat(c.amount), 0),
+            color: "#FFA5BA",
+            gradientCenterColor: "#FF7F97",
         }
     ];
 
@@ -129,8 +130,8 @@ export function Portfolio() {
     };
 
     return (
-        <SafeAreaView>
-            <View style={{ padding: 20 }}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{ padding: 20, flex: 1 }}>
                 <View style={{ alignItems: 'center', marginBottom: 10 }}>
                     <Text style={{ fontSize: 20 }}>Portfolio</Text>
                 </View>
@@ -171,33 +172,36 @@ export function Portfolio() {
                     </View>
                     <Text style={{ fontSize: 16, color: '#040111' }}>{symbol("ngn")}{formatMoney(moneyOut())}</Text>
                 </View>
-                <View style={{ alignItems: "center" }}>
-                    <PieChart
-                        data={data}
-                        width={Dimensions.get("screen").width - 40}
-                        height={Dimensions.get("screen").width - 70}
-                        chartConfig={chartConfig}
-                        accessor={"transactions"}
-                        backgroundColor={"transparent"}
-                        // paddingLeft={"15"}
-                        center={[90, 0]}
-                        absolute={false}
-                        hasLegend={false}
-                    />
-                </View>
-                <FlatList
-                    data={data} renderItem={({ item }) => {
-                        // console.log(item);
-                        return (
-                            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, justifyContent: "space-between" }}>
-                                <View style={{ alignItems: 'center', flexDirection: "row" }}>
-                                    <View style={{ marginRight: 10, backgroundColor: item.color, borderRadius: 50, padding: 15 }}></View>
-                                    <Text style={{ color: '#3b3c43', fontSize: 15, textTransform: "capitalize" }}>{item.name}</Text>
+                <View style={{ marginTop: 20, padding: 16, borderRadius: 20, backgroundColor: '#232B5D', }}>
+                    <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>Statistics</Text>
+
+                    <View style={{ padding: 20, alignItems: 'center' }}>
+                        <PieChart
+                            data={data}
+                            donut
+                            showGradient
+                            sectionAutoFocus
+                            radius={90}
+                            innerRadius={60}
+                            innerCircleColor={'#232B5D'}
+                        />
+                    </View>
+
+                    <FlatList
+                        data={data} renderItem={({ item }) => {
+                            // console.log(item);
+                            return (
+                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, justifyContent: "space-between" }}>
+                                    <View style={{ alignItems: 'center', flexDirection: "row" }}>
+                                        <View style={{ marginRight: 10, backgroundColor: item.color, borderRadius: 50, padding: 10 }}></View>
+                                        <Text style={{ color: '#a6c6fe', fontSize: 15, textTransform: "capitalize" }}>{item.name}</Text>
+                                    </View>
+                                    <Text style={{ color: '#ffffff', fontSize: 15, }}>{symbol("ngn")}{formatMoney(item.value)}</Text>
                                 </View>
-                                <Text style={{ color: '#040111', fontSize: 15, }}>{symbol("ngn")}{formatMoney(item.transactions)}</Text>
-                            </View>
-                        )
-                    }} key={({ item }) => { item.id }} />
+                            )
+                        }} key={({ item }) => { item.id }} />
+                </View>
+
             </View>
         </SafeAreaView>
     )

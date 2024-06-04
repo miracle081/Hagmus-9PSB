@@ -23,14 +23,16 @@ import { handleError } from '../components/HandleRequestError';
 
 
 export function ProfileSettings({ navigation }) {
-  const { setPreloader, profileImage, userInfo, token, getAccountInfo } = useContext(AppContext);
+  const { setPreloader, profileImage, userInfo, token, getAccountInfo, getUserInfo } = useContext(AppContext);
   const [image, setImage] = useState({ uri: null, file: {} });
   const [modalVisibility, setModalVisibility] = useState(false);
   const [preVisibility, setpreVisibility] = useState(false);
   const [imageMD, setimageMD] = useState(false);
-  const [fName, setfName] = useState('');
-  const [lName, setlName] = useState('');
-  const [address, setaddress] = useState('');
+  const [address, setAddress] = useState(userInfo.address);
+  const [state, setState] = useState(userInfo.state);
+  const [city, setCity] = useState(userInfo.city);
+  const [postal_code, setPostal_code] = useState(userInfo.postal_code);
+  const [dob, setDob] = useState(userInfo.dob);
   const [phone, setphone] = useState('');
   const width = Dimensions.get("screen").width
 
@@ -132,7 +134,7 @@ export function ProfileSettings({ navigation }) {
         setPreloader(false)
         console.log('error', error)
         if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+        else Alert.alert("Error!", error.message)
       });
   }
 
@@ -141,6 +143,56 @@ export function ProfileSettings({ navigation }) {
     setPreloader(true);
     uplaod()
 
+  }
+
+  const handleDateChange = (text) => {
+    const cleaned = text.replace(/[^\d]/g, '');
+
+    let formatted = '';
+    if (cleaned.length > 6) {
+      formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
+    } else if (cleaned.length > 4) {
+      formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}`;
+    } else if (cleaned.length > 0) {
+      formatted = `${cleaned.slice(0, 4)}`;
+    }
+    setDob(formatted);
+  };
+
+  function updateProfile() {
+    setPreloader(true)
+    const formdata = {
+      address,
+      state,
+      city,
+      postal_code,
+      dob,
+    }
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(formdata),
+      redirect: 'follow'
+    };
+    fetch(`${baseURL}/api/profile/update`, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        const { status, message, data } = result
+        // console.log(result);
+        setPreloader(false)
+        if (status == "success") {
+          getUserInfo()
+          Alert.alert('Profile Image!', message,)
+        }
+        handleError(status, message);
+      })
+      .catch(error => {
+        console.log('error', error)
+        setPreloader(false)
+      });
   }
 
   return (
@@ -206,10 +258,17 @@ export function ProfileSettings({ navigation }) {
                 value={userInfo.phone}
               />
 
-              <Text style={styles.signupText}>Date of birth</Text>
-              <View >
-                <Text style={[styles.inputStyle, { paddingVertical: 10 }]}>{userInfo.dob || "MM/DD/YYYY"}</Text>
-              </View>
+              <Text style={styles.signupText}>Date of birth (YYYY-MM-DD)</Text>
+              <TextInput
+                style={styles.inputStyle}
+                selectionColor={'grey'}
+                placeholder="YYYY-MM-DD"
+                mode='outlined'
+                placeholderTextColor='#787A8D'
+                onChangeText={handleDateChange}
+                keyboardType='numeric'
+                value={dob}
+              />
 
               <Text style={styles.signupText}>Address</Text>
               <TextInput
@@ -217,8 +276,35 @@ export function ProfileSettings({ navigation }) {
                 keyboardType='default'
                 placeholder='Address'
                 mode='outlined'
-                editable={false}
-                value={userInfo.address}
+                onChangeText={inp => setAddress(inp.trim())}
+                value={address}
+              />
+              <Text style={styles.signupText}>State</Text>
+              <TextInput
+                style={styles.inputStyle}
+                keyboardType='default'
+                placeholder='State'
+                mode='outlined'
+                onChangeText={inp => setState(inp.trim())}
+                value={state}
+              />
+              <Text style={styles.signupText}>City</Text>
+              <TextInput
+                style={styles.inputStyle}
+                keyboardType='default'
+                placeholder='City'
+                mode='outlined'
+                onChangeText={inp => setCity(inp.trim())}
+                value={city}
+              />
+              <Text style={styles.signupText}>Postal Code</Text>
+              <TextInput
+                style={styles.inputStyle}
+                keyboardType='default'
+                placeholder='Postal Code'
+                mode='outlined'
+                onChangeText={inp => setPostal_code(inp.trim())}
+                value={postal_code}
               />
 
               <Text style={styles.signupText}>Email</Text>
@@ -229,6 +315,10 @@ export function ProfileSettings({ navigation }) {
                 editable={false}
                 value={userInfo.email}
               />
+
+              <TouchableOpacity onPress={updateProfile} style={styles.getStarted}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Update Profile</Text>
+              </TouchableOpacity>
 
             </View>
           </ScrollView>

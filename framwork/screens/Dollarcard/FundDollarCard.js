@@ -50,36 +50,8 @@ export function FundDollarCard({ navigation }) {
             });
     }
 
-    function getRate() {
-        setPreloader(true)
-        const requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            headers: {
-                authorization: `bearer ${token}`
-            }
-        };
-
-        fetch(baseURL + "/api/cards/exchange-rate", requestOptions)
-            .then(response => response.json())
-            .then(result => {
-                const { data, status, message } = result
-                // console.log(result);
-                if (status == "success") {
-                    setRate(data.rate)
-                    setPreloader(false)
-                }
-                handleError(status, message);
-            })
-            .catch(error => {
-                setPreloader(false)
-                console.log('error', error)
-            });
-    }
-
     useEffect(() => {
         // setPreloader(false)
-        getRate()
         getCardInfo();
     }, []);
 
@@ -183,17 +155,17 @@ export function FundDollarCard({ navigation }) {
                             }}>
                             <Text style={{ color: '#7B61FF', fontSize: 13, marginLeft: 8 }}>Enter Funding Amount</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                                <Text style={{ fontSize: 17, marginLeft: 8 }}>$</Text>
+                                <Text style={{ fontSize: 17, marginLeft: 8 }}>{symbol("ngn")}</Text>
                                 <TextInput
                                     style={{ width: "98%", padding: 2, fontSize: 18, }}
                                     selectionColor={'#7B61FF'}
                                     keyboardType='numeric'
-                                    onChangeText={(inp) => { converter(Number(inp)) }}
+                                    onChangeText={(inp) => { setAmount(Number(inp)) }}
                                 />
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', marginTop: 18, alignItems: 'center' }}>
+                        {/* <View style={{ flexDirection: 'row', marginTop: 18, alignItems: 'center' }}>
                             <View style={{ backgroundColor: '#d1caf8', padding: 5, marginRight: 10, borderRadius: 100 }}>
                                 <FontAwesomeIcon icon={faRotate} color="#15075e" />
                             </View>
@@ -207,12 +179,12 @@ export function FundDollarCard({ navigation }) {
                             </View>
                             <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#15075e', letterSpacing: 0.5 }}>
                                 Funding fee : 1.8% </Text>
-                        </View>
+                        </View> */}
 
                         <View style={{ padding: 15, backgroundColor: '#d1caf8', marginTop: 18, borderRadius: 10, marginBottom: 10 }}>
                             <Text style={{ marginBottom: 3, fontSize: 13, color: '#15075e' }}>Amount to be debited form your account</Text>
                             <Text style={{ marginBottom: 3, fontSize: 18, color: '#15075e', fontWeight: 'bold', letterSpacing: 0.5 }}>
-                                {symbol("ngn")}{formatMoney(convertionAmount)}</Text>
+                                {symbol("ngn")}{formatMoney(amount)}</Text>
                         </View>
 
                         <View style={{ alignItems: 'center', marginTop: 15 }}>

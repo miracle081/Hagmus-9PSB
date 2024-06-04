@@ -31,20 +31,20 @@ export function CardIntro({ navigation }) {
             <Image source={require('../../assets/card1.png')} style={{ width: 250, height: 375, marginBottom:5 }} />
           </View>
           <View style={{ alignItems: 'center', margin: 20 }}>
-            <Text style={{ fontSize: 15, color: '#464646' }}>Your online needs, Shop and Pay Globally</Text>
+            <Text style={{ fontSize: 15, color: '#464646' }}>Your online needs, Shop and Pay Instantly</Text>
           </View>
 
 
-          <View
+          {/* <View
             style={{ backgroundColor: '#7B61FF', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 18 }}>Coming Soon...</Text>
-          </View>
+          </View> */}
 
-          {/* <TouchableOpacity
-            onPress={() => navigation.navigate('DollarCards')}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('NairaCard')}
             style={{ backgroundColor: '#7B61FF', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center' }}>
-            <Text style={{ color: 'white', fontSize: 15 }}>Get Dollar Card</Text>
-          </TouchableOpacity> */}
+            <Text style={{ color: 'white', fontSize: 15 }}>Get Naira Virtual Card</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

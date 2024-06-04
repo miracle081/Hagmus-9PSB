@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
         alignItems:'center',
         justifyContent:'space-between',
         padding:18,
-        backgroundColor:'#e1def5',
+        backgroundColor:'#ded9ff',
         borderRadius:8
     },
     getStarted: {

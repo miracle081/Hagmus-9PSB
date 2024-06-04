@@ -1,7 +1,7 @@
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput, image, Pressable, Alert, Platform, KeyboardAvoidingView } from "react-native";
 import { styles } from "../styles/aboutus";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAngleRight, faArrowLeft, faBookOpenReader, faChevronDown, faCircleQuestion, faCreditCard, faEnvelope, faGlobe, faHome, faIdCard, faMessage, faSquareCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faAngleRight, faArrowLeft, faBookOpenReader, faChevronDown, faCircleQuestion, faCreditCard, faEnvelope, faGlobe, faHome, faIdCard, faInfoCircle, faMessage, faSquareCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { faFacebook, faLinkedin, faReadme, faTelegram, faTwitter, faWeebly } from "@fortawesome/free-brands-svg-icons";
 import { ModalAlert } from "../components/ModalAlert";
 import { useContext, useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import { handleError } from "../components/HandleRequestError";
 import { Picker } from "@react-native-picker/picker";
 import { faCheckCircle } from "@fortawesome/free-regular-svg-icons";
 import { uriToBlob } from "../components/UriToBlob";
+import { theme } from "../components/Theme";
 
 export function BvnVerify({ navigation }) {
         const { userUID, setDocID, setPreloader, userInfo, token, getUserInfo } = useContext(AppContext);
@@ -113,6 +114,7 @@ export function BvnVerify({ navigation }) {
                         method: 'POST',
                         headers: {
                                 'Content-Type': 'application/json',
+                                'accept': 'application/json',
                                 authorization: `bearer ${token}`
                         },
                         body: JSON.stringify(formdata),
@@ -124,7 +126,7 @@ export function BvnVerify({ navigation }) {
                         .then(response => {
                                 const { data, status, message } = response;
                                 setPreloader(false)
-                                // console.log(response);
+                                console.log(response);
                                 if (status == "success") {
                                         closeModal();
                                         setOtp_id(data.otpId)
@@ -261,11 +263,11 @@ export function BvnVerify({ navigation }) {
                                                         <View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Daily Transaction Limit:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦0</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦5,000,000</Text>
                                                                 </View>
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                                         <Text style={{ fontSize: 15, color: 'white', marginTop: 10 }}>Maximum Account Balance:</Text>
-                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>₦500,000</Text>
+                                                                        <Text style={{ fontSize: 16, color: 'white', marginTop: 3, fontWeight: 'bold' }}>Unlimited</Text>
                                                                 </View>
 
                                                         </View>
@@ -279,8 +281,9 @@ export function BvnVerify({ navigation }) {
                                                                         flexDirection: 'row', alignItems: 'center'
                                                                 }}>
                                                                         <Image source={require('../../assets/medal.png')} style={{ width: 35, height: 35, }} />
-                                                                        <Text style={{ fontWeight: 'bold', fontSize: 17, color: 'white' }}>Tier 2</Text>
+                                                                        <Text style={{ fontWeight: 'bold', fontSize: 17, color: 'white' }}>Update BVN</Text>
                                                                 </View>
+                                                                <Text style={{ fontSize: 10, fontWeight: 'bold' }}>Please disregard if you have updated your BVN upon creation your account.</Text>
                                                                 <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />
                                                                 <View>
                                                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -421,8 +424,17 @@ export function BvnVerify({ navigation }) {
                                                 </View>
 
                                                 <View style={{ marginTop: 0, padding: 15 }}>
-                                                        <View style={{ alignItems: 'center', marginBottom: 20 }}>
+                                                        {/* <View style={{ alignItems: 'center', marginBottom: 20 }}>
                                                                 <Text style={{ fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Tier 2 Upgrade</Text>
+                                                        </View> */}
+                                                        <View style={{ marginBottom: 30 }}>
+                                                                <Text style={{ textAlign: "center", marginBottom: 20, fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Tier 2 Upgrade</Text>
+                                                                <View style={{ backgroundColor: theme.colors.primary + 20, borderColor: theme.colors.primary, borderWidth: 0.3, borderRadius: 8, padding: 10, flexDirection: "row", alignItems: "center", gap: 10 }}>
+                                                                        <FontAwesomeIcon icon={faInfoCircle} size={25} color={theme.colors.primary} />
+                                                                        <Text>
+                                                                                Expect OTP to come before 1 - 2 minutes.
+                                                                        </Text>
+                                                                </View>
                                                         </View>
                                                         <KeyboardAvoidingView
                                                                 behavior={Platform.OS === 'ios' ? 'padding' : null}

@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { baseURL } from '../../config';
 import { signIn } from '../components/LoginFunction';
+import { Feather } from '@expo/vector-icons';
 
 const formRules = yup.object({
   email: yup.string().email().required(),
@@ -22,6 +23,7 @@ const formRules = yup.object({
 export function Login({ navigation }) {
   const { setUserUID, setPreloader, setUserInfo, setToken, sendNotification } = useContext(AppContext);
   const [userAsync, setUserAsync] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     // console.log(userAsync);
@@ -130,7 +132,7 @@ export function Login({ navigation }) {
                   setPreloader(false)
                   console.log('error', error)
                   if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
-                    else Alert.alert("Error!", error.message)
+                  else Alert.alert("Error!", error.message)
                 });
             }}
 
@@ -165,24 +167,29 @@ export function Login({ navigation }) {
                       </Text>
                     </>
                     :
-                    <View>
+                    <View style={{alignItems:'center'}}>
                       <Text style={{ color: 'black', fontSize: 25, marginBottom: 5 }}>Welcome back!</Text>
-                      <Text style={{ color: '#919191', marginBottom: 20, fontSize: 17 }}>{userAsync.username}</Text>
+                      <Text style={{ color: '#919191', marginBottom: 20, fontSize: 17 }}>{userAsync.first_name}</Text>
                     </View>
                   }
 
                   {/* <Text style={styles.signupText}>Password</Text> */}
-                  <TextInput
-                    style={styles.inputStyle}
-                    secureTextEntry={true}
-                    selectionColor={'grey'}
-                    placeholder='Password'
-                    onChangeText={props.handleChange('password')}
-                    mode='outlined'
-                    autoComplete='off'
-                    autoCapitalize='none'
-                    placeholderTextColor='#787A8D'
-                  />
+                  <View style={{ position: "relative" }}>
+                    <TextInput
+                      style={styles.inputStyle}
+                      secureTextEntry={!showPassword}
+                      selectionColor={'grey'}
+                      placeholder='Password'
+                      onChangeText={props.handleChange('password')}
+                      mode='outlined'
+                      autoComplete='off'
+                      autoCapitalize='none'
+                      placeholderTextColor='#787A8D'
+                    />
+                    <TouchableOpacity style={{ position: "absolute", top: 10, right: 10 }} onPress={() => setShowPassword(!showPassword)}>
+                      <Feather name={!showPassword ? "eye" : "eye-off"} size={24} color="#7B61FF" />
+                    </TouchableOpacity>
+                  </View>
 
                   <Text style={styles.errorMessage}>
                     {props.touched.password && props.errors.password}
@@ -221,6 +228,12 @@ export function Login({ navigation }) {
                 onPress={() => navigation.navigate('Signup')}>
                 <Text style={{ color: '#050507', margin: 15 }}>Don't have an account?<Text style={{ color: '#7B61FF', fontFamily: 'Inter_400Regular', fontWeight: 'bold' }}> Register here</Text></Text>
               </TouchableOpacity>
+
+              {/* <TouchableOpacity
+                onPress={() => navigation.navigate('NinVerification')}>
+                <Text style={{ color: '#050507', margin: 15 }}>Nin VERIFICATION<Text style={{ color: '#7B61FF', fontFamily: 'Inter_400Regular', fontWeight: 'bold' }}> Register here</Text></Text>
+              </TouchableOpacity> */}
+
             </View>
             {userAsync ?
               <TouchableOpacity

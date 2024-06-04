@@ -1,7 +1,7 @@
 import { Alert, FlatList, Image, KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/businesstargetinfo";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { Checkbox } from "react-native-paper";
+import { Checkbox, Switch } from "react-native-paper";
 import { useState } from "react";
 import { getFutureTimestamp } from "../../components/DateTime";
 import moment from "moment";
@@ -115,6 +115,7 @@ export function TargetDate({ navigation }) {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
+                'accept': 'application/json',
                 authorization: `Bearer ${token}`
             },
             body: JSON.stringify(formdata),
@@ -126,7 +127,7 @@ export function TargetDate({ navigation }) {
             .then(response => {
                 const { data, status, message } = response;
                 setPreloader(false)
-                // console.log(response);
+                console.log(response);
                 if (status == "success") {
                     getSavings();
                     navigation.navigate('TargetMenu')
@@ -151,94 +152,97 @@ export function TargetDate({ navigation }) {
                     <View style={{ alignItems: 'center', margin: 15 }}>
                         <Text style={{ fontWeight: 'bold', fontSize: 20, color: 'white', textTransform: "capitalize" }}>Create {targetName} Target</Text>
                     </View>
-                    <View style={styles.vault}>
+                    <ScrollView style={{ flex: 1 }}>
+                        <View style={styles.vault}>
 
-                        <KeyboardAvoidingView
-                            behavior={Platform.OS === 'ios' ? 'padding' : null}
-                        >
-                            <ScrollView>
-                                <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                                    <Text style={{ color: '#787A8D' }}>Easily accomplish your financial goal</Text>
-                                </View>
+                            <View style={{ alignItems: 'center', marginBottom: 15 }}>
+                                <Text style={{ color: '#787A8D' }}>Easily accomplish your financial goal</Text>
+                            </View>
+                            <KeyboardAvoidingView style={{ flex: 1 }}
+                                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                            >
 
-                                <View>
-                                    <View style={{ padding: 20, }}>
-                                        <Text style={styles.signupText}>Initail Funding Amount</Text>
-                                        <TextInput
-                                            style={[styles.inputStyle, { marginBottom: 0 }]}
-                                            keyboardType='numeric'
-                                            placeholder='0'
-                                            selectionColor={'#7B61FF'}
-                                            mode='outlined'
-                                            placeholderTextColor="#787A8D"
-                                            onChangeText={inp => validation(Number(inp.trim()))}
-                                        />
-                                        {message2 != "" ? <Text style={{ marginBottom: 0, color: color }}>{message2}</Text> : null}
+                            <View style={{ }}>
+                                <View style={{ padding: 20, }}>
+                                    <Text style={styles.signupText}>Initail Funding Amount</Text>
+                                    <TextInput
+                                        style={[styles.inputStyle, { marginBottom: 0 }]}
+                                        keyboardType='numeric'
+                                        placeholder='0'
+                                        selectionColor={'#7B61FF'}
+                                        mode='outlined'
+                                        placeholderTextColor="#787A8D"
+                                        onChangeText={inp => validation(Number(inp.trim()))}
+                                    />
+                                    {message2 != "" ? <Text style={{ marginBottom: 0, color: color }}>{message2}</Text> : null}
 
-                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Target Amount</Text>
-                                        <TextInput
-                                            style={[styles.inputStyle, { marginBottom: 0 }]}
-                                            keyboardType='numeric'
-                                            placeholder='0'
-                                            selectionColor={'#7B61FF'}
-                                            mode='outlined'
-                                            placeholderTextColor="#787A8D"
-                                            onChangeText={inp => setTargetAmount(Number(inp.trim()))}
-                                        />
+                                    <Text style={[styles.signupText, { marginTop: 10, }]}>Target Amount</Text>
+                                    <TextInput
+                                        style={[styles.inputStyle, { marginBottom: 0 }]}
+                                        keyboardType='numeric'
+                                        placeholder='0'
+                                        selectionColor={'#7B61FF'}
+                                        mode='outlined'
+                                        placeholderTextColor="#787A8D"
+                                        onChangeText={inp => setTargetAmount(Number(inp.trim()))}
+                                    />
 
-                                        {/* <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
-                                        <View style={{ position: "relative" }}>
-                                            <Pressable>
-                                                <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
-                                            </Pressable>
-                                            <TouchableOpacity
-                                                onPress={closeModal}
-                                                style={styles.calenderIcon}>
-                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
-                                            </TouchableOpacity>
-                                        </View> */}
-
-                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
-                                        <View style={{ position: "relative" }}>
-                                            <Pressable onPress={closeFrequency}>
-                                                <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
-                                            </Pressable>
-                                            <TouchableOpacity
-                                                onPress={closeFrequency}
-                                                style={styles.calenderIcon}>
-                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={{ marginTop: 10 }}>
-                                            <Text style={styles.signupText}>Description</Text>
-                                            <TextInput
-                                                style={[styles.inputStyle, { marginBottom: 20 }]}
-                                                keyboardType='default'
-                                                selectionColor={'#7B61FF'}
-                                                mode='outlined'
-                                                placeholderTextColor="#787A8D"
-                                                onChangeText={inp => setDescription(inp.trim())}
-                                            />
-                                        </View>
-
-                                        <TouchableOpacity style={styles.reasons} onPress={() => setAuto_deposit(!auto_deposit)}>
-                                            <Text style={{ fontSize: 18, }}>Auto Deposit</Text>
-                                            <View style={[styles.radio, { borderColor: auto_deposit ? "#7B61FF" : "gray", }]}>
-                                                <View style={[styles.radioInner, { backgroundColor: auto_deposit ? "#7B61FF" : "transparent" }]} />
-                                            </View>
+                                    <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
+                                    <View style={{ position: "relative" }}>
+                                        <Pressable>
+                                            <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
+                                        </Pressable>
+                                        <TouchableOpacity
+                                            onPress={closeModal}
+                                            style={styles.calenderIcon}>
+                                            <FontAwesomeIcon icon={faCalendarAlt} color="white" />
                                         </TouchableOpacity>
-
                                     </View>
 
-
-                                    <View style={{ padding: 15, marginTop: 10, }}>
-                                        {btnVal()}
+                                    <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
+                                    <View style={{ position: "relative" }}>
+                                        <Pressable onPress={closeFrequency}>
+                                            <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
+                                        </Pressable>
+                                        <TouchableOpacity
+                                            onPress={closeFrequency}
+                                            style={styles.calenderIcon}>
+                                            <FontAwesomeIcon icon={faCalendarAlt} color="white" />
+                                        </TouchableOpacity>
                                     </View>
+
+                                    <View style={{ marginTop: 10 }}>
+                                        <Text style={styles.signupText}>Description</Text>
+                                        <TextInput
+                                            style={[styles.inputStyle, { marginBottom: 20 }]}
+                                            keyboardType='default'
+                                            selectionColor={'#7B61FF'}
+                                            mode='outlined'
+                                            placeholderTextColor="#787A8D"
+                                            onChangeText={inp => setDescription(inp.trim())}
+                                        />
+                                    </View>
+                                    
+
+                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 20, alignItems: "center", }} onPress={() => setAuto_deposit(!auto_deposit)}>
+                                        <Text style={{ fontSize: 18, }}>Auto Deposit</Text>
+                                        <Switch value={auto_deposit} color="#7B61FF" thumbColor="#7B61FF" onChange={() => setAuto_deposit(!auto_deposit)} />
+                                        {/* <View style={[styles.radio, { borderColor: auto_deposit ? "#7B61FF" : "gray", }]}>
+                                                <View style={[styles.radioInner, { backgroundColor: auto_deposit ? "#7B61FF" : "transparent" }]} />
+                                            </View> */}
+                                    </TouchableOpacity>
+
                                 </View>
-                            </ScrollView>
-                        </KeyboardAvoidingView>
-                    </View>
+
+                                <View style={{ padding: 15, marginTop: 5, }}>
+                                    {btnVal()}
+                                </View>
+                            </View>
+
+                            </KeyboardAvoidingView>
+                        </View>
+                    </ScrollView>
+
                 </View>
 
                 {/* ===================== Days Modal =============== */}
@@ -270,7 +274,7 @@ export function TargetDate({ navigation }) {
                                         data={options} renderItem={({ item }) => {
                                             // console.log(item);
                                             return (
-                                                <TouchableOpacity onPress={() => setDays(item.days)}>
+                                                <TouchableOpacity onPress={() => { setDays(item.days); closeModal() }}>
                                                     <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
                                                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                                             <Checkbox
@@ -320,7 +324,7 @@ export function TargetDate({ navigation }) {
                                         data={frequencyOption} renderItem={({ item }) => {
                                             // console.log(item);
                                             return (
-                                                <TouchableOpacity onPress={() => {setFrequency(item); closeFrequency();}}>
+                                                <TouchableOpacity onPress={() => { setFrequency(item); closeFrequency(); }}>
                                                     <View style={{ alignItems: 'center', flexDirection: 'row', padding: 5, justifyContent: "space-between" }}>
                                                         <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                                                             <Checkbox
@@ -341,6 +345,7 @@ export function TargetDate({ navigation }) {
                 </Modal>
 
             </View>
+
         </AppSafeAreaView>
     )
 }

@@ -34,7 +34,7 @@ export function Earn({ navigation }) {
                     <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, marginTop: 10 }}>
                         <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>Referral Code</Text>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>@{userInfo.username}</Text>
+                            <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>{userInfo.username}</Text>
                             <FontAwesomeIcon
                                 icon={faCopy}
                                 color="#7b61ff"

@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Earn } from './Earn';
 import { CardIntro } from './CardIntro';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlFood, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -129,8 +129,8 @@ function HomeScreen({ navigation }) {
     const packageName = 'com.hagmussend.dev';
 
     // Linking.openURL(`market://details?id=${packageName}`)
-    Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+    // Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
+    Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -164,7 +164,7 @@ function HomeScreen({ navigation }) {
                     Hi, {userInfo.username}
                   </Text> */}
                   <Text style={{ fontSize: 18, color: 'black', fontFamily: "EBGaramond_700Bold" }}>
-                    Hi, {userInfo.username}
+                    Hi, {userInfo.first_name}
                   </Text>
                   <Text style={{ fontSize: 10, fontFamily: "EBGaramond_700Bold", color: '#49494d' }}>Welcome, let's settle the bills!</Text>
                 </View>
@@ -423,16 +423,16 @@ function HomeScreen({ navigation }) {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                  onPress={closeModal5}
-                    // onPress={()=> navigation.navigate ('FoodIntro')}
+                  // onPress={closeModal5}
+                    onPress={()=> navigation.navigate ('Landing')}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
                       width: 100, borderRadius: 8
                     }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faTicket} size={25} color='#7B61FF' />
+                      <FontAwesomeIcon icon={faBowlFood} size={25} color='#7B61FF' />
                     </View>
-                    <Text style={{ fontSize: 13 }}>Tickets</Text>
+                    <Text style={{ fontSize: 13 }}>HFood</Text>
                   </TouchableOpacity>
                 </View>
               </View>

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { Text, View, TextInput, Alert, TouchableOpacity, Image, StatusBar, KeyboardAvoidingView, ScrollView, } from "react-native";
+import { Text, View, TextInput, Alert, TouchableOpacity, Image, StatusBar, KeyboardAvoidingView, ScrollView, Platform, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { Checkbox } from 'react-native-paper';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -11,6 +11,7 @@ import { AppContext } from '../../globals/AppContext';
 import { authentication, db } from '../../firebase/firebase';
 import { addDoc, doc, setDoc } from 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Feather } from '@expo/vector-icons';
 
 const formRules = yup.object({
   email: yup.string().email().required(),
@@ -24,6 +25,7 @@ export function Signup({ navigation }) {
   const [open, setOpen] = useState(false);
   const { setUserUID, setPreloader, setAccount, account } = useContext(AppContext);
   const [checked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function setAsyncItem(userUID,) {
     try {
@@ -130,25 +132,29 @@ export function Signup({ navigation }) {
                         {props.touched.email && props.errors.email}
                       </Text>
 
-
                       <Text style={styles.signupText}>Password</Text>
-                      <TextInput
-                        style={styles.inputStyle}
-                        secureTextEntry={true}
-                        selectionColor={'grey'}
-                        placeholderTextColor='#787A8D'
-                        placeholder='Enter your password'
-                        onChangeText={props.handleChange('password')}
-                        mode='outlined'
-                        autoCapitalize='none'
-                      />
+                      <View style={{ position: "relative" }}>
+                        <TextInput
+                          style={styles.inputStyle}
+                          secureTextEntry={!showPassword}
+                          selectionColor={'grey'}
+                          placeholderTextColor='#787A8D'
+                          placeholder='Enter your password'
+                          onChangeText={props.handleChange('password')}
+                          mode='outlined'
+                          autoCapitalize='none'
+                        />
+                        <TouchableOpacity style={{ position: "absolute", top: 10, right: 10 }} onPress={() => setShowPassword(!showPassword)}>
+                          <Feather name={!showPassword ? "eye" : "eye-off"} size={24} color="#7B61FF" />
+                        </TouchableOpacity>
+                      </View>
 
                       <Text style={styles.errorMessage}>
                         {props.touched.password && props.errors.password}
                       </Text>
 
                       <View style={styles.terms}>
-                        <View style={{ borderWidth: 0.2 }}>
+                        <View style={{ borderWidth: Platform.OS === "ios" ? 0.9 : null, marginRight: 3, borderRadius: 8 }}>
                           <Checkbox status={checked ? 'checked' : 'unchecked'}
                             onPress={() => setChecked(!checked)}
                             color='#7B61FF'
