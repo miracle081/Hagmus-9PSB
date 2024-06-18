@@ -35,16 +35,16 @@ export function CardIntro({ navigation }) {
           </View>
 
 
-          {/* <View
+          <View
             style={{ backgroundColor: '#7B61FF', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 18 }}>Coming Soon...</Text>
-          </View> */}
+          </View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => navigation.navigate('NairaCard')}
             style={{ backgroundColor: '#7B61FF', padding: 10, margin: 8, borderRadius: 8, alignItems: 'center' }}>
             <Text style={{ color: 'white', fontSize: 15 }}>Get Naira Virtual Card</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>

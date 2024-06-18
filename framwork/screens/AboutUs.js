@@ -2,7 +2,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "rea
 import { styles } from "../styles/aboutus";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight, faArrowLeft, faGlobe } from "@fortawesome/free-solid-svg-icons";
-import { faFacebook, faLinkedin, faTelegram, faTwitter, faWeebly } from "@fortawesome/free-brands-svg-icons";
+import { faFacebook, faInstagram, faLinkedin, faTelegram, faTiktok, faTwitter, faWeebly } from "@fortawesome/free-brands-svg-icons";
 
 export function AboutUs({ navigation }) {
     return (
@@ -37,10 +37,10 @@ export function AboutUs({ navigation }) {
                                     size={22}
                                     style={{ marginRight: 5 }}
                                 />
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>Follow us on Facebook</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> Facebook</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>@HagmusPay</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}>@Hagmus_africa</Text>
                             </View>
                         </View>
 
@@ -55,10 +55,10 @@ export function AboutUs({ navigation }) {
                                     size={22}
                                     style={{ marginRight: 5 }}
                                 />
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>Follow us on Twitter</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> Twitter</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>@HagmusPay</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}>@Hagmus_africa</Text>
                             </View>
                         </View>
 
@@ -68,15 +68,15 @@ export function AboutUs({ navigation }) {
                         }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <FontAwesomeIcon
-                                    icon={faTelegram}
-                                    color='#0088cc'
+                                    icon={faInstagram}
+                                    color='#dd4d84'
                                     size={22}
                                     style={{ marginRight: 5 }}
                                 />
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>Join us on Telegram</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> Telegram</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>@HagmusPay</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}>@Hagmus_africa</Text>
                             </View>
                         </View>
 
@@ -91,10 +91,28 @@ export function AboutUs({ navigation }) {
                                     size={22}
                                     style={{ marginRight: 5 }}
                                 />
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>Follow us on Linkedin</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> Linkedin</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>@HagmusPay</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> @Hagmus_africa</Text>
+                            </View>
+                        </View>
+
+                        <View style={{
+                            flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+                            marginTop: 20, marginBottom: 20
+                        }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <FontAwesomeIcon
+                                    icon={faTiktok}
+                                    color='#220411'
+                                    size={22}
+                                    style={{ marginRight: 5 }}
+                                />
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> Tiktok</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}> @Hagmus_africa</Text>
                             </View>
                         </View>
 
@@ -112,7 +130,7 @@ export function AboutUs({ navigation }) {
                                 <Text style={{ color: '#05030d', fontSize: 16 }}>Hagmus Webpage </Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ color: '#05030d', fontSize: 16 }}>hagmuspay.com</Text>
+                                <Text style={{ color: '#05030d', fontSize: 16 }}>hagmus.com</Text>
                             </View>
                         </View>
                     </View>
@@ -128,7 +146,7 @@ export function AboutUs({ navigation }) {
                         margin: 7, backgroundColor: '#16171D', padding: 8, borderRadius: 5,
                         alignItems: 'center',
                     }}>
-                        <Text style={{ color: '#FFE5F1', fontSize: 14, lineHeight: 20 }}>Join the HagmusPay community via our main 
+                        <Text style={{ color: '#FFE5F1', fontSize: 14, lineHeight: 20 }}>Join the Hagmus community via our main 
                         social media channels. Please be wary of fake accounts impersonating Hagmuspay.
 
                         </Text>

@@ -47,6 +47,15 @@ export const styles = StyleSheet.create({
         paddingVertical: 15,
         alignItems: 'center',
         borderRadius: 5,
-    }
+    },
+    boxStyle2: {
+        flex: 1,
+        width: "100%",
+        margin: 5,
+        padding: 5,
+        paddingVertical: 0,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
 
 })
