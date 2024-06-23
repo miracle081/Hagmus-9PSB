@@ -6,12 +6,13 @@ import { useContext } from "react";
 import { formatMoney } from "../components/FormatMoney";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppContext } from "../../globals/AppContext";
+import { copyToClipboard } from "../components/ClipBoard";
 
 export function Earn({ navigation }) {
     const { userInfo, accountInfo } = useContext(AppContext);
 
     const imageUrl = 'https://wenethub.com/imageslink/referralB.png';
-    
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -35,11 +36,9 @@ export function Earn({ navigation }) {
                         <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>Referral Code</Text>
                         <View style={{ flexDirection: 'row' }}>
                             <Text style={{ color: '#20212a', fontWeight: 'bold', fontSize: 16 }}>{userInfo.username}</Text>
-                            <FontAwesomeIcon
-                                icon={faCopy}
-                                color="#7b61ff"
-                                style={{ marginLeft: 5 }}
-                            />
+                            <TouchableOpacity onPress={() => copyToClipboard(accountInfo.username)}>
+                                <FontAwesomeIcon icon={faCopy} style={{ marginLeft: 5 }} color="#7b61ff" />
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View
@@ -73,7 +72,7 @@ export function Earn({ navigation }) {
                 <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>
                     {/* <Text style={{ fontWeight: 'bold', fontSize: 15, color: 'white' }}>Referral Info</Text> */}
                     {/* <Image source={require('../../assets/bns.png')} style={{ width: 410, height: 170 }} /> */}
-                    <Image  source={{ uri: imageUrl }} style={{ width: '100%', height: 170 }}/>
+                    <Image source={{ uri: imageUrl }} style={{ width: '100%', height: 170 }} />
                 </View>
 
                 <View style={{ alignItems: 'center', marginBottom: 15, marginTop: 18 }}>

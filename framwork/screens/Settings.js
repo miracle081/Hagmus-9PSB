@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { theme } from "../components/Theme";
+import { copyToClipboard } from "../components/ClipBoard";
 
 
 export function Settings({ navigation }) {
@@ -29,13 +30,13 @@ export function Settings({ navigation }) {
   const closeModal = () => {
     setModalVisibility(!modalVisibility);
   };
-  
+
   //Share App content begins
   const onShare = async () => {
     try {
       const result = await Share.share({
         message:
-          'Join the HagmusPay Community. Pay your bills easily',
+          `Download and install Hagmus today to enjoy fast and relyable payment service.\nHere's my referral tag: \n@ ${userInfo.username}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -106,7 +107,7 @@ export function Settings({ navigation }) {
         <Text>Account Number</Text>
         <View style={{ flexDirection: 'row', marginTop: 5 }}>
           <Text style={{ fontSize: 19, color: 'black', fontWeight: 'bold' }} selectable>{accountInfo.account_number}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => copyToClipboard(accountInfo.account_number)}>
             <FontAwesomeIcon icon={faCopy} style={{ marginLeft: 10 }} color="#776e9d" />
           </TouchableOpacity>
         </View>
@@ -137,18 +138,19 @@ export function Settings({ navigation }) {
 
 
           <View style={{ padding: 10, borderRadius: 8 }}>
-            <TouchableOpacity activeOpacity={0.8}
+            <TouchableOpacity onPress={onShare} activeOpacity={0.8}
               style={{ marginBottom: 15 }}>
               <View style={styles.portfolio}>
                 <View style={styles.News}>
                   <View style={{ marginRight: 10 }}>
                     <FontAwesomeIcon icon={faRightLeft} color="#776e9d" size={18} />
                   </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>Referral Tag</Text>
-                  </View>
+                  <Text style={{ color: 'black', fontSize: 14, fontWeight: 'bold' }}>Referral Tag</Text>
                 </View>
-                <Text style={{ fontSize: 16, }}>{userInfo.username}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ fontSize: 16, marginEnd: 5 }}>{userInfo.username}</Text>
+                  <FontAwesomeIcon icon={faShare} color="#776e9d" size={14} />
+                </View>
               </View>
             </TouchableOpacity>
             <View style={{ borderBottomColor: '#e5e3ee', borderBottomWidth: StyleSheet.hairlineWidth, marginBottom: 15 }} />

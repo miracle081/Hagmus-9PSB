@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
 import { AppContext } from '../../globals/AppContext';
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
+import { copyToClipboard } from './ClipBoard';
 
 export function P2pModal({ visible, onPress, adsCatigory }) {
     const { accountInfo } = useContext(AppContext);
@@ -34,7 +35,7 @@ export function P2pModal({ visible, onPress, adsCatigory }) {
                             <Text>Account Number</Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5 }}>
                                 <Text style={{ fontSize: 19, color: 'black', fontWeight: 'bold' }} selectable>{accountInfo.account_number}</Text>
-                                <TouchableOpacity style={{ backgroundColor: 'green', padding: 5, flexDirection: 'row', alignItems: 'center', borderRadius: 8 }}>
+                                <TouchableOpacity onPress={() => copyToClipboard(accountInfo.account_number)} style={{ backgroundColor: 'green', padding: 5, flexDirection: 'row', alignItems: 'center', borderRadius: 8 }}>
                                     <FontAwesomeIcon icon={faCopy} style={{ marginRight: 5 }} color="#f6f5fc" />
                                     <Text style={{ color: '#f6f5fc' }}>Copy</Text>
                                 </TouchableOpacity>

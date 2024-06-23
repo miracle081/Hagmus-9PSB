@@ -84,7 +84,6 @@ export function Login({ navigation }) {
 
             onSubmit={(values, actions) => {
               setPreloader(true)
-              actions.resetForm();
 
               const formdata = new FormData();
               formdata.append("email", !userAsync ? values.email : userAsync.email,);
@@ -119,6 +118,7 @@ export function Login({ navigation }) {
                         navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
                       }
                     }
+                    actions.resetForm();
                   } else {
                     Alert.alert(
                       'Sorry!',
@@ -155,11 +155,13 @@ export function Login({ navigation }) {
                         keyboardType='email-address'
                         placeholder='Email'
                         onChangeText={!userAsync ? props.handleChange('email') : null}
+                        onBlur={!userAsync ? props.handleBlur('email') : null}
                         selectionColor={'grey'}
                         mode='outlined'
                         autoComplete='off'
                         autoCapitalize='none'
                         placeholderTextColor='#787A8D'
+                        value={props.values.email}
                       />
 
                       <Text style={styles.errorMessage}>
@@ -167,7 +169,7 @@ export function Login({ navigation }) {
                       </Text>
                     </>
                     :
-                    <View style={{alignItems:'center'}}>
+                    <View style={{ alignItems: 'center' }}>
                       <Text style={{ color: 'black', fontSize: 25, marginBottom: 5 }}>Welcome back!</Text>
                       <Text style={{ color: '#919191', marginBottom: 20, fontSize: 17 }}>{userAsync.first_name}</Text>
                     </View>
@@ -181,10 +183,12 @@ export function Login({ navigation }) {
                       selectionColor={'grey'}
                       placeholder='Password'
                       onChangeText={props.handleChange('password')}
+                      onBlur={props.handleBlur('password')}
                       mode='outlined'
                       autoComplete='off'
                       autoCapitalize='none'
                       placeholderTextColor='#787A8D'
+                      value={props.values.password}
                     />
                     <TouchableOpacity style={{ position: "absolute", top: 10, right: 10 }} onPress={() => setShowPassword(!showPassword)}>
                       <Feather name={!showPassword ? "eye" : "eye-off"} size={24} color="#7B61FF" />

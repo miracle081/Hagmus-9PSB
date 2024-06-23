@@ -1,4 +1,4 @@
-import { Alert, FlatList, Image, ImageBackground, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, ImageBackground, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/targets";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowUpFromBracket, faBullseye, faBusinessTime, faCirclePlus, faEye, faEyeSlash, faFaceSmile, faHandHoldingDollar, faLock, faSackDollar, faWallet, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -119,7 +119,7 @@ export function Targets({ navigation, route }) {
         setPreloader(true)
         const formdata = {
             saving_id: info.id,
-            amount:info.current_balance,
+            amount: info.current_balance,
         }
         const requestOptions = {
             method: 'POST',
@@ -204,32 +204,36 @@ export function Targets({ navigation, route }) {
                     </View>
                     <View style={styles.vault}>
                         <View style={styles.balance}>
-                            <View style={{ alignItems:'center', marginBottom:20 }}>
-                               
-                                    <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
-                                        <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(info.current_balance)}</Text>
-                                    </Text>
-                                    {/* <Text style={{ marginStart: 20, }}>Due Date: </Text> */}
-                               
+                            <View style={{ alignItems: 'center', marginBottom: 20 }}>
 
-                               
+                                <Text style={{ color: '#7B61FF', fontSize: 18 }}>₦
+                                    <Text style={{ color: '#7B61FF', fontSize: 28, fontWeight: 'bold' }}>{formatMoney(info.current_balance)}</Text>
+                                </Text>
+                                {/* <Text style={{ marginStart: 20, }}>Due Date: </Text> */}
+
+
+
 
 
                             </View>
-                            <View style={{flexDirection:'row',justifyContent:'space-between'}}>
-                            <TouchableOpacity onPress={closeModal2} style={{ flexDirection: 'row', 
-                            justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF',
-                             padding: 10, borderRadius: 4, height: 40,width:150 }}>
-                                <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
-                                <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity onPress={closeModal2} style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF',
+                                    padding: 10, borderRadius: 4, height: 40, width: 150
+                                }}>
+                                    <Text style={{ color: 'white', marginStart: 5, fontWeight: 'bold' }}>Withdraw Target</Text>
+                                    <FontAwesomeIcon icon={faArrowUpFromBracket} color="white" />
+                                </TouchableOpacity>
 
-                            <TouchableOpacity onPress={closeModal} style={{ flexDirection: 'row', 
-                            justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF', 
-                            padding: 10, borderRadius: 4, height: 40,width:150 }}>
-                                        <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Add Money</Text>
-                                        <FontAwesomeIcon icon={faCirclePlus} color="white" />
-                                    </TouchableOpacity>
+                                <TouchableOpacity onPress={closeModal} style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#7B61FF',
+                                    padding: 10, borderRadius: 4, height: 40, width: 150
+                                }}>
+                                    <Text style={{ color: 'white', marginRight: 5, fontWeight: 'bold' }}>Add Money</Text>
+                                    <FontAwesomeIcon icon={faCirclePlus} color="white" />
+                                </TouchableOpacity>
                             </View>
                         </View>
 
@@ -306,49 +310,53 @@ export function Targets({ navigation, route }) {
                     <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
                         <Pressable style={{ flex: 1 }} onPress={closeModal} >
                         </Pressable>
-                        <View style={{ backgroundColor: "#ebe8eb", height: 420, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
-                            <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
-                                <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === 'ios' ? 'padding' : null}
+                        >
+                            <View style={{ backgroundColor: "#ebe8eb", height: 420, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
+                                <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
+                                    <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
+                                        <FontAwesomeIcon
+                                            icon={faXmark}
+                                            size={20}
+                                            color='#fff'
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ alignItems: 'center', marginBottom: 10 }}>
                                     <FontAwesomeIcon
-                                        icon={faXmark}
-                                        size={20}
-                                        color='#fff'
+                                        icon={faBusinessTime}
+                                        size={40}
+                                        color="#7B61FF"
                                     />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{ alignItems: 'center', marginBottom: 10 }}>
-                                <FontAwesomeIcon
-                                    icon={faBusinessTime}
-                                    size={40}
-                                    color="#7B61FF"
-                                />
-                            </View>
-                            <View style={{ alignItems: 'center', marginBottom: 15 }}>
-                                <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>{targetName} Target Plan</Text>
-                                <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>You can finance the expansion of your firm by saving and earning.</Text>
-                            </View>
-                            <View style={{ padding: 15 }}>
-                                <Text style={styles.signupText}>Amount</Text>
-                                <TextInput
-                                    style={[styles.inputStyle, { marginBottom: 0 }]}
-                                    keyboardType='numeric'
-                                    placeholder='0'
-                                    selectionColor={'#7B61FF'}
-                                    mode='outlined'
-                                    placeholderTextColor="#787A8D"
-                                    onChangeText={inp => { setAmount(Number(inp.trim())) }}
-                                />
-                                {message2 != "" ? <Text style={{ marginBottom: 25, color: color }}>{message2}</Text> : null}
-                                <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>Interest on Deposit  {interest}</Text>
-                            </View>
-                            <View style={{ padding: 15 }}>
-                                <TouchableOpacity onPress={() => { closeModal(); fundTarget() }} disabled={amount ? false : true}
-                                    style={[styles.getStarted, { backgroundColor: amount ? '#7B61FF' : '#9c94c2', }]}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, }}>Fund</Text>
-                                </TouchableOpacity>
-                            </View>
+                                </View>
+                                <View style={{ alignItems: 'center', marginBottom: 15 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#5e5f6d', textTransform: "capitalize" }}>{targetName} Target Plan</Text>
+                                    <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>You can finance the expansion of your firm by saving and earning.</Text>
+                                </View>
+                                <View style={{ padding: 15 }}>
+                                    <Text style={styles.signupText}>Amount</Text>
+                                    <TextInput
+                                        style={[styles.inputStyle, { marginBottom: 0 }]}
+                                        keyboardType='numeric'
+                                        placeholder='0'
+                                        selectionColor={'#7B61FF'}
+                                        mode='outlined'
+                                        placeholderTextColor="#787A8D"
+                                        onChangeText={inp => { setAmount(Number(inp.trim())) }}
+                                    />
+                                    {message2 != "" ? <Text style={{ marginBottom: 25, color: color }}>{message2}</Text> : null}
+                                    <Text style={{ fontWeight: 'bold', fontSize: 11, color: '#787A8D' }}>Interest on Deposit  {interest}</Text>
+                                </View>
+                                <View style={{ padding: 15 }}>
+                                    <TouchableOpacity onPress={() => { closeModal(); fundTarget() }} disabled={amount ? false : true}
+                                        style={[styles.getStarted, { backgroundColor: amount ? '#7B61FF' : '#9c94c2', }]}>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, }}>Fund</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                        </View>
+                            </View>
+                        </KeyboardAvoidingView>
                     </View>
                 </Modal>
 

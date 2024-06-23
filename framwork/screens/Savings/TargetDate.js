@@ -57,7 +57,7 @@ export function TargetDate({ navigation }) {
     const closeModal2 = () => setModalVisibility2(!modalVisibility2);
 
     function validation(inp) {
-        if (inp >= 1000) {
+        if (inp >= 500) {
             if (inp <= accountInfo.account_balance) {
                 setAmount(Number(inp))
                 setMessage2('Amount Ok');
@@ -69,7 +69,7 @@ export function TargetDate({ navigation }) {
             }
         }
         else {
-            setMessage2(`Minimum Amount ₦1000`);
+            setMessage2(`Minimum Amount ₦500`);
             setColor('#ce0a0ae5')
             setAmount(0)
         }
@@ -162,82 +162,82 @@ export function TargetDate({ navigation }) {
                                 behavior={Platform.OS === 'ios' ? 'padding' : null}
                             >
 
-                            <View style={{ }}>
-                                <View style={{ padding: 20, }}>
-                                    <Text style={styles.signupText}>Initail Funding Amount</Text>
-                                    <TextInput
-                                        style={[styles.inputStyle, { marginBottom: 0 }]}
-                                        keyboardType='numeric'
-                                        placeholder='0'
-                                        selectionColor={'#7B61FF'}
-                                        mode='outlined'
-                                        placeholderTextColor="#787A8D"
-                                        onChangeText={inp => validation(Number(inp.trim()))}
-                                    />
-                                    {message2 != "" ? <Text style={{ marginBottom: 0, color: color }}>{message2}</Text> : null}
-
-                                    <Text style={[styles.signupText, { marginTop: 10, }]}>Target Amount</Text>
-                                    <TextInput
-                                        style={[styles.inputStyle, { marginBottom: 0 }]}
-                                        keyboardType='numeric'
-                                        placeholder='0'
-                                        selectionColor={'#7B61FF'}
-                                        mode='outlined'
-                                        placeholderTextColor="#787A8D"
-                                        onChangeText={inp => setTargetAmount(Number(inp.trim()))}
-                                    />
-
-                                    <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
-                                    <View style={{ position: "relative" }}>
-                                        <Pressable>
-                                            <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
-                                        </Pressable>
-                                        <TouchableOpacity
-                                            onPress={closeModal}
-                                            style={styles.calenderIcon}>
-                                            <FontAwesomeIcon icon={faCalendarAlt} color="white" />
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
-                                    <View style={{ position: "relative" }}>
-                                        <Pressable onPress={closeFrequency}>
-                                            <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
-                                        </Pressable>
-                                        <TouchableOpacity
-                                            onPress={closeFrequency}
-                                            style={styles.calenderIcon}>
-                                            <FontAwesomeIcon icon={faCalendarAlt} color="white" />
-                                        </TouchableOpacity>
-                                    </View>
-
-                                    <View style={{ marginTop: 10 }}>
-                                        <Text style={styles.signupText}>Description</Text>
+                                <View style={{}}>
+                                    <View style={{ padding: 20, }}>
+                                        <Text style={styles.signupText}>Initail Funding Amount</Text>
                                         <TextInput
-                                            style={[styles.inputStyle, { marginBottom: 20 }]}
-                                            keyboardType='default'
+                                            style={[styles.inputStyle, { marginBottom: 0 }]}
+                                            keyboardType='numeric'
+                                            placeholder='0'
                                             selectionColor={'#7B61FF'}
                                             mode='outlined'
                                             placeholderTextColor="#787A8D"
-                                            onChangeText={inp => setDescription(inp.trim())}
+                                            onChangeText={inp => validation(Number(inp.trim()))}
                                         />
-                                    </View>
-                                    
+                                        {message2 != "" ? <Text style={{ marginBottom: 0, color: color }}>{message2}</Text> : null}
 
-                                    <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 20, alignItems: "center", }} onPress={() => setAuto_deposit(!auto_deposit)}>
-                                        <Text style={{ fontSize: 18, }}>Auto Deposit</Text>
-                                        <Switch value={auto_deposit} color="#7B61FF" thumbColor="#7B61FF" onChange={() => setAuto_deposit(!auto_deposit)} />
-                                        {/* <View style={[styles.radio, { borderColor: auto_deposit ? "#7B61FF" : "gray", }]}>
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Target Amount</Text>
+                                        <TextInput
+                                            style={[styles.inputStyle, { marginBottom: 0 }]}
+                                            keyboardType='numeric'
+                                            placeholder='0'
+                                            selectionColor={'#7B61FF'}
+                                            mode='outlined'
+                                            placeholderTextColor="#787A8D"
+                                            onChangeText={inp => setTargetAmount(Number(inp.trim()))}
+                                        />
+
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>End Date</Text>
+                                        <View style={{ position: "relative" }}>
+                                            <Pressable>
+                                                <Text style={[styles.inputStyle, { paddingVertical: 15, }]}>{dateConverter()}</Text>
+                                            </Pressable>
+                                            <TouchableOpacity
+                                                onPress={closeModal}
+                                                style={styles.calenderIcon}>
+                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <Text style={[styles.signupText, { marginTop: 10, }]}>Frequency</Text>
+                                        <View style={{ position: "relative" }}>
+                                            <Pressable onPress={closeFrequency}>
+                                                <Text style={[styles.inputStyle, { paddingVertical: 15, textTransform: "capitalize" }]}>{frequency ? frequency : "Select frequency"}</Text>
+                                            </Pressable>
+                                            <TouchableOpacity
+                                                onPress={closeFrequency}
+                                                style={styles.calenderIcon}>
+                                                <FontAwesomeIcon icon={faCalendarAlt} color="white" />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                        <View style={{ marginTop: 10 }}>
+                                            <Text style={styles.signupText}>Description</Text>
+                                            <TextInput
+                                                style={[styles.inputStyle, { marginBottom: 20 }]}
+                                                keyboardType='default'
+                                                selectionColor={'#7B61FF'}
+                                                mode='outlined'
+                                                placeholderTextColor="#787A8D"
+                                                onChangeText={inp => setDescription(inp.trim())}
+                                            />
+                                        </View>
+
+
+                                        <TouchableOpacity style={{ flexDirection: "row", justifyContent: "space-between", paddingVertical: 20, alignItems: "center", }} onPress={() => setAuto_deposit(!auto_deposit)}>
+                                            <Text style={{ fontSize: 18, }}>Auto Deposit</Text>
+                                            <Switch value={auto_deposit} color="#7B61FF" thumbColor="#7B61FF" onChange={() => setAuto_deposit(!auto_deposit)} />
+                                            {/* <View style={[styles.radio, { borderColor: auto_deposit ? "#7B61FF" : "gray", }]}>
                                                 <View style={[styles.radioInner, { backgroundColor: auto_deposit ? "#7B61FF" : "transparent" }]} />
                                             </View> */}
-                                    </TouchableOpacity>
+                                        </TouchableOpacity>
 
-                                </View>
+                                    </View>
 
-                                <View style={{ padding: 15, marginTop: 5, }}>
-                                    {btnVal()}
+                                    <View style={{ padding: 15, marginTop: 5, }}>
+                                        {btnVal()}
+                                    </View>
                                 </View>
-                            </View>
 
                             </KeyboardAvoidingView>
                         </View>
