@@ -12,6 +12,7 @@ function AppProvider({ children }) {
      const [profileImage, setProfileImage] = useState(require("../assets/person.png"));
      const [userInfo, setUserInfo] = useState({ username: '', first_name: "", last_name: "", name: "" });
      const [docID, setDocID] = useState('');
+     const [doc, setDoc] = useState('');
      const [ID, setID] = useState('');
      const [notification, setNotification] = useState([]);
      const [carouselLinks, setCarouselLinks] = useState([
@@ -24,6 +25,7 @@ function AppProvider({ children }) {
      const [welcomeModal, setWelcomeModal] = useState(true);
      const [referralBonus, setReferralBonus] = useState(0);
      const [token, setToken] = useState("");
+     const [tokenFood, setTokenFood] = useState("4|tgZ8Um6aU7slFLZIKWIlZ7txt9oCEDL3NNOySXke3e573393");
      const [pin, setPin] = useState("");
      const [cardId, setCardId] = useState("");
      const [account, setAccount] = useState({ email: "", password: "", });
@@ -200,6 +202,7 @@ function AppProvider({ children }) {
      return (
           <AppContext.Provider value={{
                ID, setID,
+               doc, setDoc,
                pin, setPin,
                token, setToken,
                docID, setDocID,
@@ -209,6 +212,7 @@ function AppProvider({ children }) {
                saysInfo, setSaysInfo,
                userInfo, setUserInfo,
                userCards, setUserCards,
+               tokenFood, setTokenFood,
                preloader, setPreloader,
                targetName, setTargetName,
                accountInfo, setAccountInfo,

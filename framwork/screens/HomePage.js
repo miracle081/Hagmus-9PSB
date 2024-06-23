@@ -27,7 +27,7 @@ import { theme } from '../components/Theme';
 import { baseURL, coingeckoAPIKey } from '../../config';
 import Constants from 'expo-constants';
 import { ToastApp } from '../components/Toast';
-import { faAddressBook, faCreditCard, faLightbulb, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import { faAddressBook, faCreditCard, faFutbolBall, faLightbulb, faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import Carousel from 'react-native-reanimated-carousel';
 import { handleError } from '../components/HandleRequestError';
 import { MyDollarCard } from './Dollarcard/MyDollarCard';
@@ -129,8 +129,8 @@ function HomeScreen({ navigation }) {
     const packageName = 'com.hagmussend.dev';
 
     // Linking.openURL(`market://details?id=${packageName}`)
-    // Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-    Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+    Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
+    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -392,15 +392,15 @@ function HomeScreen({ navigation }) {
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', padding: 5, marginTop: 10 }}>
                   <TouchableOpacity
-                    onPress={() => navigation.navigate('Earn')}
+                    onPress={closeModal5}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
                       width: 100, borderRadius: 8
                     }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faCreditCard} size={25} color='#7B61FF' />
+                      <FontAwesomeIcon icon={faFutbolBall} size={25} color='#7B61FF' />
                     </View>
-                    <Text style={{ fontSize: 13 }}>Bonus</Text>
+                    <Text style={{ fontSize: 13 }}>Fund Bet</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => navigation.navigate("Electricity")}
@@ -430,7 +430,7 @@ function HomeScreen({ navigation }) {
                       width: 100, borderRadius: 8
                     }}>
                     <View style={{ backgroundColor: '#ffffff', padding: 10, borderRadius: 40 }}>
-                      <FontAwesomeIcon icon={faBowlFood} size={25} color='#7B61FF' />
+                      <FontAwesomeIcon icon={faBowlRice} size={25} color='#7B61FF' />
                     </View>
                     <Text style={{ fontSize: 13 }}>HFood</Text>
                   </TouchableOpacity>

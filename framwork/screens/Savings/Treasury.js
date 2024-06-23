@@ -188,7 +188,7 @@ export function Treasury({ navigation }) {
 
             <View style={styles.savingsplan}>
               <View style={styles.boxView}>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   onPress={closeModal}
                   style={[styles.boxStyle, { backgroundColor: '#ffd69984', }]}>
                   <View style={{ alignItems: 'center' }}>
@@ -206,12 +206,12 @@ export function Treasury({ navigation }) {
                       </Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
 
                 <TouchableOpacity
                   onPress={closeModal}
-                  style={[styles.boxStyle, { backgroundColor: '#9afdbc80', }]}>
+                  style={[styles.boxStyle2, { backgroundColor: '#9afdbc80', }]}>
                   <View style={{ alignItems: 'center' }}>
                     <View style={{ padding: 5, justifyContent: "center", alignItems: "center" }}>
                       <FontAwesomeIcon

@@ -4,7 +4,7 @@ import {
     MESSAGING_SENDER_ID, APP_ID,
     CoingeckoAPIKey,
     VTPass_API_KEY, VTPass_Public_Key, VTPass_Secret_Key,
-    BaseURL,
+    BaseURL, BaseURL_Food,
 } from "@env"
 
 const apiKey = API_KEY
@@ -26,3 +26,4 @@ export const firebaseConfig = {
 export const coingeckoAPIKey = CoingeckoAPIKey
 export const VTPass = { apiKey: VTPass_API_KEY, publicKey: VTPass_Public_Key, secretKey: VTPass_Secret_Key }
 export const baseURL = BaseURL
+export const BaseURLFood = BaseURL_Food

@@ -1,19 +1,77 @@
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Image, Modal, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../../styles/foodintro";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
-import { faArrowRight, faChevronDown, faFilter, faHandHolding, faLocationDot, faNairaSign, faPeopleGroup, faSearch, } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faChevronDown, faFilter, faHandHolding, faLocationDot, faNairaSign, faPeopleGroup, faSearch, faXmark, } from "@fortawesome/free-solid-svg-icons";
+import { BaseURLFood } from "../../../config";
+import { AppContext } from "../../../globals/AppContext";
+import { useContext, useState } from "react";
+import { useEffect } from "react";
+import { handleError } from "../../components/HandleRequestError";
 
 
 
 export function Menu({ navigation }) {
+    const { tokenFood, setPreloader, setDoc } = useContext(AppContext);
+    const [vendors, setVendors] = useState([]);
+    const [filteredVendors, setfilteredVendors] = useState([]);
+    const [modalVisibility, setModalVisibility] = useState(false);
+
+    const closeModal = () => {
+        setModalVisibility(!modalVisibility);
+    };
+    function getUserInfo() {
+        setPreloader(true)
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${tokenFood}`
+            },
+            redirect: 'follow'
+        };
+        fetch(`${BaseURLFood}/v1/food/vendors`, requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                const { data, status, message } = response;
+                // console.log(data);
+                setPreloader(false)
+                if (status) {
+                    setVendors(data);
+                    setfilteredVendors(data);
+                } else {
+                    Alert.alert(
+                        'Sorry!',
+                        message,
+                        [{ text: 'Try again' }]
+                    )
+                }
+            })
+            .catch(error => {
+                setPreloader(false)
+                console.log('error', error)
+                if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+                else Alert.alert("Error!", error.message)
+            });
+    }
+
+    useEffect(() => {
+        getUserInfo()
+    }, []);
+
+
+    function handleSearch(inp) {
+        const newVendors = vendors.filter(item => item.name.toLowerCase().includes(inp.toLowerCase()));
+        setfilteredVendors(newVendors);
+    }
+
+
     return (
         <AppSafeAreaView >
             <View style={styles.container}>
                 <View style={styles.body}>
-                    <TouchableOpacity style={{ alignItems: 'center', margin: 15, flexDirection: 'row', justifyContent: 'center' }}>
+                    <TouchableOpacity onPress={closeModal} style={{ alignItems: 'center', margin: 15, flexDirection: 'row', justifyContent: 'center' }}>
                         <FontAwesomeIcon icon={faLocationDot} size={20} color="#7B61FF" />
-                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#7B61FF', marginLeft: 15, marginRight: 10 }}>Abuja NG</Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 20, color: '#7B61FF', marginLeft: 15, marginRight: 10 }}>Kubwa</Text>
                         <FontAwesomeIcon icon={faChevronDown} size={20} color="#7B61FF" />
                     </TouchableOpacity>
 
@@ -24,6 +82,7 @@ export function Menu({ navigation }) {
                                 placeholder="Search Restaurant"
                                 selectionColor={'#7B61FF'}
                                 style={styles.FoodSearch2}
+                                onChangeText={handleSearch}
                             />
                         </View>
                     </View>
@@ -81,118 +140,61 @@ export function Menu({ navigation }) {
                         </View>
 
 
-                        <ScrollView style={{ flex: 1,marginVertical:10 }}>
-                            <View style={styles.Box}>
-                                <View style={styles.boxView}>
-                                    <TouchableOpacity
-                                        onPress={()=>navigation.navigate('FoodMenu')}
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/Kili.png')} style={{ width: 80, height: 80 }} />
+                        <FlatList data={filteredVendors}
+                            initialNumToRender={10}
+                            style={{ flex: 1, padding: 5 }}
+                            numColumns={2}
+                            renderItem={({ item }) => {
+                                return (
+                                    <View style={styles.boxView}>
+                                        <TouchableOpacity
+                                            onPress={() => { setDoc(item); navigation.navigate('FoodMenu') }}
+                                            style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
+                                            <View style={{ alignItems: 'center' }}>
+                                                <View style={{ padding: 5, alignItems: "center" }}>
+                                                    <Image source={{ uri: item.logo }} style={{ width: 80, height: 80 }} />
+                                                </View>
+                                                <View style={{ marginTop: 10, alignItems: "center" }}>
+                                                    <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>{item.name}</Text>
+                                                </View>
                                             </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Kilimanjaro</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
+                                        </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/chiki.png')} style={{ width: 80, height: 80 }} />
-                                            </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Chicken Republic</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </View>
-
-                            <View style={styles.Box}>
-                                <View style={styles.boxView}>
-                                    <TouchableOpacity
-                                        // onPress={()=>navigation.navigate('FoodMenu')}
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/pizzahut.png')} style={{ width: 80, height: 80 }} />
-                                            </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Pizza Hut</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/chiki.png')} style={{ width: 80, height: 80 }} />
-                                            </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Chicken Republic</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </View>
-
-                            <View style={styles.Box}>
-                                <View style={styles.boxView}>
-                                    <TouchableOpacity
-                                        // onPress={()=>navigation.navigate('FoodMenu')}
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/pizzahut.png')} style={{ width: 80, height: 80 }} />
-                                            </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Pizza Hut</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={[styles.boxStyle, { backgroundColor: '#ede9ff', }]}>
-                                        <View style={{ alignItems: 'center' }}>
-                                            <View style={{ padding: 5, alignItems: "center" }}>
-                                                <Image source={require('../../../assets/chiki.png')} style={{ width: 80, height: 80 }} />
-                                            </View>
-                                            <View style={{ marginTop: 10, alignItems: "center" }}>
-                                                <Text style={{ color: '#042024ff', marginBottom: 8, fontSize: 16, fontWeight: "bold" }}>Chicken Republic</Text>
-                                                <Text style={{ color: '#5f5f5f', marginLeft: 0, fontSize: 10 }}>
-                                                    {/* <Text style={{ fontSize: 13, color: '#5f5f5f', }}>₦ 0.00</Text> */}
-                                                </Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-
-                                </View>
-                            </View>
-
-                        </ScrollView>
+                                    </View>
+                                )
+                            }} key={({ item }) => { item.id }} />
                     </View>
 
+                    <Modal
+                        visible={modalVisibility}
+                        animationType="slide"
+                        transparent={true}
+                    >
+                        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+                            <Pressable style={{ flex: 1 }} onPress={closeModal} >
+                            </Pressable>
+                            <View style={{ backgroundColor: "#fcfbff", height: 400, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                                <View style={{ alignItems: 'flex-end', margin: 10 }}>
+                                    <TouchableOpacity onPress={closeModal}>
+                                        <FontAwesomeIcon
+                                            icon={faXmark}
+                                            size={24}
+                                            color='#7B61FF'
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+
+                                <View>
+
+                                    <View style={{ alignItems: 'center', }}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#302e3a' }}>Recommended Restaurants</Text>
+
+                                    </View>
+                                </View>
+
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
             </View>
         </AppSafeAreaView>

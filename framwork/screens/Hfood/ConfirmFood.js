@@ -4,18 +4,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { AppSafeAreaView } from "../../components/AppSafeAreaView";
 import { faChevronDown, faCircleDot, faLocation, faLocationDot, faMinus, faPlus, faXmark, } from "@fortawesome/free-solid-svg-icons";
 import { Modal } from "react-native";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AppContext } from "../../../globals/AppContext";
 
 
 
 export function ConfirmFood({ navigation }) {
+    const { userInfo } = useContext(AppContext);
     const [modalVisibility, setModalVisibility] = useState(false);
-    const [count, setCount] = useState(0);
+    const [count1, setCount1] = useState(0);
+    const [count2, setCount2] = useState(0);
+    const [count3, setCount3] = useState(0);
+    const [count4, setCount4] = useState(0);
 
 
     // Top up increament and decreament button //
-    const increaseCount = () => setCount(count + 1);
-    const decreaseCount = () => {
+    const increaseCount = (setCount, count) => setCount(count + 1);
+    const decreaseCount = (setCount, count) => {
         if (count > 0) {
             setCount(count - 1);
         }
@@ -67,15 +72,15 @@ export function ConfirmFood({ navigation }) {
                                                     flexDirection: 'row', alignItems: 'center',
                                                     backgroundColor: '#d7d0fc', padding: 5, borderRadius: 8
                                                 }}>
-                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={decreaseCount}>
+                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => decreaseCount(setCount1, count1)}>
                                                         <FontAwesomeIcon icon={faMinus} size={20} />
                                                     </TouchableOpacity>
 
                                                     <View>
-                                                        <Text style={styles.countText}>{count}</Text>
+                                                        <Text style={styles.countText}>{count1}</Text>
                                                     </View>
 
-                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={increaseCount}>
+                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => increaseCount(setCount1, count1)}>
                                                         <FontAwesomeIcon icon={faPlus} size={20} />
                                                     </TouchableOpacity>
 
@@ -104,15 +109,15 @@ export function ConfirmFood({ navigation }) {
                                                     flexDirection: 'row', alignItems: 'center',
                                                     backgroundColor: '#d7d0fc', padding: 5, borderRadius: 8
                                                 }}>
-                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={decreaseCount}>
+                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => decreaseCount(setCount2, count2)}>
                                                         <FontAwesomeIcon icon={faMinus} size={20} />
                                                     </TouchableOpacity>
 
                                                     <View>
-                                                        <Text style={styles.countText}>{count}</Text>
+                                                        <Text style={styles.countText}>{count2}</Text>
                                                     </View>
 
-                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={increaseCount}>
+                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => increaseCount(setCount2, count2)}>
                                                         <FontAwesomeIcon icon={faPlus} size={20} />
                                                     </TouchableOpacity>
 
@@ -141,15 +146,15 @@ export function ConfirmFood({ navigation }) {
                                                     flexDirection: 'row', alignItems: 'center',
                                                     backgroundColor: '#d7d0fc', padding: 5, borderRadius: 8
                                                 }}>
-                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={decreaseCount}>
+                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => decreaseCount(setCount3, count3)}>
                                                         <FontAwesomeIcon icon={faMinus} size={20} />
                                                     </TouchableOpacity>
 
                                                     <View>
-                                                        <Text style={styles.countText}>{count}</Text>
+                                                        <Text style={styles.countText}>{count3}</Text>
                                                     </View>
 
-                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={increaseCount}>
+                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => increaseCount(setCount3, count3)}>
                                                         <FontAwesomeIcon icon={faPlus} size={20} />
                                                     </TouchableOpacity>
 
@@ -178,15 +183,15 @@ export function ConfirmFood({ navigation }) {
                                                     flexDirection: 'row', alignItems: 'center',
                                                     backgroundColor: '#d7d0fc', padding: 5, borderRadius: 8
                                                 }}>
-                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={decreaseCount}>
+                                                    <TouchableOpacity style={{ marginRight: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => decreaseCount(setCount4, count4)}>
                                                         <FontAwesomeIcon icon={faMinus} size={20} />
                                                     </TouchableOpacity>
 
                                                     <View>
-                                                        <Text style={styles.countText}>{count}</Text>
+                                                        <Text style={styles.countText}>{count4}</Text>
                                                     </View>
 
-                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={increaseCount}>
+                                                    <TouchableOpacity style={{ marginLeft: 20, borderWidth: 2, borderColor: '#bbadff', borderRadius: 4 }} onPress={() => increaseCount(setCount4, count4)}>
                                                         <FontAwesomeIcon icon={faPlus} size={20} />
                                                     </TouchableOpacity>
 
@@ -198,12 +203,15 @@ export function ConfirmFood({ navigation }) {
                             </View>
 
 
-                        <View style={{flexDirection:'row',alignItems:'center', padding:20,justifyContent:'center',}}>
-                                <FontAwesomeIcon icon={faLocationDot} size={20}/>
-                                <TextInput 
-                                placeholder="delivery address"
-                                selectionColor={'#7B61FF'}
-                                style={{borderWidth:1,width:'80%',borderRadius:8,padding:15,marginLeft:5}}/>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', padding: 20, justifyContent: 'center', }}>
+                                <FontAwesomeIcon icon={faLocationDot} size={20} />
+                                <TextInput
+                                    placeholder="delivery address"
+                                    selectionColor={'#7B61FF'}
+                                    style={{ borderWidth: 1, width: '80%', borderRadius: 8, padding: 15, marginLeft: 5 }}
+                                    value={userInfo.address}
+                                />
+
                             </View>
 
 
@@ -266,11 +274,11 @@ export function ConfirmFood({ navigation }) {
 
 
                                 < View style={{ padding: 15, marginTop: 20, marginTop: 0 }}>
-                                <TouchableOpacity
-                                    style={styles.getStarted}>
-                                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Pay</Text>
-                                </TouchableOpacity>
-                            </View>
+                                    <TouchableOpacity
+                                        style={styles.getStarted}>
+                                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: 'white' }}>Pay</Text>
+                                    </TouchableOpacity>
+                                </View>
 
                             </View>
 

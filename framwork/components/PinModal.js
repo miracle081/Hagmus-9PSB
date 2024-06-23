@@ -5,6 +5,8 @@ import { KeyboardAvoidingView, Modal, Pressable, StyleSheet, Text, TextInput, To
 import { AppContext } from "../../globals/AppContext";
 import { theme } from "./Theme";
 import { useNavigation } from "@react-navigation/native";
+import SmoothPinCodeInput from "react-native-smooth-pincode-input";
+
 
 export function PinTransactionModal({ visibility, onClose, onVerify, }) {
     const { pin, setPin, userInfo } = useContext(AppContext);
@@ -35,7 +37,18 @@ export function PinTransactionModal({ visibility, onClose, onVerify, }) {
                         </View>
                         <View style={{ padding: 15, flex: 1 }}>
                             <Text style={{ color: "#7B61FF", fontSize: 20, fontFamily: theme.fonts.Quicksand_700Bold, textAlign: "center", marginBottom: 30 }}>Transaction PIN</Text>
-                            <TextInput
+                            <View style={{ marginTop: 10, alignItems: "center", justifyContent: "center" }}>
+                                <SmoothPinCodeInput
+                                    value={pin}
+                                    onTextChange={inp => setPin(inp)}
+                                    password={true}
+                                    autoFocus
+                                    cellStyle={{ marginLeft: 10, borderRadius: 10, backgroundColor: "transparent", borderWidth: 1, borderColor: '#7b61ff39', }}
+                                    cellStyleFocused={{ borderColor: '#7b61ff', }}
+                                    containerStyle={{ marginLeft: 10 }}
+                                />
+                            </View>
+                            {/* <TextInput
                                 style={[styles.inputStyle, { marginBottom: 0 }]}
                                 keyboardType='numeric'
                                 placeholder='PIN'
@@ -44,7 +57,7 @@ export function PinTransactionModal({ visibility, onClose, onVerify, }) {
                                 placeholderTextColor='#787A8D'
                                 onChangeText={inp => setPin(inp.trim().toLowerCase())}
                                 secureTextEntry
-                            />
+                            /> */}
                             <TouchableOpacity disabled={pin.length === 4 ? false : true} onPress={onVerify}
                                 style={[styles.getStarted, { backgroundColor: pin.length === 4 ? '#7b61ff' : '#7B61FF70', }]}>
                                 <Text style={{ fontSize: 16, color: "white" }}>Pay</Text>
