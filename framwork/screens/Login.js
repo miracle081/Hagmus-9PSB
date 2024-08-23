@@ -108,7 +108,7 @@ export function Login({ navigation }) {
                     // console.log(data);
                     setUserInfo(data.user)
                     setToken(data.token)
-                    if (data.user.email == "test@hagmuspay.com") {
+                    if (data.user.email == "Josephsamson1537@gmail.com") {
                       navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
                     } else {
                       if (!userAsync) {

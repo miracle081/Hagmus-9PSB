@@ -1,4 +1,4 @@
-import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, StatusBar, } from "react-native";
+import { Text, View, TextInput, TouchableOpacity, Alert, Image, ScrollView, StatusBar, Platform, } from "react-native";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/signup";
 
