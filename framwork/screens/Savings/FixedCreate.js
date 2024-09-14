@@ -19,10 +19,10 @@ import { baseURL } from "../../../config";
 
 const options = [
     // { days: 30, label: '1 month', pa: 1.7 },
-    { days: 60, label: '2 months', pa: 3 },
+    // { days: 60, label: '2 months', pa: 3 },
     { days: 90, label: '3 months', pa: 5 },
     { days: 180, label: '6 months', pa: 10 },
-    { days: 210, label: '7 months', pa: 12 },
+    // { days: 210, label: '7 months', pa: 12 },
     // { days: 240, label: '8 months', pa: 14 },
     { days: 270, label: '9 months', pa: 15 },
     { days: 365, label: '12 months', pa: 20 },
@@ -238,7 +238,7 @@ export function FixedCreate({ navigation }) {
                     <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
                         <Pressable style={{ flex: 1 }} onPress={closeModal} >
                         </Pressable>
-                        <View style={{ backgroundColor: "#ebe8eb", height: 420, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
+                        <View style={{ backgroundColor: "#ebe8eb", height: 350, borderTopRightRadius: 20, borderTopLeftRadius: 20, paddingTop: 40 }}>
                             <View style={{ margin: 10, position: 'absolute', top: -40, right: "40%" }}>
                                 <TouchableOpacity onPress={closeModal} style={{ backgroundColor: "#7B61FF", padding: 15, borderRadius: 50 }}>
                                     <FontAwesomeIcon

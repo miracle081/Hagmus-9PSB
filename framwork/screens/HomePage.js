@@ -129,8 +129,8 @@ function HomeScreen({ navigation }) {
     const packageName = 'com.hagmussend.dev';
 
     // Linking.openURL(`market://details?id=${packageName}`)
-    Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+    // Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
+    Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
