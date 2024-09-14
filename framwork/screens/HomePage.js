@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Earn } from './Earn';
 import { CardIntro } from './CardIntro';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlFood, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlFood, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faInfoCircle, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -50,18 +50,34 @@ function HomeScreen({ navigation }) {
   const [appVersion, setAppVersion] = useState("");
   const [adsCatigory, setAdsCatigory] = useState('');
   const [appIsReady, setAppIsReady] = useState(false);
-  const [homeCoins, setHomeCoins] = useState([]);
+  const [APIMessage, setAPIMessage] = useState({});
   const [otherCoins, setOtherCoins] = useState([]);
   const screenWidth = Dimensions.get('screen').width;
 
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalVisibility2, setModalVisibility2] = useState(true);
+  const [MSGModal, setMSGModal] = useState(false);
   const [modalVisibility3, setModalVisibility3] = useState(false);
   const [modalVisibility4, setModalVisibility4] = useState(false)
   const [modalVisibility5, setModalVisibility5] = useState(false)
 
 
-
+  function getMessage() {
+    setPreloader(true)
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${baseURL}/api/check-maintenance`, requestOptions)
+      .then(response => response.json())
+      .then(response => {
+        setMSGModal(response.status);
+        setAPIMessage(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   function getAppVersion() {
     setPreloader(true)
@@ -91,6 +107,7 @@ function HomeScreen({ navigation }) {
     getAccountInfo()
     getUserCards();
     getAppVersion();
+    getMessage();
   }, []);
 
   useEffect(() => {
@@ -116,6 +133,7 @@ function HomeScreen({ navigation }) {
     setModalVisibility(!modalVisibility);
   };
   const updateModal = () => setModalVisibility2(!modalVisibility2);
+  const APIMSGModal = () => setMSGModal(!MSGModal);
 
   useCallback(async () => {
     if (appIsReady) {
@@ -423,8 +441,8 @@ function HomeScreen({ navigation }) {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                  // onPress={closeModal5}
-                    onPress={()=> navigation.navigate ('Landing')}
+                    // onPress={closeModal5}
+                    onPress={() => navigation.navigate('Landing')}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
                       width: 100, borderRadius: 8
@@ -557,7 +575,7 @@ function HomeScreen({ navigation }) {
 
             <View>
 
-              <View style={{alignItems:'center',}}>
+              <View style={{ alignItems: 'center', }}>
                 <Image source={require('../../assets/comingsoon.png')} style={{ width: 300, height: 300 }} />
 
               </View>
@@ -603,7 +621,7 @@ function HomeScreen({ navigation }) {
       {/* ============== App Version modal ============== */}
       {/* https://play.google.com/store/apps/details?id=com.hagmus.dev */}
 
-      {appVersion != "" ?
+      {/* {appVersion != "" ?
         installedAppVersion != appVersion[Platform.OS] ?
           <Modal
             visible={modalVisibility2}
@@ -618,7 +636,7 @@ function HomeScreen({ navigation }) {
                   <View style={{ alignItems: 'center' }}>
                     <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, width: "90%", marginVertical: 10 }}>Your Hagmus app is outdated {"\n"}upgrade to the latest version.</Text>
                   </View>
-                  <TouchableOpacity onPress={() => { openPlayStore('Kyc'), updateModal() }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
+                  <TouchableOpacity onPress={() => { openPlayStore(), updateModal() }} style={[styles.button, { width: 200, marginVertical: 15, backgroundColor: "#7B61FF" }]}>
                     <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'white' }}>Update now</Text>
                   </TouchableOpacity>
                 </View>
@@ -627,7 +645,28 @@ function HomeScreen({ navigation }) {
             </View>
           </Modal> : null :
         null
-      }
+      } */}
+
+      <Modal
+        visible={MSGModal}
+        transparent={true}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.856)" }}>
+          <View style={{ flex: 1 }} ></View>
+          <View style={{ backgroundColor: "#fefefe", borderRadius: 20, marginHorizontal: 20 }}>
+            <View style={{ alignItems: "center", marginBottom: 20, padding: 20 }}>
+              <FontAwesomeIcon icon={faInfoCircle} color='#be654f' size={40} />
+              {/* <Image source={require("../../assets/icon.png")} style={{ width: 80, height: 80, }} /> */}
+              <Text style={{ fontSize: 20, fontWeight: 'bold', color: "#be654f", marginTop: 10 }}>{APIMessage.title}</Text>
+              <Text style={{ color: "gray", lineHeight: 20, fontSize: 14, marginVertical: 10 }}>{APIMessage.message}</Text>
+              <TouchableOpacity onPress={() => { APIMSGModal() }} style={[styles.button, { width: 200, marginTop: 15, backgroundColor: "#7B61FF", borderRadius: 50 }]}>
+                <Text style={{ fontWeight: 'bold', fontSize: 13, color: 'white' }}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={{ flex: 1 }} ></View>
+        </View>
+      </Modal>
 
       <P2pModal visible={modalVisibility} onPress={closeModal} adsCatigory={adsCatigory} />
 
