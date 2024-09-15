@@ -73,7 +73,7 @@ export function Targets({ navigation, route }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/savings/${info.id}/transactions`, requestOptions)
+        fetch(`${baseURL}/savings/${info.id}/transactions`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -131,7 +131,7 @@ export function Targets({ navigation, route }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/savings/withdraw", requestOptions)
+        fetch(baseURL + "/savings/withdraw", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -170,7 +170,7 @@ export function Targets({ navigation, route }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/savings/fund", requestOptions)
+        fetch(baseURL + "/savings/fund", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

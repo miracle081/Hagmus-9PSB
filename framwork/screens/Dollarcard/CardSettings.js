@@ -41,7 +41,7 @@ export function CardSettings({ navigation }) {
             }
         };
 
-        fetch(`${baseURL}/api/cards/${cardId}/terminate`, requestOptions)
+        fetch(`${baseURL}/cards/${cardId}/terminate`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -70,7 +70,7 @@ export function CardSettings({ navigation }) {
             }
         };
 
-        fetch(`${baseURL}/api/cards/${cardId}/block`, requestOptions)
+        fetch(`${baseURL}/cards/${cardId}/block`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -99,7 +99,7 @@ export function CardSettings({ navigation }) {
             }
         };
 
-        fetch(`${baseURL}/api/cards/${cardId}/unblock`, requestOptions)
+        fetch(`${baseURL}/cards/${cardId}/unblock`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { status, message } = result

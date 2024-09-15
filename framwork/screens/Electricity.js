@@ -78,7 +78,7 @@ export function Electricity({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/electricity/pay", requestOptions)
+        fetch(baseURL + "/vas/electricity/pay", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -128,7 +128,7 @@ export function Electricity({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/billers/verify-account", requestOptions)
+        fetch(baseURL + "/vas/billers/verify-account", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

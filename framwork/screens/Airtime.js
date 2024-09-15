@@ -70,7 +70,7 @@ export function Airtime({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/airtime/pay", requestOptions)
+        fetch(baseURL + "/vas/airtime/pay", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

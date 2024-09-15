@@ -56,7 +56,7 @@ export function HagmusTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/transfers/verify-account", requestOptions)
+    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers/verify-account", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -100,7 +100,7 @@ export function HagmusTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/transfers", requestOptions)
+    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -132,7 +132,7 @@ export function HagmusTransfer({ navigation }) {
       return (
         <TouchableOpacity onPress={() => { closeModal2() }}
           style={styles.getStarted}>
-          <Text style={{ fontSize: 16, color:'white'}}>Next</Text>
+          <Text style={{ fontSize: 16, color: 'white' }}>Next</Text>
         </TouchableOpacity>
       )
     } else {
@@ -213,7 +213,7 @@ export function HagmusTransfer({ navigation }) {
 
                 <Text style={[styles.signupText, { marginTop: 15 }]}>Amount</Text>
                 <TextInput
-                  style={[styles.inputStyle, {fontSize:18}]}
+                  style={[styles.inputStyle, { fontSize: 18 }]}
                   keyboardType='numeric'
                   placeholder='0'
                   selectionColor={'#7B61FF'}
@@ -282,7 +282,7 @@ export function HagmusTransfer({ navigation }) {
                 fontSize: 17, margin: 10, textAlign: "center"
               }}>Confirm Details</Text>
               <View>
-              <View style={{ backgroundColor: '#dbd5fa', padding: 7, marginHorizontal: 10, borderRadius: 10, }}>
+                <View style={{ backgroundColor: '#dbd5fa', padding: 7, marginHorizontal: 10, borderRadius: 10, }}>
                   <Text style={{ color: "#1e1839" }}>
                     Confirm the transfer details are correct before you proceed to avoid mistakes. Successful transfers cannot be reversed.
                   </Text>
@@ -317,7 +317,7 @@ export function HagmusTransfer({ navigation }) {
                   </View>
                   <TouchableOpacity onPress={() => { closeModal2(), pinModal() }}
                     style={styles.getStarted}>
-                    <Text style={{ fontSize: 16, color:'white' }}>Confirm</Text>
+                    <Text style={{ fontSize: 16, color: 'white' }}>Confirm</Text>
                   </TouchableOpacity>
                 </View>
               </View>

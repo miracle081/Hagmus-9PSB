@@ -10,7 +10,7 @@ export function signIn(email, password) {
         body: formdata,
         redirect: 'follow'
     };
-    fetch(`${baseURL}/api/login`, requestOptions)
+    fetch(`${baseURL}/login`, requestOptions)
         .then(response => response.json())
         .then(result => {
             const { status, message, data } = result

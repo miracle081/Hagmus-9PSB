@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Earn } from './Earn';
 import { CardIntro } from './CardIntro';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleDoubleRight, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlFood, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight, faAngleDown, faAngleRight, faArrowDown, faArrowUp, faBank, faBowlFood, faBowlRice, faBuildingColumns, faChartPie, faContactBook, faFileInvoice, faHeadset, faMobileScreenButton, faNairaSign, faPlus, faPlusCircle, faReceipt, faRotate, faSackDollar, faSquarePhone, faTelevision, faTicket, faTicketAlt, faTriangleExclamation, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
@@ -41,7 +41,7 @@ const installedAppVersion = Constants.expoConfig.version
 
 function HomeScreen({ navigation }) {
   const {
-    userUID, setWelcomeModal, welcomeModal, getAccountInfo, carouselLinks,
+    setAccountInfo, setWelcomeModal, welcomeModal, getAccountInfo, carouselLinks,
     setReferralBonus, profileImage, setProfileImage, token, getUserInfo, accountInfo,
     setPreloader, userInfo, notification, getMySAYS, getUserCards
   } = useContext(AppContext);
@@ -50,13 +50,16 @@ function HomeScreen({ navigation }) {
   const [appVersion, setAppVersion] = useState("");
   const [adsCatigory, setAdsCatigory] = useState('');
   const [appIsReady, setAppIsReady] = useState(false);
-  const [homeCoins, setHomeCoins] = useState([]);
+  const [currentAcc, setCurrentAcc] = useState({});
   const [otherCoins, setOtherCoins] = useState([]);
   const screenWidth = Dimensions.get('screen').width;
 
   const [modalVisibility, setModalVisibility] = useState(false);
   const [modalVisibility2, setModalVisibility2] = useState(true);
+
   const [modalVisibility3, setModalVisibility3] = useState(false);
+  const closeModal3 = () => setModalVisibility3(!modalVisibility3)
+
   const [modalVisibility4, setModalVisibility4] = useState(false)
   const [modalVisibility5, setModalVisibility5] = useState(false)
 
@@ -69,7 +72,7 @@ function HomeScreen({ navigation }) {
       method: 'GET',
       redirect: 'follow'
     };
-    fetch(`${baseURL}/api/app-version`, requestOptions)
+    fetch(`${baseURL}/app-version`, requestOptions)
       .then(response => response.json())
       .then(response => {
         // console.log(response);
@@ -87,8 +90,9 @@ function HomeScreen({ navigation }) {
     //   const info = doc.data()
     //   setAppVersion(info.appVersion);
     // });
+    console.log(accountInfo);
 
-    getAccountInfo()
+    getAccountInfo();
     getUserCards();
     getAppVersion();
   }, []);
@@ -126,11 +130,8 @@ function HomeScreen({ navigation }) {
   }, [appIsReady]);
 
   const openPlayStore = () => {
-    const packageName = 'com.hagmussend.dev';
-
-    // Linking.openURL(`market://details?id=${packageName}`)
-    Linking.openURL('https://apps.apple.com/us/app/hagmus/id6473706399')
-    // Linking.openURL('https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US')
+    const url = Platform.OS == "ios" ? 'https://apps.apple.com/us/app/hagmus/id6473706399' : 'https://play.google.com/store/apps/details?id=com.hagmussend.dev&hl=en&gl=US'
+    Linking.openURL(url)
       .catch((error) => {
         console.error('Failed to open Play Store:', error);
       });
@@ -140,6 +141,35 @@ function HomeScreen({ navigation }) {
     getUserCards()
     getAccountInfo();
     getUserInfo();
+  }
+
+  function switchAccount(accountNum) {
+    setPreloader(true)
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        authorization: `bearer ${token}`
+      }
+    };
+
+    fetch(baseURL + "/v2/account?account_number=" + accountNum, requestOptions)
+      .then(response => response.json())
+      .then(result => {
+        const { data, status, message } = result
+        console.log(result);
+        if (status == "success") {
+          setAccountInfo(data)
+          setPreloader(false)
+        }
+        handleError(status, message);
+      })
+      .catch(error => {
+        setPreloader(false)
+        console.log('error', error)
+        if (error.message == "JSON Parse error: Unexpected character: <") Alert.alert("Error!", "Network error, please try again");
+        // else Alert.alert("Error!", error.message)
+      });
   }
 
   return (
@@ -232,10 +262,16 @@ function HomeScreen({ navigation }) {
                           />
                         </TouchableOpacity>
                       </View>
-                      <TouchableOpacity onPress={() => navigation.navigate("History")} style={{ flexDirection: "row", alignItems: "center" }}>
-                        <FontAwesomeIcon icon={faFileInvoice} color='#e9eaf2' size={15} />
-                        <Text style={{ fontSize: 12, color: '#e9eaf2', }}>History</Text>
-                      </TouchableOpacity>
+                      <View>
+                        <TouchableOpacity onPress={() => navigation.navigate("History")} style={{ flexDirection: "row", alignItems: "center" }}>
+                          <FontAwesomeIcon icon={faFileInvoice} color='#e9eaf2' size={15} />
+                          <Text style={{ fontSize: 12, color: '#e9eaf2', }}>History</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={closeModal3} style={{ flexDirection: "row", alignItems: "center" }}>
+                          <FontAwesomeIcon icon={faAngleDown} color='#e9eaf2' size={15} />
+                          <Text style={{ fontSize: 12, color: '#e9eaf2', }}>Switch Accounts</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -423,8 +459,8 @@ function HomeScreen({ navigation }) {
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                  // onPress={closeModal5}
-                    onPress={()=> navigation.navigate ('Landing')}
+                    // onPress={closeModal5}
+                    onPress={() => navigation.navigate('Landing')}
                     style={{
                       alignItems: 'center', backgroundColor: '#ece9fb', padding: 20,
                       width: 100, borderRadius: 8
@@ -474,6 +510,53 @@ function HomeScreen({ navigation }) {
         </View>
       </View>
 
+      {/* ============== Transfer Modal ============== */}
+      <Modal
+        visible={modalVisibility3}
+        animationType="slide"
+        transparent={true}
+      >
+        <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.8)" }}>
+          <Pressable style={{ flex: 1 }} onPress={closeModal3} >
+          </Pressable>
+          <View style={{ backgroundColor: "#fcfbff", height: 300, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+            <View style={{ alignItems: 'flex-end', margin: 10 }}>
+              <TouchableOpacity onPress={closeModal3}>
+                <FontAwesomeIcon
+                  icon={faXmark}
+                  size={24}
+                  color='#7B61FF'
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={{ color: '#493c86', margin: 10, fontWeight: "bold", fontSize: 25 }}>Switch Accounts</Text>
+              </View>
+              <FlatList
+                data={userInfo.accounts} renderItem={({ item }) => {
+                  // console.log(item);
+                  return (
+                    <TouchableOpacity
+                      onPress={() => { closeModal3(item.account_number); switchAccount(item.account_number) }}
+                      style={{
+                        flexDirection: 'row', justifyContent: 'space-between',
+                        alignItems: 'center', padding: 10, borderWidth: 2, margin: 13, borderRadius: 8,
+                        borderColor: '#7B61FF', backgroundColor: '#7B61FF'
+                      }}>
+                      <Text style={{ color: 'white', fontSize: 18 }}>{item.bank_name}</Text>
+                      <View style={{ backgroundColor: "white", borderRadius: 100, padding: 8 }}>
+                        <FontAwesomeIcon icon={faBank} color='#7B61FF' />
+                      </View>
+                    </TouchableOpacity>
+                  )
+                }} key={({ item }) => { item.id }} />
+            </View>
+
+          </View>
+        </View>
+      </Modal>
       {/* ============== Transfer Modal ============== */}
       <Modal
         visible={modalVisibility4}
@@ -557,7 +640,7 @@ function HomeScreen({ navigation }) {
 
             <View>
 
-              <View style={{alignItems:'center',}}>
+              <View style={{ alignItems: 'center', }}>
                 <Image source={require('../../assets/comingsoon.png')} style={{ width: 300, height: 300 }} />
 
               </View>

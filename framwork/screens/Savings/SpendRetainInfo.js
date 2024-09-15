@@ -52,7 +52,7 @@ export function SpendRetainInfo({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/says/create", requestOptions)
+        fetch(baseURL + "/says/create", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

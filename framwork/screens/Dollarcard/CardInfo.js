@@ -28,7 +28,7 @@ export function CardInfo({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/" + cardId, requestOptions)
+        fetch(baseURL + "/cards/" + cardId, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result

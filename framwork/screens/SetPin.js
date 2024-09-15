@@ -41,7 +41,7 @@ export function SetPin({ navigation }) {
             body: JSON.stringify(data),
             redirect: 'follow'
         };
-        fetch(baseURL + "/api/set-pin", requestOptions)
+        fetch(baseURL + "/set-pin", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { status, message } = response;

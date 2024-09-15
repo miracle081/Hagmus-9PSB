@@ -32,7 +32,7 @@ export function ForgotPassword({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/forgot-password", requestOptions)
+    fetch(baseURL + "/forgot-password", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { status, message } = response;

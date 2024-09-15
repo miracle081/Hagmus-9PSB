@@ -54,7 +54,7 @@ export function UserAddress({ navigation }) {
             body: JSON.stringify(data),
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/login`, requestOptions)
+        fetch(`${baseURL}/login`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { status, message, data } = result
@@ -99,7 +99,7 @@ export function UserAddress({ navigation }) {
             body: JSON.stringify(formdata),
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/register`, requestOptions)
+        fetch(`${baseURL}/register`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { status, message, data } = result

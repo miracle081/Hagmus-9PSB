@@ -32,7 +32,7 @@ export function FundDollarCard({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/" + cardId, requestOptions)
+        fetch(baseURL + "/cards/" + cardId, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -79,7 +79,7 @@ export function FundDollarCard({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/cards/fund", requestOptions)
+        fetch(baseURL + "/cards/fund", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

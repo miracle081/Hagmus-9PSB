@@ -35,7 +35,7 @@ export function History({ navigation }) {
       },
       redirect: 'follow'
     };
-    fetch(`${baseURL}/api/transactions`, requestOptions)
+    fetch(`${baseURL}/transactions`, requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;

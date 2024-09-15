@@ -82,7 +82,7 @@ export function BvnVerify({ navigation }) {
                         redirect: 'follow'
                 };
 
-                fetch(baseURL + "/api/profile/verify-bvn", requestOptions)
+                fetch(baseURL + "/profile/verify-bvn", requestOptions)
                         .then(response => response.json())
                         .then(response => {
                                 const { data, status, message } = response;
@@ -121,7 +121,7 @@ export function BvnVerify({ navigation }) {
                         redirect: 'follow'
                 };
 
-                fetch(baseURL + "/api/profile/bvn-otp", requestOptions)
+                fetch(baseURL + "/profile/bvn-otp", requestOptions)
                         .then(response => response.json())
                         .then(response => {
                                 const { data, status, message } = response;
@@ -159,7 +159,7 @@ export function BvnVerify({ navigation }) {
                         redirect: 'follow'
                 };
 
-                fetch(baseURL + "/api/profile/upload-documents", requestOptions)
+                fetch(baseURL + "/profile/upload-documents", requestOptions)
                         .then(response => response.json())
                         .then(response => {
                                 console.log("request", formdata);

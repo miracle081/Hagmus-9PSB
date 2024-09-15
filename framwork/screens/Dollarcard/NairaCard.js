@@ -44,7 +44,7 @@ export function NairaCard({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/cards/virtual", requestOptions)
+        fetch(baseURL + "/cards/virtual", requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result

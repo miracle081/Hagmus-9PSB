@@ -35,7 +35,7 @@ export function CardDetails({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/" + cardId, requestOptions)
+        fetch(baseURL + "/cards/" + cardId, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -75,7 +75,7 @@ export function CardDetails({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/cards/secure-data", requestOptions)
+        fetch(baseURL + "/cards/secure-data", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

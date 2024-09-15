@@ -99,7 +99,7 @@ export function Data({ navigation }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/vas/billers/${net || "mtn-data"}/plans`, requestOptions)
+        fetch(`${baseURL}/vas/billers/${net || "mtn-data"}/plans`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -141,7 +141,7 @@ export function Data({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/data/pay", requestOptions)
+        fetch(baseURL + "/vas/data/pay", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

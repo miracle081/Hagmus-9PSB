@@ -41,7 +41,7 @@ export function ForgottenPin({ navigation }) {
             body: JSON.stringify(data),
             redirect: 'follow'
         };
-        fetch(baseURL + "/api/reset-pin", requestOptions)
+        fetch(baseURL + "/reset-pin", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -73,7 +73,7 @@ export function ForgottenPin({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/forgot-pin", requestOptions)
+        fetch(baseURL + "/forgot-pin", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { status, message } = response;

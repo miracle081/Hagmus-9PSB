@@ -41,7 +41,7 @@ export function BorderTransfer({ navigation }) {
       }
     };
 
-    fetch(baseURL + "/api/transfers/banks", requestOptions)
+    fetch(baseURL + accountInfo.bank == "9PSB" ? "" : "/v2" + "/transfers/banks", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response
@@ -83,7 +83,7 @@ export function BorderTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/transfers/verify-account", requestOptions)
+    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers/verify-account", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -128,7 +128,7 @@ export function BorderTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/transfers", requestOptions)
+    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -336,7 +336,7 @@ export function BorderTransfer({ navigation }) {
 
                 <Text style={[styles.signupText, { marginTop: 15, }]}>Amount</Text>
                 <TextInput
-                  style={[styles.inputStyle,{fontSize:18}]}
+                  style={[styles.inputStyle, { fontSize: 18 }]}
                   keyboardType='numeric'
                   placeholder='0'
                   selectionColor={'#7B61FF'}

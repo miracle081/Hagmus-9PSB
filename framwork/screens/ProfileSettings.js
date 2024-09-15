@@ -115,7 +115,7 @@ export function ProfileSettings({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/profile/update-picture", requestOptions)
+    fetch(baseURL + "/profile/update-picture", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -177,7 +177,7 @@ export function ProfileSettings({ navigation }) {
       body: JSON.stringify(formdata),
       redirect: 'follow'
     };
-    fetch(`${baseURL}/api/profile/update`, requestOptions)
+    fetch(`${baseURL}/profile/update`, requestOptions)
       .then(response => response.json())
       .then(result => {
         const { status, message, data } = result

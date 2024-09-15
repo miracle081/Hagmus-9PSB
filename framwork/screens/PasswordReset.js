@@ -36,7 +36,7 @@ export function PasswordReset({ navigation }) {
       body: JSON.stringify(data),
       redirect: 'follow'
     };
-    fetch(baseURL + "/api/change-password", requestOptions)
+    fetch(baseURL + "/change-password", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;

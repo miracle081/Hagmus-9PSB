@@ -43,7 +43,7 @@ export function DollarCards({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/cards/virtual", requestOptions)
+        fetch(baseURL + "/cards/virtual", requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -81,7 +81,7 @@ export function DollarCards({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/exchange-rate", requestOptions)
+        fetch(baseURL + "/cards/exchange-rate", requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result

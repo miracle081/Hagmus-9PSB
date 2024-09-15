@@ -43,7 +43,7 @@ export function Referral({ navigation }) {
             body: JSON.stringify(data),
             redirect: 'follow'
         };
-        fetch(baseURL + "/api/account/withdraw-cashback", requestOptions)
+        fetch(baseURL + "/account/withdraw-cashback", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -80,7 +80,7 @@ export function Referral({ navigation }) {
     //         body: JSON.stringify(data),
     //         redirect: 'follow'
     //     };
-    //     fetch(baseURL + "/api/account/withdraw-referral-bonus", requestOptions)
+    //     fetch(baseURL + "/account/withdraw-referral-bonus", requestOptions)
     //         .then(response => response.json())
     //         .then(response => {
     //             const { data, status, message } = response;

@@ -42,7 +42,7 @@ function AppProvider({ children }) {
                },
                redirect: 'follow'
           };
-          fetch(`${baseURL}/api/user`, requestOptions)
+          fetch(`${baseURL}/user`, requestOptions)
                .then(response => response.json())
                .then(response => {
                     const { data, status, message } = response;
@@ -71,7 +71,7 @@ function AppProvider({ children }) {
                }
           };
 
-          fetch(baseURL + "/api/account", requestOptions)
+          fetch(baseURL + "/account", requestOptions)
                .then(response => response.json())
                .then(result => {
                     const { data, status, message } = result
@@ -99,7 +99,7 @@ function AppProvider({ children }) {
                }
           };
 
-          fetch(baseURL + "/api/cards/my-cards", requestOptions)
+          fetch(baseURL + "/cards/my-cards", requestOptions)
                .then(response => response.json())
                .then(result => {
                     const { data, status, message } = result
@@ -126,7 +126,7 @@ function AppProvider({ children }) {
                title,
                body
           }
-          fetch("https://exp.host/--/api/v2/push/send", {
+          fetch("https://exp.host/--/v2/push/send", {
                method: "POST",
                headers: {
                     host: "exp.host",
@@ -149,7 +149,7 @@ function AppProvider({ children }) {
                },
                redirect: 'follow'
           };
-          fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+          fetch(`${baseURL}/savings/my-savings`, requestOptions)
                .then(response => response.json())
                .then(response => {
                     const { data, status, message } = response;
@@ -179,7 +179,7 @@ function AppProvider({ children }) {
                },
                redirect: 'follow'
           };
-          fetch(`${baseURL}/api/says/my-says`, requestOptions)
+          fetch(`${baseURL}/says/my-says`, requestOptions)
                .then(response => response.json())
                .then(response => {
                     const { data, status, message } = response;

@@ -59,7 +59,7 @@ export function Tv({ navigation }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/vas/billers/${net || networkList[0].id}/plans`, requestOptions)
+        fetch(`${baseURL}/vas/billers/${net || networkList[0].id}/plans`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -101,7 +101,7 @@ export function Tv({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/cable-tv/pay", requestOptions)
+        fetch(baseURL + "/vas/cable-tv/pay", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -128,7 +128,7 @@ export function Tv({ navigation }) {
         // const password = 'Cleanzy123';
         // const authString = `${username}:${password}`;
         // // const encodedAuthString = btoa(authString);
-        // const url = 'https://api-service.vtpass.com/api/pay';
+        // const url = 'https://api-service.vtpass.com/pay';
         // const apiKey = VTPass.apiKey;
         // const secretKey = VTPass.secretKey;
         // const requestId = generateRequestId()
@@ -188,7 +188,7 @@ export function Tv({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/vas/billers/verify-account", requestOptions)
+        fetch(baseURL + "/vas/billers/verify-account", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

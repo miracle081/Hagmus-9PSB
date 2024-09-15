@@ -135,7 +135,7 @@ export function FixedCreate({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/savings/create", requestOptions)
+        fetch(baseURL + "/savings/create", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

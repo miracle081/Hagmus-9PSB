@@ -72,7 +72,7 @@ export function SpendRetain({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/says/my-says/" + saysInfo.id + "/update", requestOptions)
+        fetch(baseURL + "/says/my-says/" + saysInfo.id + "/update", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -111,7 +111,7 @@ export function SpendRetain({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/says/withdraw", requestOptions)
+        fetch(baseURL + "/says/withdraw", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -146,7 +146,7 @@ export function SpendRetain({ navigation }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/says/${saysInfo.id}/transactions`, requestOptions)
+        fetch(`${baseURL}/says/${saysInfo.id}/transactions`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

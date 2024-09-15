@@ -39,7 +39,7 @@ export function ViewCard({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/" + cardId, requestOptions)
+        fetch(baseURL + "/cards/" + cardId, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -67,7 +67,7 @@ export function ViewCard({ navigation }) {
             }
         };
 
-        fetch(baseURL + "/api/cards/exchange-rate", requestOptions)
+        fetch(baseURL + "/cards/exchange-rate", requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -94,7 +94,7 @@ export function ViewCard({ navigation }) {
             }
         };
 
-        fetch(`${baseURL}/api/cards/${cardId}/transactions`, requestOptions)
+        fetch(`${baseURL}/cards/${cardId}/transactions`, requestOptions)
             .then(response => response.json())
             .then(result => {
                 const { data, status, message } = result
@@ -140,7 +140,7 @@ export function ViewCard({ navigation }) {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/cards/withdraw", requestOptions)
+        fetch(baseURL + "/cards/withdraw", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

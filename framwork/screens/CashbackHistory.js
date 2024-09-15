@@ -28,7 +28,7 @@ export function CashbackHistory({ navigation }) {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/transactions/cashback`, requestOptions)
+        fetch(`${baseURL}/transactions/cashback`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;

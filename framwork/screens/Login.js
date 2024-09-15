@@ -93,7 +93,7 @@ export function Login({ navigation }) {
                 body: formdata,
                 redirect: 'follow'
               };
-              fetch(`${baseURL}/api/login`, requestOptions)
+              fetch(`${baseURL}/login`, requestOptions)
                 .then(response => response.json())
                 .then(result => {
                   const { status, message, data } = result
@@ -106,7 +106,7 @@ export function Login({ navigation }) {
                   }
                   else if (status == "success") {
                     // console.log(data);
-                    setUserInfo(data.user)
+                    setUserInfo({ ...data.user, accounts: data.accounts })
                     setToken(data.token)
                     if (data.user.email == "Josephsamson1537@gmail.com") {
                       navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })

@@ -51,7 +51,7 @@ export function FixedTarget() {
             },
             redirect: 'follow'
         };
-        fetch(`${baseURL}/api/savings/my-savings`, requestOptions)
+        fetch(`${baseURL}/savings/my-savings`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
@@ -93,7 +93,7 @@ export function FixedTarget() {
             redirect: 'follow'
         };
 
-        fetch(baseURL + "/api/savings/withdraw", requestOptions)
+        fetch(baseURL + "/savings/withdraw", requestOptions)
             .then(response => response.json())
             .then(response => {
                 const { data, status, message } = response;
