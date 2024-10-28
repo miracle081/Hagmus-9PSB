@@ -6,7 +6,6 @@ import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { styles } from "../styles/username";
 import { faCalendarAlt, faChevronLeft, faInfoCircle, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { baseURL } from '../../config';
 import { handleError } from '../components/HandleRequestError';
 import { theme } from '../components/Theme';
@@ -22,48 +21,9 @@ export function Username({ navigation }) {
   const [last_name, setlast_name] = useState('');
   const [phone, setPhone] = useState('');
   const [gender, setGender] = useState('');
-  const [dateVisibility, setDateVisibility] = useState(false);
   const [dob, setDob] = useState("");
   const [modalVisibility, setModalVisibility] = useState(false)
 
-
-  // function btnVali() {
-  //   const condition = phone == "";
-  //   return condition
-  // }
-
-  // function reauthenticate() {
-  //   const data = {
-  //     email: account.email,
-  //     password: account.password,
-  //   };
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //     body: JSON.stringify(data),
-  //     redirect: 'follow'
-  //   };
-  //   fetch(`${baseURL}/login`, requestOptions)
-  //     .then(response => response.json())
-  //     .then(result => {
-  //       const { status, message, data } = result
-  //       setPreloader(false)
-  //       if (status == "success") {
-  //         // console.log(data);
-  //         setUserInfo(data.user)
-  //         setToken(data.token)
-  //         navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
-  //       }
-  //       handleError(status, message);
-  //     })
-  //     .catch(error => {
-  //       console.log('error', error)
-  //       setPreloader(false)
-  //     });
-  // }
 
   function createAccount() {
     setPreloader(true)
@@ -244,7 +204,7 @@ export function Username({ navigation }) {
               <View style={styles.formContainer}>
 
                 <Text style={[styles.signupText, { marginTop: 30 }]}>Enter the detials on your valid ID card</Text>
-                
+
                 <TextInput
                   style={[styles.inputStyle, { marginBottom: 20 }]}
                   selectionColor={'grey'}
@@ -379,7 +339,6 @@ export function Username({ navigation }) {
                   </View>
                 </View>
               </Modal>
-
 
             </KeyboardAvoidingView>
           </ScrollView>
