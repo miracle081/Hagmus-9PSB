@@ -10,6 +10,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { baseURL } from '../../config';
 import { handleError } from '../components/HandleRequestError';
 import { theme } from '../components/Theme';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export function Username({ navigation }) {
   const { account, setUserInfo, setToken, token, setPreloader } = useContext(AppContext);
@@ -17,56 +18,62 @@ export function Username({ navigation }) {
   const [otp, setOtp] = useState('');
   const [bvn, setBvn] = useState('');
   const [otp_id, setOtp_id] = useState('');
+  const [first_name, setfirst_name] = useState('');
+  const [last_name, setlast_name] = useState('');
   const [phone, setPhone] = useState('');
+  const [gender, setGender] = useState('');
   const [dateVisibility, setDateVisibility] = useState(false);
   const [dob, setDob] = useState("");
   const [modalVisibility, setModalVisibility] = useState(false)
 
 
-  function btnVali() {
-    const condition = phone == "";
-    return condition
-  }
+  // function btnVali() {
+  //   const condition = phone == "";
+  //   return condition
+  // }
 
-  function reauthenticate() {
-    const data = {
-      email: account.email,
-      password: account.password,
-    };
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-      redirect: 'follow'
-    };
-    fetch(`${baseURL}/api/login`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        const { status, message, data } = result
-        setPreloader(false)
-        if (status == "success") {
-          // console.log(data);
-          setUserInfo(data.user)
-          setToken(data.token)
-          navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
-        }
-        handleError(status, message);
-      })
-      .catch(error => {
-        console.log('error', error)
-        setPreloader(false)
-      });
-  }
+  // function reauthenticate() {
+  //   const data = {
+  //     email: account.email,
+  //     password: account.password,
+  //   };
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //     body: JSON.stringify(data),
+  //     redirect: 'follow'
+  //   };
+  //   fetch(`${baseURL}/login`, requestOptions)
+  //     .then(response => response.json())
+  //     .then(result => {
+  //       const { status, message, data } = result
+  //       setPreloader(false)
+  //       if (status == "success") {
+  //         // console.log(data);
+  //         setUserInfo(data.user)
+  //         setToken(data.token)
+  //         navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
+  //       }
+  //       handleError(status, message);
+  //     })
+  //     .catch(error => {
+  //       console.log('error', error)
+  //       setPreloader(false)
+  //     });
+  // }
 
   function createAccount() {
     setPreloader(true)
     const formdata = {
-      bvn: bvn,
-      otp,
-      otp_id,
+      first_name,
+      last_name,
+      gender,
+      dob,
       email: account.email,
+      bvn,
       phone: phone,
       password: account.password,
       refferal_code: account.refferal_code
@@ -75,17 +82,20 @@ export function Username({ navigation }) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
       body: JSON.stringify(formdata),
       redirect: 'follow'
     };
-    fetch(`${baseURL}/api/register`, requestOptions)
+    fetch(`${baseURL}/register`, requestOptions)
       .then(response => response.json())
       .then(result => {
         const { status, message, data } = result
         // console.log(result);
         if (status == "success") {
-          reauthenticate()
+          setUserInfo(data.user)
+          setToken(data.token)
+          navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
         } else {
           setPreloader(false)
         }
@@ -129,7 +139,7 @@ export function Username({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/api/verify-bvn", requestOptions)
+    fetch(baseURL + "/verify-bvn", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -166,7 +176,7 @@ export function Username({ navigation }) {
       body: JSON.stringify(formdata),
       redirect: 'follow'
     };
-    fetch(baseURL + "/api/bvn-otp", requestOptions)
+    fetch(baseURL + "/bvn-otp", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
@@ -184,6 +194,20 @@ export function Username({ navigation }) {
         console.log('error', error)
       });
   }
+
+  const handleDateChange = (text) => {
+    const cleaned = text.replace(/[^\d]/g, '');
+
+    let formatted = '';
+    if (cleaned.length > 6) {
+      formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}-${cleaned.slice(6, 8)}`;
+    } else if (cleaned.length > 4) {
+      formatted = `${cleaned.slice(0, 4)}-${cleaned.slice(4, 6)}`;
+    } else if (cleaned.length > 0) {
+      formatted = `${cleaned.slice(0, 4)}`;
+    }
+    setDob(formatted);
+  };
 
 
   const closeModal = () => {
@@ -219,50 +243,86 @@ export function Username({ navigation }) {
             >
               <View style={styles.formContainer}>
 
-                {hiden ?
-                  <>
-                    <Text style={[styles.signupText, { marginTop: 30 }]}>Valid Phone Number</Text>
-                    <TextInput
-                      style={[styles.inputStyle, { marginBottom: 20 }]}
-                      selectionColor={'grey'}
-                      placeholder='Enter your phone number'
-                      mode='outlined'
-                      placeholderTextColor='#787A8D'
-                      onChangeText={(text) => setPhone(text.trim())}
-                      keyboardType='number-pad'
-                    />
+                <Text style={[styles.signupText, { marginTop: 30 }]}>Enter the detials on your valid ID card</Text>
+                
+                <TextInput
+                  style={[styles.inputStyle, { marginBottom: 20 }]}
+                  selectionColor={'grey'}
+                  placeholder='First Name'
+                  mode='outlined'
+                  placeholderTextColor='#787A8D'
+                  onChangeText={(text) => setfirst_name(text.trim())}
+                />
+                {first_name !== "" ?
 
-                    <View>
-                      <TouchableOpacity disabled={btnVali()}
-                        onPress={createAccount}
-                        style={[styles.getStarted, { opacity: btnVali() ? 0.5 : 1 }]}>
-                        <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 16, color: "white" }}>Create Account</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </>
+                  <TextInput
+                    style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
+                    placeholder='Last Name'
+                    selectionColor={'grey'}
+                    mode='outlined'
+                    placeholderTextColor='#787A8D'
+                    onChangeText={inp => setlast_name(inp.trim())}
+                  />
+                  : null}
 
-                  :
+                {last_name !== "" ?
+                  <TextInput
+                    style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
+                    keyboardType='numeric'
+                    placeholder='Phone number'
+                    selectionColor={'grey'}
+                    mode='outlined'
+                    placeholderTextColor='#787A8D'
+                    onChangeText={inp => setPhone(inp.trim())}
+                  />
+                  : null}
+                {phone !== "" ?
                   <>
+                    <Text style={styles.signupText}>Date of birth (YYYY-MM-DD)</Text>
                     <TextInput
                       style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
                       keyboardType='numeric'
-                      placeholder='Enter BVN'
+                      placeholder='Date of Birth'
                       selectionColor={'grey'}
                       mode='outlined'
                       placeholderTextColor='#787A8D'
-                      onChangeText={inp => setBvn(inp.trim())}
+                      onChangeText={inp => handleDateChange(inp)}
+                      value={dob}
                     />
+                  </> : null}
 
-                    <TouchableOpacity onPress={() => { sendBvnOtp(); }} style={[styles.getStarted, { marginBottom: 20 }]}>
-                      <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Get BVN OTP</Text>
-                    </TouchableOpacity>
+                {dob !== "" ?
+                  <SelectList
+                    setSelected={(val) => setGender(val)}
+                    data={[{ key: "1", value: "Male" }, { key: "2", value: "Female" }]}
+                    save="value"
+                    boxStyles={styles.inputStyle}
+                    placeholder='Select Gender'
+                  />
+                  : null}
 
-                    <View style={{ alignItems: 'center', flexDirection: 'row', }}>
-                      <Image source={require('../../assets/CBN.png')} style={{ width: 80, height: 80 }} />
-                      <Text style={{ color: '#7B61FF' }} >In accordance to CBN policy all{'\n'} account must be verified</Text>
-                    </View>
-                  </>
-                }
+                {gender !== "" ?
+                  <TextInput
+                    style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
+                    keyboardType='numeric'
+                    placeholder='Valid BVN'
+                    selectionColor={'grey'}
+                    mode='outlined'
+                    placeholderTextColor='#787A8D'
+                    onChangeText={inp => inp.length == 11 ? setBvn(inp.trim()) : setBvn("")}
+                  />
+                  : null}
+
+                {bvn !== "" ?
+                  <TouchableOpacity onPress={() => { createAccount(); }} style={[styles.getStarted, { marginBottom: 20 }]}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Create Account</Text>
+                  </TouchableOpacity>
+                  : null}
+
+                <View style={{ alignItems: 'center', }}>
+                  <Image source={require('../../assets/CBN.png')} style={{ width: 120, height: 100 }} />
+                  <Text style={{ color: '#7B61FF' }} >In accordance to CBN policy all{'\n'} account must be verified</Text>
+                </View>
               </View>
 
 
@@ -288,9 +348,9 @@ export function Username({ navigation }) {
 
                     <View style={{ marginTop: 0, padding: 15 }}>
                       <View style={{ marginBottom: 30 }}>
-                        <Text style={{ textAlign: "center", marginBottom: 20, fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Verify BVN OTP</Text>
-                        <View style={{ backgroundColor: theme.colors.primary + 20, borderColor: theme.colors.primary, borderWidth: 0.3, borderRadius: 8, padding: 10, flexDirection: "row", alignItems: "center", gap: 10 }}>
-                          <FontAwesomeIcon icon={faInfoCircle} size={25} color={theme.colors.primary} />
+                        <Text style={{ textAlign: "center", marginBottom: 20, fontWeight: 'bold', color: '#2e3144', fontSize: 18 }}>Verify NIN OTP</Text>
+                        <View style={{ backgroundColor: '#f0f0f0', borderColor: '#7B61FF', borderWidth: 0.3, borderRadius: 8, padding: 10, flexDirection: "row", alignItems: "center", gap: 10 }}>
+                          <FontAwesomeIcon icon={faInfoCircle} size={25} color='#7B61FF' />
                           <Text>
                             Expect OTP to come before 1 - 2 minutes.
                           </Text>
@@ -326,6 +386,6 @@ export function Username({ navigation }) {
         </View>
 
       </View>
-    </AppSafeAreaView>
+    </AppSafeAreaView >
   )
 }

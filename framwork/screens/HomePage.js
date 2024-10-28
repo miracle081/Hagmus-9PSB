@@ -51,7 +51,7 @@ function HomeScreen({ navigation }) {
   const [adsCatigory, setAdsCatigory] = useState('');
   const [appIsReady, setAppIsReady] = useState(false);
   const [currentAcc, setCurrentAcc] = useState({});
-  const [otherCoins, setOtherCoins] = useState([]);
+  const [APIMessage, setAPIMessage] = useState({});
   const screenWidth = Dimensions.get('screen').width;
 
   const [modalVisibility, setModalVisibility] = useState(false);
@@ -64,7 +64,22 @@ function HomeScreen({ navigation }) {
   const [modalVisibility5, setModalVisibility5] = useState(false)
 
 
-
+  function getMessage() {
+    setPreloader(true)
+    const requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    fetch(`${baseURL}/api/check-maintenance`, requestOptions)
+      .then(response => response.json())
+      .then(response => {
+        setMSGModal(response.status);
+        setAPIMessage(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
 
   function getAppVersion() {
     setPreloader(true)
@@ -90,11 +105,12 @@ function HomeScreen({ navigation }) {
     //   const info = doc.data()
     //   setAppVersion(info.appVersion);
     // });
-    console.log(accountInfo);
+    // console.log(userInfo.accounts.lengt);
 
     getAccountInfo();
     getUserCards();
     getAppVersion();
+
   }, []);
 
   useEffect(() => {
@@ -157,7 +173,7 @@ function HomeScreen({ navigation }) {
       .then(response => response.json())
       .then(result => {
         const { data, status, message } = result
-        console.log(result);
+        // console.log(result);
         if (status == "success") {
           setAccountInfo(data)
           setPreloader(false)
@@ -267,10 +283,7 @@ function HomeScreen({ navigation }) {
                           <FontAwesomeIcon icon={faFileInvoice} color='#e9eaf2' size={15} />
                           <Text style={{ fontSize: 12, color: '#e9eaf2', }}>History</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={closeModal3} style={{ flexDirection: "row", alignItems: "center" }}>
-                          <FontAwesomeIcon icon={faAngleDown} color='#e9eaf2' size={15} />
-                          <Text style={{ fontSize: 12, color: '#e9eaf2', }}>Switch Accounts</Text>
-                        </TouchableOpacity>
+
                       </View>
                     </View>
 
@@ -284,12 +297,16 @@ function HomeScreen({ navigation }) {
                         </View>
                         {/* <Text style={{ fontWeight: 'bold', fontSize: 14, color: '#AED2FF', }}> {showBalance ? symbol("usdt") + Number(userInfo.usdt).toFixed(2) : '****'}</Text> */}
                       </View>
-                      {/* <TouchableOpacity
-                    onPress={() => { setAdsCatigory("buy"), closeModal() }}
-                    style={{ backgroundColor: '#f0f0f3', padding: 5, borderRadius: 100, width: "25%", height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                    <FontAwesomeIcon icon={faPlusCircle} color='#7B61FF' />
-                    <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginLeft: 5, color: '#7B61FF' }}>Fund</Text>
-                  </TouchableOpacity> */}
+                      {userInfo.accounts && <TouchableOpacity
+                        onPress={closeModal3}
+                        style={{ backgroundColor: '#f0f0f3', padding: 5, borderRadius: 100, paddingHorizontal: 10, height: 30, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                        <Text style={{ fontSize: 13, alignItems: 'center', fontWeight: 'bold', marginRight: 5, color: '#7B61FF' }}>Switch Account</Text>
+                        <FontAwesomeIcon icon={faAngleDown} color='#7B61FF' />
+                      </TouchableOpacity>}
+                      {/* <TouchableOpacity onPress={closeModal3} style={{ flexDirection: "row", alignItems: "center" }}>
+                          <FontAwesomeIcon icon={faAngleDown} color='#e9eaf2' size={15} />
+                          <Text style={{ fontSize: 12, color: '#e9eaf2', }}>Switch Accounts</Text>
+                        </TouchableOpacity> */}
                     </View>
 
                   </View>

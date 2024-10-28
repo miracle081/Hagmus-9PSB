@@ -41,7 +41,8 @@ export function BorderTransfer({ navigation }) {
       }
     };
 
-    fetch(baseURL + accountInfo.bank == "9PSB" ? "" : "/v2" + "/transfers/banks", requestOptions)
+    // fetch(`${baseURL}${accountInfo.bank_name == "9PSB" ? "/v2" : ""}/transfers/banks`, requestOptions)
+    fetch(`${baseURL}/transfers/banks`, requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response
@@ -63,6 +64,8 @@ export function BorderTransfer({ navigation }) {
   useEffect(() => {
     setPreloader(true)
     fetchBankList();
+    // console.log(`${baseURL}${accountInfo.bank_name == "9PSB" ? "/v2" : ""}/transfers/banks`);    
+
   }, []);
 
   function verifyName(accountNumber) {
@@ -83,13 +86,13 @@ export function BorderTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers/verify-account", requestOptions)
+    fetch(`${baseURL}${accountInfo.bank_name == "9PSB" ? "/v2" : ""}/transfers/verify-account`, requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
         if (status == "success") {
-          const accountName = data.accountName
-          const sessionId = data.sessionId
+          const accountName = accountInfo.bank_name == "9PSB" ? data.name : data.accountName
+          const sessionId = accountInfo.bank_name == "9PSB" ? data.number : data.sessionId
           setActName({ name: accountName, color: "#00C566", sessionId })
         } else {
           setActName({ name: message, color: "#ff0000be", })
@@ -128,7 +131,7 @@ export function BorderTransfer({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + accountInfo.bank == "9PSB" ? "/v2" : "" + "/transfers", requestOptions)
+    fetch(`${baseURL}${accountInfo.bank_name == "9PSB" ? "/v2" : ""}/transfers`, requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
