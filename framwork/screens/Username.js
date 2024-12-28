@@ -28,14 +28,15 @@ export function Username({ navigation }) {
   function createAccount() {
     setPreloader(true)
     const formdata = {
-      first_name,
-      last_name,
-      gender,
-      dob,
+      // first_name,
+      // last_name,
+      // gender,
+      // dob,
       email: account.email,
-      bvn,
-      phone: phone,
+      // bvn,
+      // phone: phone,
       password: account.password,
+      reference: otp_id,
       refferal_code: account.refferal_code
     }
     const requestOptions = {
@@ -47,7 +48,7 @@ export function Username({ navigation }) {
       body: JSON.stringify(formdata),
       redirect: 'follow'
     };
-    fetch(`${baseURL}/register`, requestOptions)
+    fetch(`${baseURL}/v2/register`, requestOptions)
       .then(response => response.json())
       .then(result => {
         const { status, message, data } = result
@@ -84,11 +85,12 @@ export function Username({ navigation }) {
   function verifyBVN() {
     setPreloader(true)
     const formdata = {
-      bvn,
+      // bvn,
       otp,
-      otp_id,
-      key: "j8YifmnrZ09028624if0204JH171106582456072622wrHnJJHsrnb"
+      reference: otp_id,
+      // key: "j8YifmnrZ09028624if0204JH171106582456072622wrHnJJHsrnb"
     }
+    
     const requestOptions = {
       method: 'POST',
       headers: {
@@ -99,20 +101,24 @@ export function Username({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch(baseURL + "/verify-bvn", requestOptions)
+    fetch(baseURL + "/v2/verify-bvn-otp", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
         setPreloader(false);
-        // console.log(response);
-        if (status == "success") {
-          setHiden(true);
+        console.log(response);
+        if (status) {
+          console.log(formdata);
+          // setHiden(true);
+          createAccount()
           Alert.alert(
             'Success',
             message,
           )
         }
-        handleError(status, message);
+        else {
+          handleError(status, message);
+        }
       })
       .catch(error => {
         setPreloader(false)
@@ -136,17 +142,18 @@ export function Username({ navigation }) {
       body: JSON.stringify(formdata),
       redirect: 'follow'
     };
-    fetch(baseURL + "/bvn-otp", requestOptions)
+    fetch(baseURL + "/v2/verify-bvn", requestOptions)
       .then(response => response.json())
       .then(response => {
         const { data, status, message } = response;
         setPreloader(false)
-        // console.log(response);
-        if (status == "success") {
+        console.log(data.otp, data.reference);
+        if (status) {
           closeModal();
-          setOtp_id(data.otpId)
+          setOtp_id(data.reference)
+        } else {
+          handleError(status, message);
         }
-        handleError(status, message);
       })
 
       .catch(error => {
@@ -205,7 +212,7 @@ export function Username({ navigation }) {
 
                 <Text style={[styles.signupText, { marginTop: 30 }]}>Enter the detials on your valid ID card</Text>
 
-                <TextInput
+                {/* <TextInput
                   style={[styles.inputStyle, { marginBottom: 20 }]}
                   selectionColor={'grey'}
                   placeholder='First Name'
@@ -262,20 +269,20 @@ export function Username({ navigation }) {
                   : null}
 
                 {gender !== "" ?
-                  <TextInput
-                    style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
-                    keyboardType='numeric'
-                    placeholder='Valid BVN'
-                    selectionColor={'grey'}
-                    mode='outlined'
-                    placeholderTextColor='#787A8D'
-                    onChangeText={inp => inp.length == 11 ? setBvn(inp.trim()) : setBvn("")}
-                  />
-                  : null}
+                  : null} */}
+                <TextInput
+                  style={[styles.inputStyle, { marginBottom: 20, color: "#0f1018" }]}
+                  keyboardType='numeric'
+                  placeholder='Valid BVN'
+                  selectionColor={'grey'}
+                  mode='outlined'
+                  placeholderTextColor='#787A8D'
+                  onChangeText={inp => inp.length == 11 ? setBvn(inp.trim()) : setBvn("")}
+                />
 
                 {bvn !== "" ?
-                  <TouchableOpacity onPress={() => { createAccount(); }} style={[styles.getStarted, { marginBottom: 20 }]}>
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Create Account</Text>
+                  <TouchableOpacity onPress={() => { sendBvnOtp(); }} style={[styles.getStarted, { marginBottom: 20 }]}>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: 'white' }}>Send OTP</Text>
                   </TouchableOpacity>
                   : null}
 
@@ -288,7 +295,8 @@ export function Username({ navigation }) {
 
               {/* ============== BVN Modal ============== */}
               <Modal
-                visible={modalVisibility}
+                // visible={modalVisibility}
+                visible={true}
                 animationType="slide"
                 transparent={true}
               >
