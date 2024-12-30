@@ -16,6 +16,13 @@ import { Quicksand_400Regular, Quicksand_700Bold, Quicksand_600SemiBold } from "
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { LeaveMsg } from "./framwork/screens/LeaveMsg";
 import { PushNotification } from "./framwork/Notification/Notification";
+import { LogLevel, OneSignal } from 'react-native-onesignal';
+import Constants from "expo-constants";
+
+OneSignal.Debug.setLogLevel(LogLevel.Verbose);
+OneSignal.initialize(Constants.expoConfig.extra.oneSignalAppId);
+
+OneSignal.Notifications.requestPermission(true);
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted from react-native core and will be removed in a future release. It can now be installed and imported from '@react-native-async-storage/async-storage' instead of 'react-native'. See https://github.com/react-native-async-storage/async-storage"]);
 export default function App() {

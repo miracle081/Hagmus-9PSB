@@ -3,7 +3,7 @@ import { Alert } from "react-native"
 export function handleError(status, message) {
     if (status == "success") {
         return null
-    } else if (status == "error") {
+    } else if (status == "error" || status == false) {
         Alert.alert(
             'An error occurred',
             message,

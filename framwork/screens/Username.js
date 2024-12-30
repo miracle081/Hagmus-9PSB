@@ -24,6 +24,7 @@ export function Username({ navigation }) {
   const [dob, setDob] = useState("");
   const [modalVisibility, setModalVisibility] = useState(false)
 
+  // 22545471291
 
   function createAccount() {
     setPreloader(true)
@@ -52,8 +53,8 @@ export function Username({ navigation }) {
       .then(response => response.json())
       .then(result => {
         const { status, message, data } = result
-        // console.log(result);
-        if (status == "success") {
+        console.log(formdata);
+        if (status) {
           setUserInfo(data.user)
           setToken(data.token)
           navigation.reset({ index: 0, routes: [{ name: "HomePage", }] })
@@ -106,15 +107,13 @@ export function Username({ navigation }) {
       .then(response => {
         const { data, status, message } = response;
         setPreloader(false);
-        console.log(response);
+        // console.log(response);
         if (status) {
-          console.log(formdata);
-          // setHiden(true);
-          createAccount()
-          Alert.alert(
-            'Success',
-            message,
-          )
+          createAccount();
+          // Alert.alert(
+          //   'Success',
+          //   message,
+          // )
         }
         else {
           handleError(status, message);
@@ -295,8 +294,8 @@ export function Username({ navigation }) {
 
               {/* ============== BVN Modal ============== */}
               <Modal
-                // visible={modalVisibility}
-                visible={true}
+                visible={modalVisibility}
+                // visible={true}
                 animationType="slide"
                 transparent={true}
               >
