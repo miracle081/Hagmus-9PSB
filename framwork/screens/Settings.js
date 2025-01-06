@@ -14,13 +14,13 @@ import {
 import { db } from "../../firebase/firebase";
 import { AppContext } from "../../globals/AppContext";
 import { styles } from "../styles/settings";
-import ExpoStatusBar from "expo-status-bar/build/ExpoStatusBar";
 import { ToastApp } from "../components/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppSafeAreaView } from "../components/AppSafeAreaView";
 import { faCopy } from "@fortawesome/free-regular-svg-icons";
 import { theme } from "../components/Theme";
 import { copyToClipboard } from "../components/ClipBoard";
+import { StatusBar } from "expo-status-bar";
 
 
 export function Settings({ navigation }) {
@@ -80,7 +80,7 @@ export function Settings({ navigation }) {
 
   return (
     <AppSafeAreaView style={styles.container} >
-      <ExpoStatusBar style="light" />
+      <StatusBar style="light" />
       <View style={styles.body}>
 
         <View style={[styles.status, { borderRadius: 50, backgroundColor: "#007a02", position: "absolute", top: 0, right: 10 }]}>
@@ -125,7 +125,7 @@ export function Settings({ navigation }) {
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
           <Text style={{ fontSize: 13, }}>Account Name</Text>
-          <Text>{accountInfo.account_name}</Text>
+          <Text style={{flex:1,textAlign:'right'}}>{accountInfo.account_name}</Text>
         </View>
       </View>
 

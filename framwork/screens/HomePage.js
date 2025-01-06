@@ -668,7 +668,7 @@ function HomeScreen({ navigation }) {
       </Modal>
 
       {/* ============== Welcome modal ============== */}
-      {userInfo.userStatus == "unverified" ?
+      {/* {userInfo.userStatus == "unverified" ?
         <Modal
           visible={welcomeModal}
           animationType="slide"
@@ -698,12 +698,12 @@ function HomeScreen({ navigation }) {
             <View style={{ flex: 1 }} ></View>
           </View>
         </Modal> : null
-      }
+      } */}
 
       {/* ============== App Version modal ============== */}
       {/* https://play.google.com/store/apps/details?id=com.hagmus.dev */}
 
-      {appVersion != "" ?
+      {/* {appVersion != "" ?
         installedAppVersion != appVersion[Platform.OS] ?
           <Modal
             visible={modalVisibility2}
@@ -727,7 +727,7 @@ function HomeScreen({ navigation }) {
             </View>
           </Modal> : null :
         null
-      }
+      } */}
 
       <P2pModal visible={modalVisibility} onPress={closeModal} adsCatigory={adsCatigory} />
 
